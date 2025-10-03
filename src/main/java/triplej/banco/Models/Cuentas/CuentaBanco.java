@@ -63,4 +63,37 @@ public abstract class CuentaBanco {
                 ", fechaApertura=" + fechaApertura +
                 '}';
     }
+
+    public Cliente getPropietario() {
+        return propietario;
+    }
+
+    public void setPropietario(Cliente propietario) {
+        this.propietario = propietario;
+    }
+
+    public String getNumeroCuenta() {
+        return numeroCuenta;
+    }
+
+    public void setNumeroCuenta(String numeroCuenta) {
+        this.numeroCuenta = numeroCuenta;
+    }
+
+    public double getSaldo() {
+        return this.saldo;
+    }
+
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
+    }
+
+    public abstract void retirar(Double monto);
+
+
+    public void depositar(Double monto){
+        if(monto <=0) throw new IllegalArgumentException("El monto debe ser positivo");
+        saldo += monto;
+    };
+
 }

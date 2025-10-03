@@ -11,4 +11,14 @@ public class CuentaEmpresarial extends CuentaBanco {
     public String getCodigoTipoCuenta() {
         return "3";
     }
+
+    @Override
+    public void retirar(Double monto){
+        //Falta
+    };
+
+    @Override
+    public void depositar(Double monto){
+        //Falta
+    };
 }
