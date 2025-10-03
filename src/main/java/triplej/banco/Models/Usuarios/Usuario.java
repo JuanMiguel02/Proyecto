@@ -7,7 +7,7 @@ public abstract class Usuario {
     private TipoDocumento documento;
     private String numeroDocumento;
     private String telefono;
-    private String email;
+    private String correo;
     private String contrasenia;
     private String pais;
     private String ciudad;
@@ -16,16 +16,20 @@ public abstract class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String nombre, TipoDocumento documento, String numeroDocumento, String telefono, String email, String contrasenia, String pais, String ciudad) {
+    public Usuario(String nombre, TipoDocumento documento, String numeroDocumento, String telefono, String correo, String contrasenia, String pais, String ciudad) {
         this.nombre = nombre;
         this.documento = documento;
         this.numeroDocumento = numeroDocumento;
         this.telefono = telefono;
-        this.email = email;
+        this.correo = correo;
         this.contrasenia = contrasenia;
         this.pais = pais;
         this.ciudad = ciudad;
         this.fechaRegistro = LocalDate.now();
+    }
+
+    public boolean verificarCredenciales(String correo, String contrasenia){
+        return this.correo.equals(correo) && this.contrasenia.equals(contrasenia);
     }
 
     public String getNombre() {
@@ -61,11 +65,11 @@ public abstract class Usuario {
     }
 
     public String getEmail() {
-        return email;
+        return correo;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmail(String correo) {
+        this.correo = correo;
     }
 
     public String getContrasenia() {
@@ -110,7 +114,7 @@ public abstract class Usuario {
                 "nombre='" + nombre + '\'' +
                 ", numeroDocumento='" + numeroDocumento + '\'' +
                 ", telefono='" + telefono + '\'' +
-                ", email='" + email + '\'' +
+                ", correo='" + correo + '\'' +
                 ", fechaRegistro=" + fechaRegistro +
                 '}';
     }

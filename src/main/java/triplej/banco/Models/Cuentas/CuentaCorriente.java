@@ -12,4 +12,14 @@ public class CuentaCorriente extends CuentaBanco{
     public String getCodigoTipoCuenta() {
         return "2";
     }
+
+    @Override
+    public void retirar(Double monto){
+        //Falta
+    };
+
+    @Override
+    public void depositar(Double monto){
+        //Falta
+    };
 }
