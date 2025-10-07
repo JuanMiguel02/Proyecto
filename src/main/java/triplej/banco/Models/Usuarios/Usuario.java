@@ -64,11 +64,11 @@ public abstract class Usuario {
         this.telefono = telefono;
     }
 
-    public String getEmail() {
+    public String getCorreo() {
         return correo;
     }
 
-    public void setEmail(String correo) {
+    public void setCorreo(String correo) {
         this.correo = correo;
     }
 

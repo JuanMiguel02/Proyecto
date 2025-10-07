@@ -1,5 +1,7 @@
 package triplej.banco.Models.Usuarios;
 
+import triplej.banco.Models.Cuentas.CuentaBancaria;
+
 public class PersonaNatural extends Cliente{
 
     private String apellido;
@@ -11,5 +13,8 @@ public class PersonaNatural extends Cliente{
 
     public String getNombreCompleto(){
         return getNombre() + " " + this.apellido;
+    }
+    public String getApellido(){
+        return this.apellido;
     }
 }

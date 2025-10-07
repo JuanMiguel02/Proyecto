@@ -1,11 +1,13 @@
 package triplej.banco.Models.Usuarios;
 
+import triplej.banco.Models.Cuentas.CuentaBancaria;
+
 public class PersonaJuridica extends Cliente{
     private String razonSocial;
     private String representanteLegal;
     private String tipoEmpresa;
 
-    public PersonaJuridica(String razonSocial, String representanteLegal, String tipoEmpresa, String apellido, TipoDocumento documento, String numeroDocumento, String telefono, String email, String contrasenia, String pais, String ciudad){
+    public PersonaJuridica(String razonSocial, String representanteLegal, String tipoEmpresa, TipoDocumento documento, String numeroDocumento, String telefono, String email, String contrasenia, String pais, String ciudad){
         super(razonSocial, documento, numeroDocumento, telefono, email, contrasenia, pais, ciudad);
         this.representanteLegal = representanteLegal;
         this.tipoEmpresa = tipoEmpresa;
