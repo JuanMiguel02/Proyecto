@@ -2,9 +2,9 @@ package triplej.banco.Models.Cuentas;
 
 import triplej.banco.Models.Usuarios.Cliente;
 
-public class CuentaEmpresarial extends CuentaBanco {
-    public CuentaEmpresarial(Cliente propietario, double saldo){
-        super(propietario, saldo);
+public class CuentaEmpresarial extends CuentaBancaria {
+    public CuentaEmpresarial(Cliente propietario){
+        super(propietario);
     }
 
     @Override
@@ -17,8 +17,5 @@ public class CuentaEmpresarial extends CuentaBanco {
         //Falta
     };
 
-    @Override
-    public void depositar(Double monto){
-        //Falta
-    };
+
 }

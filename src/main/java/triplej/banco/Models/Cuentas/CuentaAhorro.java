@@ -2,10 +2,10 @@ package triplej.banco.Models.Cuentas;
 
 import triplej.banco.Models.Usuarios.Cliente;
 
-public class CuentaAhorro extends CuentaBanco{
+public class CuentaAhorro extends CuentaBancaria {
 
-    public CuentaAhorro(Cliente propietario, double saldo){
-        super(propietario, saldo);
+    public CuentaAhorro( Cliente propietario){
+        super(propietario);
     }
 
     @Override
@@ -15,12 +15,11 @@ public class CuentaAhorro extends CuentaBanco{
 
     @Override
     public void retirar(Double monto){
-        //Falta
+        if(monto < getSaldo()){
+            setSaldo(getSaldo() - monto);
+        }
     };
 
-    @Override
-    public void depositar(Double monto){
-        //Falta
-    };
+
 
 }
