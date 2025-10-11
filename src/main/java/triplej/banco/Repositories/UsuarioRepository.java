@@ -1,7 +1,7 @@
 package triplej.banco.Repositories;
 
-import triplej.banco.Models.Cuentas.CuentaBancaria;
-import triplej.banco.Models.Usuarios.Cliente;
+
+import triplej.banco.Models.Usuarios.RolUsuario;
 import triplej.banco.Models.Usuarios.Usuario;
 
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ public class UsuarioRepository {
     private final ArrayList<Usuario> usuarios;
 
     public UsuarioRepository() {
-        usuarios = new ArrayList<>();
+        this.usuarios = new ArrayList<>();
     }
 
     public static synchronized UsuarioRepository getInstancia() {
@@ -27,48 +27,27 @@ public class UsuarioRepository {
 
     // Unico metodo para guardar cualquier tipo de usuario.
     public void guardar(Usuario usuario) {
-        if(buscarPorEmail(usuario.getCorreo()).isPresent()){
-            throw  new IllegalArgumentException("Advertencia: Se intentó guardar un usuario con un email que ya existe: " + usuario.getCorreo());
+        if(buscarUsuarioPorEmail(usuario.getCorreo()).isPresent()){
+            throw  new IllegalArgumentException("Advertencia: Se intentó guardar un cliente con un email que ya existe: " + usuario.getCorreo());
         }
         usuarios.add(usuario);
     }
 
-    public Optional<Usuario> buscarPorEmail(String correo) {
+    public Optional<Usuario> buscarUsuarioPorEmail(String correo) {
         return usuarios.stream()
                 .filter(u -> u.getCorreo().equalsIgnoreCase(correo))
                 .findFirst();
     }
 
-    public List<Cliente> getClientes() {
+    public List<Usuario> obtenerPorRol(RolUsuario rol){
         return usuarios.stream()
-                .filter(u -> u instanceof Cliente)
-                .map(u -> (Cliente) u)
+                .filter(u -> u.getRolUsuario() == rol)
                 .collect(Collectors.toList());
     }
 
-    public Optional<CuentaBancaria> buscarCuentaPorNumero(String numeroCuenta) {
-        return usuarios.stream()
-                .filter(u -> u instanceof Cliente)
-                .map(u -> (Cliente) u)
-                .flatMap(c -> c.getCuentas().stream())
-                .filter(cuenta -> cuenta.getNumeroCuenta().equals(numeroCuenta))
-                .findFirst();
+    public int contarTodos(){
+        return usuarios.size();
     }
 
-    public Optional<Cliente> buscarClientePorCuenta(String numeroCuenta){
-        return getClientes().stream()
-                         .filter(c -> c.getCuentas().stream()
-                        .anyMatch(cta -> cta.getNumeroCuenta().equals(numeroCuenta)))
-                        .findFirst();
-    }
 
-    /**
-     * Cuenta el numero total de usuarios que son de tipo Cliente.
-     * @return el numero de clientes registrados.
-     */
-    public long contarClientes() {
-        return usuarios.stream()
-                .filter(u -> u instanceof Cliente)
-                .count();
-    }
 }

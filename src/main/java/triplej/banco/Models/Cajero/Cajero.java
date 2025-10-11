@@ -3,6 +3,9 @@ package triplej.banco.Models.Cajero;
 import triplej.banco.Models.Banco;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
 import triplej.banco.Models.Usuarios.Cliente;
+import triplej.banco.Models.Usuarios.RolUsuario;
+import triplej.banco.Models.Usuarios.Usuario;
+import triplej.banco.Repositories.ClienteRepository;
 import triplej.banco.Repositories.UsuarioRepository;
 import triplej.banco.Utils.CuentaFactory;
 
@@ -10,47 +13,58 @@ import java.util.Optional;
 
 public class Cajero {
     private final UsuarioRepository usuarioRepository;
+    private final ClienteRepository clienteRepository;
 
     public Cajero() {
         this.usuarioRepository = Banco.getInstancia().getUsuarioRepository();
-
+        this.clienteRepository = Banco.getInstancia().getClienteRepository();
     }
 
-    public void registrarCliente(Cliente cliente, String tipoCuenta) {
-        if (usuarioRepository.buscarPorEmail(cliente.getCorreo()).isPresent()) {
-            throw new IllegalArgumentException("El correo ya existe");
+    public Cliente registrarCliente(Usuario usuario, String tipoCuenta) {
+        if(usuarioRepository.buscarUsuarioPorEmail(usuario.getCorreo()).isPresent()){
+            throw  new IllegalArgumentException(
+                    "El correo ya está registrado: " + usuario.getCorreo()
+            );
         }
+        usuario.setRolUsuario(RolUsuario.CLIENTE);
+
+        Cliente cliente = new Cliente(usuario);
         CuentaBancaria cuenta = CuentaFactory.crearCuenta(tipoCuenta.toUpperCase(), cliente);
         cliente.agregarCuenta(cuenta);
-
-        usuarioRepository.guardar(cliente);
+        clienteRepository.guardar(cliente);
+        return cliente;
     }
 
     public void agregarCuentaACliente(Cliente cliente, String tipoCuenta){
-        try{
-            CuentaBancaria nuevaCuenta = CuentaFactory.crearCuenta(tipoCuenta.toUpperCase(), cliente);
-            cliente.agregarCuenta(nuevaCuenta);
-        } catch (IllegalArgumentException ignored){
+        if(cliente == null){
+            throw new IllegalArgumentException("El cliente no puede estar nulo");
         }
+        CuentaBancaria nuevaCuenta = CuentaFactory.crearCuenta(tipoCuenta.toUpperCase(), cliente);
+        cliente.agregarCuenta(nuevaCuenta);
+        System.out.println("Cuenta " + nuevaCuenta.getNumeroCuenta() + " agregada ");
     }
 
-    public void realizarDeposito(String numeroCuentaOrigen, double monto, String descripcion) {
-        try {
-
-            Optional<CuentaBancaria> cuentaOpt = usuarioRepository.buscarCuentaPorNumero(numeroCuentaOrigen);
-            if (cuentaOpt.isPresent()) {
-                cuentaOpt.get().depositar(monto, descripcion);
-                return;
-            }
-            System.out.println("Cuenta no encontrada");
-
-        } catch (IllegalArgumentException e) {
+    public void realizarDeposito(CuentaBancaria cuenta, double monto, String descripcion) {
+        if( cuenta == null){
+            System.out.println("No se encontró");
+            return;
+        }
+        if(descripcion == null || descripcion.isBlank()){
+            descripcion = "Déposito realizado";
+        }
+        try{
+            cuenta.depositar(monto, descripcion);
+            System.out.println("Déposito de " + monto + " realizado");
+        }catch (IllegalArgumentException e){
             System.out.println("Error al realizar deposito");
         }
     }
 
-    public double consultarSaldo(CuentaBancaria cuenta) {
-      return cuenta.getSaldo();
+    public double consultarSaldo(CuentaBancaria cuenta){
+        if(cuenta == null){
+            throw  new IllegalArgumentException("La cuenta no puede ser nula");
+        }
+        return cuenta.getSaldo();
     }
 
 }
