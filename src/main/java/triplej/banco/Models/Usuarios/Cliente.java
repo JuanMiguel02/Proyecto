@@ -6,15 +6,26 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public abstract class Cliente extends Usuario {
+public class Cliente {
 
-
+    private Usuario usuarioAsociado;
     private final ArrayList<CuentaBancaria> cuentas;
 
-    public Cliente(String nombre, TipoDocumento documento, String numeroDocumento, String telefono, String email, String contrasenia, String pais, String ciudad) {
-        super(nombre, documento, numeroDocumento, telefono, email, contrasenia, pais, ciudad);
+    public Cliente(Usuario usuarioAsociado) {
+        if(usuarioAsociado.getRolUsuario() != RolUsuario.CLIENTE){
+            throw new IllegalArgumentException("El rol debe der ser Cliente");
+        }
+        this.usuarioAsociado = usuarioAsociado;
         this.cuentas = new ArrayList<>();
 
+    }
+
+    public Usuario getUsuarioAsociado() {
+        return usuarioAsociado;
+    }
+
+    public void setUsuarioAsociado(Usuario usuarioAsociado) {
+        this.usuarioAsociado = usuarioAsociado;
     }
 
     public ArrayList<CuentaBancaria> getCuentas() {
@@ -36,13 +47,8 @@ public abstract class Cliente extends Usuario {
 
         String cuentasString = nombrarCuentasTipo();
 
-        return "Usuario{" +
-                "nombre='" + getNombre() + '\'' +
-                ", tipoDocumento='" + getDocumento() + '\'' +
-                ", numeroDocumento='" + getNumeroDocumento() + '\'' +
-                ", telefono='" + getTelefono() + '\'' +
-                ", correo='" + getCorreo() + '\'' +
-                ", fechaRegistro=" + getFechaRegistro() +'\'' +
+        return "Cliente{" +
+                "usuario=" + usuarioAsociado.getNombreCompleto() +
                 ", cuentas= " + cuentasString +'\'' +
                 '}';
     }

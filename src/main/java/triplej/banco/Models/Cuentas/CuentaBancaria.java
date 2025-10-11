@@ -13,10 +13,10 @@ import java.util.concurrent.ThreadLocalRandom;
 public abstract class CuentaBancaria {
 
     private static final HashSet<String> numerosExistentes = new HashSet<>();
-    private ArrayList<Transaccion> historial = new ArrayList<>();
+    private final ArrayList<Transaccion> historial;
     private String numeroCuenta;
     private double saldo;
-    private LocalDate fechaApertura;
+    private final LocalDate fechaApertura;
     private Cliente propietario;
 
     public CuentaBancaria(Cliente propietario) {
@@ -24,6 +24,7 @@ public abstract class CuentaBancaria {
         this.numeroCuenta = generarNumeroCuenta();
         this.saldo = 0.0;
         this.fechaApertura = LocalDate.now();
+        this.historial = new ArrayList<>();
     }
 
     //Metodo para generar un numero de cuenta
@@ -57,6 +58,7 @@ public abstract class CuentaBancaria {
     @Override
     public String toString() {
         return "CuentaBanco{" +
+                "Cliente=" + propietario +
                 ", numeroCuenta='" + numeroCuenta + '\'' +
                 ", saldo=" + saldo +
                 ", fechaApertura=" + fechaApertura +
