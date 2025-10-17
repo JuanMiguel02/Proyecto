@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<?import javafx.geometry.Insets?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="triplej.banco.Controllers.FormularioEmpleadoController"
+      spacing="15"
+      style="-fx-background-color: #f5f5f5;"
+      prefWidth="500"
+      prefHeight="600">
+
+        <padding>
+            <Insets top="20" right="30" bottom="20" left="30"/>
+        </padding>
+
+        <Label text="Registrar Nuevo Empleado"
+               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+
+        <Separator/>
+
+        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+            <VBox spacing="10">
+
+                <!-- Datos Personales -->
+                <Label text="Datos Personales"
+                       style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                <HBox spacing="10">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="Nombre:*"/>
+                        <TextField fx:id="txtNombre" promptText="Ej: Carlos"/>
+                    </VBox>
+
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="Apellido:*"/>
+                        <TextField fx:id="txtApellido" promptText="Ej: López"/>
+                    </VBox>
+                </HBox>
+
+                <VBox spacing="5">
+                    <Label text="Cédula:*"/>
+                    <TextField fx:id="txtCedula" promptText="Ej: 1234567890"/>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Teléfono:*"/>
+                    <TextField fx:id="txtTelefono" promptText="Ej: 3001234567"/>
+                </VBox>
+
+                <HBox spacing="10">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="Ciudad:*"/>
+                        <TextField fx:id="txtCiudad" promptText="Ej: Armenia"/>
+                    </VBox>
+
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="País:*"/>
+                        <TextField fx:id="txtPais" promptText="Ej: Colombia"/>
+                    </VBox>
+                </HBox>
+
+                <Separator/>
+
+                <!-- Datos de Cuenta -->
+                <Label text="Datos de Acceso"
+                       style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                <VBox spacing="5">
+                    <Label text="Correo Electrónico:*"/>
+                    <TextField fx:id="txtEmail" promptText="Ej: carlos@banco.com"/>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Contraseña:*"/>
+                    <PasswordField fx:id="txtPassword" promptText="Mínimo 6 caracteres"/>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Confirmar Contraseña:*"/>
+                    <PasswordField fx:id="txtConfirmarPassword"/>
+                </VBox>
+
+                <Separator/>
+
+                <!-- Datos Laborales -->
+                <Label text="Datos Laborales"
+                       style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                <VBox spacing="5">
+                    <Label text="Cargo:*"/>
+                    <TextField fx:id="txtCargo" promptText="Ej: Cajero"/>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Salario:*"/>
+                    <TextField fx:id="txtSalario" promptText="Ej: 2500000"/>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Departamento:*"/>
+                    <ComboBox fx:id="cmbDepartamento"
+                              promptText="Seleccione un departamento"
+                              maxWidth="Infinity"/>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+
+        <!-- Botones -->
+        <HBox spacing="10" alignment="CENTER">
+            <Button text="Guardar"
+                    onAction="#handleGuardar"
+                    style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 30;"
+                    defaultButton="true"/>
+
+            <Button text="Cancelar"
+
+                    style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 30;"/>
+        </HBox>
+
+    </VBox>
+

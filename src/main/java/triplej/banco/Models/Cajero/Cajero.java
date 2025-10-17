@@ -21,9 +21,15 @@ public class Cajero {
     }
 
     public Cliente registrarCliente(Usuario usuario, String tipoCuenta) {
-        if(usuarioRepository.buscarUsuarioPorEmail(usuario.getCorreo()).isPresent()){
+        if(usuarioRepository.buscarUsuarioPorEmail(usuario.getCorreo()).isPresent()) {
             throw  new IllegalArgumentException(
                     "El correo ya está registrado: " + usuario.getCorreo()
+            );
+        }
+
+        if(usuario.getRolUsuario() != RolUsuario.CLIENTE) {
+            throw  new IllegalArgumentException(
+                    "Las credenciales son erroneas!"
             );
         }
         usuario.setRolUsuario(RolUsuario.CLIENTE);

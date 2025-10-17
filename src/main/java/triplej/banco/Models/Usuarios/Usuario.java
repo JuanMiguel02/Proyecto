@@ -1,5 +1,7 @@
 package triplej.banco.Models.Usuarios;
 
+import javafx.scene.image.Image;
+
 import java.time.LocalDate;
 
 public abstract class Usuario {
@@ -7,6 +9,7 @@ public abstract class Usuario {
     private String contrasenia;
     private LocalDate fechaRegistro;
     private RolUsuario rolUsuario;
+    private Image foto;
 
     public Usuario( String correo, String contrasenia, RolUsuario rolUsuario) {
         this.correo = correo;
@@ -14,6 +17,8 @@ public abstract class Usuario {
         this.rolUsuario = rolUsuario;
         this.fechaRegistro = LocalDate.now();
     }
+
+
 
     public boolean verificarCredenciales(String correo, String contrasenia){
         return this.correo.equals(correo) && this.contrasenia.equals(contrasenia);
@@ -53,6 +58,14 @@ public abstract class Usuario {
     }
 
     public abstract String getNombreCompleto();
+
+    public Image getFoto() {
+        return foto;
+    }
+
+    public void setFoto(Image foto) {
+        this.foto = foto;
+    }
 
     @Override
     public String toString() {

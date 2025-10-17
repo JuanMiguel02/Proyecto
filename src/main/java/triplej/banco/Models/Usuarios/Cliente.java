@@ -12,9 +12,6 @@ public class Cliente {
     private final ArrayList<CuentaBancaria> cuentas;
 
     public Cliente(Usuario usuarioAsociado) {
-        if(usuarioAsociado.getRolUsuario() != RolUsuario.CLIENTE){
-            throw new IllegalArgumentException("El rol debe der ser Cliente");
-        }
         this.usuarioAsociado = usuarioAsociado;
         this.cuentas = new ArrayList<>();
 

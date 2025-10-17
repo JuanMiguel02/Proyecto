@@ -13,15 +13,25 @@ public class PersonaNatural extends Persona{
         this.apellido = apellido;
     }
 
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
     @Override
     public String getNombreCompleto(){
         return this.nombre + " " + this.apellido;
     }
-
-    public String getApellido(){
-        return this.apellido;
-    }
-
-
 
 }
