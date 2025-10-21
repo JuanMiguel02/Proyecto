@@ -2,6 +2,8 @@ package triplej.banco.Models;
 
 import triplej.banco.Models.Usuarios.Usuario;
 import triplej.banco.Repositories.ClienteRepository;
+import triplej.banco.Repositories.EmpleadoRepository;
+import triplej.banco.Repositories.TransaccionRepository;
 import triplej.banco.Repositories.UsuarioRepository;
 
 public class Banco {
@@ -12,10 +14,14 @@ public class Banco {
     private static final String CODIGO = "666";
     private final UsuarioRepository usuarios;
     private final ClienteRepository clientes;
+    private final EmpleadoRepository empleados;
+    private final TransaccionRepository transacciones;
 
     private Banco() {
         this.usuarios = UsuarioRepository.getInstancia();
         this.clientes = ClienteRepository.getInstancia();
+        this.empleados = EmpleadoRepository.getInstance();
+        this.transacciones = TransaccionRepository.getInstance();
     }
 
     public static String getCodigo(){
@@ -36,4 +42,8 @@ public class Banco {
     public ClienteRepository getClienteRepository(){
         return clientes;
     }
+
+    public EmpleadoRepository getEmpleadoRepository(){ return empleados;}
+
+    public TransaccionRepository getTransaccionRepository(){ return transacciones;}
 }

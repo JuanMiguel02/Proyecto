@@ -2,6 +2,8 @@ package triplej.banco.Models.Cajero;
 
 import triplej.banco.Models.Banco;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
+import triplej.banco.Models.Reportes.ReporteCliente;
+import triplej.banco.Models.Reportes.ReporteGenerado;
 import triplej.banco.Models.Usuarios.Cliente;
 import triplej.banco.Models.Usuarios.RolUsuario;
 import triplej.banco.Models.Usuarios.Usuario;
@@ -21,9 +23,15 @@ public class Cajero {
     }
 
     public Cliente registrarCliente(Usuario usuario, String tipoCuenta) {
-        if(usuarioRepository.buscarUsuarioPorEmail(usuario.getCorreo()).isPresent()){
+        if(usuarioRepository.buscarUsuarioPorEmail(usuario.getCorreo()).isPresent()) {
             throw  new IllegalArgumentException(
                     "El correo ya está registrado: " + usuario.getCorreo()
+            );
+        }
+
+        if(usuario.getRolUsuario() != RolUsuario.CLIENTE) {
+            throw  new IllegalArgumentException(
+                    "Las credenciales son erroneas!"
             );
         }
         usuario.setRolUsuario(RolUsuario.CLIENTE);
@@ -50,11 +58,11 @@ public class Cajero {
             return;
         }
         if(descripcion == null || descripcion.isBlank()){
-            descripcion = "Déposito realizado";
+            descripcion = "Deposito realizado";
         }
         try{
             cuenta.depositar(monto, descripcion);
-            System.out.println("Déposito de " + monto + " realizado");
+            System.out.println("Deposito de " + monto + " realizado");
         }catch (IllegalArgumentException e){
             System.out.println("Error al realizar deposito");
         }
@@ -67,6 +75,10 @@ public class Cajero {
         return cuenta.getSaldo();
     }
 
+    public ReporteGenerado generarReporteCliente(CuentaBancaria cuenta){
+        ReporteCliente reporte = new ReporteCliente(cuenta);
+        return reporte.generarReporte();
+    }
 }
 
 

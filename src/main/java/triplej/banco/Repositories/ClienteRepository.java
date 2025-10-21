@@ -8,8 +8,8 @@ import java.util.Optional;
 
 public class ClienteRepository {
     private static ClienteRepository instancia;
-    private ArrayList<Cliente> clientes;
-    private UsuarioRepository usuarioRepository;
+    private final ArrayList<Cliente> clientes;
+    private final UsuarioRepository usuarioRepository;
 
     private ClienteRepository(){
         this.clientes = new ArrayList<>();

@@ -2,6 +2,7 @@ package triplej.banco.Models.Cuentas;
 
 import triplej.banco.Models.Banco;
 import triplej.banco.Models.Usuarios.Cliente;
+import triplej.banco.Repositories.TransaccionRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -82,6 +83,10 @@ public abstract class CuentaBancaria {
         this.saldo = saldo;
     }
 
+    public String getPropietario() {
+        return  propietario.getNombrePropietario();
+    }
+
     public abstract void retirar(Double monto);
 
 
@@ -99,6 +104,8 @@ public abstract class CuentaBancaria {
 
         trans.setDescripcion(descripcion);
         trans.setExitosa(true);
+
+        TransaccionRepository.getInstance().agregar(trans);
 
         historial.add(trans);
     }

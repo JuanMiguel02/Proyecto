@@ -12,9 +12,6 @@ public class Cliente {
     private final ArrayList<CuentaBancaria> cuentas;
 
     public Cliente(Usuario usuarioAsociado) {
-        if(usuarioAsociado.getRolUsuario() != RolUsuario.CLIENTE){
-            throw new IllegalArgumentException("El rol debe der ser Cliente");
-        }
         this.usuarioAsociado = usuarioAsociado;
         this.cuentas = new ArrayList<>();
 
@@ -22,6 +19,10 @@ public class Cliente {
 
     public Usuario getUsuarioAsociado() {
         return usuarioAsociado;
+    }
+
+    public String getNombrePropietario(){
+        return usuarioAsociado.getNombreCompleto();
     }
 
     public void setUsuarioAsociado(Usuario usuarioAsociado) {
