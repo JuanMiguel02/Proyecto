@@ -90,6 +90,7 @@
                       <NumberAxis side="LEFT" />
                     </yAxis>
                   </AreaChart>
+                  <Button layoutX="543.0" layoutY="658.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="237.0" text="Generar Reporte" />
                </children>
             </AnchorPane>
          </children>
@@ -110,7 +111,7 @@
         </HBox>
     </top>
     <left>
-        <AnchorPane prefHeight="749.0" prefWidth="245.0" style="-fx-background-color: green;" BorderPane.alignment="CENTER">
+        <AnchorPane prefHeight="749.0" prefWidth="245.0" style="-fx-background-color: #C1FFC1;" BorderPane.alignment="CENTER">
             <children>
                 <ImageView fitHeight="130.0" fitWidth="168.0" layoutX="59.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
                     <image>
@@ -127,15 +128,16 @@
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <Button fx:id="btnEmpleados" layoutX="39.0" layoutY="378.0" mnemonicParsing="false" onAction="#mostrarEmpleados" prefHeight="37.0" prefWidth="167.0" text="Ver Empleados" />
-                <Button fx:id="btnAgregarEmpleado" layoutX="40.0" layoutY="428.0" mnemonicParsing="false" onAction="#mostrarFormulario" prefHeight="36.0" prefWidth="164.0" text="Añadir Empleado" />
+                <Button fx:id="btnEmpleados" layoutX="39.0" layoutY="423.0" mnemonicParsing="false" onAction="#mostrarEmpleados" prefHeight="37.0" prefWidth="167.0" text="Ver Empleados" />
+                <Button fx:id="btnAgregarEmpleado" layoutX="40.0" layoutY="478.0" mnemonicParsing="false" onAction="#mostrarFormulario" prefHeight="36.0" prefWidth="164.0" text="Añadir Empleado" />
                 <Label layoutX="109.0" layoutY="175.0" prefHeight="31.0" prefWidth="80.0" text="(admin)">
                     <font>
                         <Font size="18.0" />
                     </font>
                 </Label>
             <Button fx:id="btnInicio" layoutX="40.0" layoutY="273.0" mnemonicParsing="false" onAction="#mostrarInicio" prefHeight="37.0" prefWidth="166.0" text="Inicio" />
-            <Button fx:id="btnInicio1" layoutX="40.0" layoutY="323.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="167.0" text="Monitorear Transacciones" />
+            <Button fx:id="btnInicio1" layoutX="40.0" layoutY="323.0" mnemonicParsing="false" onAction="#mostrarTransacciones" prefHeight="37.0" prefWidth="167.0" text="Monitorear Transacciones" />
+            <Button layoutX="39.0" layoutY="375.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="167.0" text="Ver Clientes" />
             </children>
         </AnchorPane>
     </left>

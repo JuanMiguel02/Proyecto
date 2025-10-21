@@ -14,6 +14,7 @@ import javafx.scene.layout.StackPane;
 import triplej.banco.Repositories.UsuarioRepository;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 public class AdminController {
 
@@ -36,8 +37,14 @@ public class AdminController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlRuta));
             Parent vista = loader.load();
 
-            // Si quieres acceder al controlador después
             Object controller = loader.getController();
+
+            try {
+                controller.getClass()
+                        .getMethod("setAdminController", AdminController.class)
+                        .invoke(controller, this);
+            }  catch (Exception ignored) {}
+
 
             // Limpiar el StackPane y agregar la nueva vista
             contenedorCentro.getChildren().clear();
@@ -61,6 +68,7 @@ public class AdminController {
     }
     @FXML
     private void mostrarEmpleados() {
+
         cargarVistaEnCentro("/triplej/banco/Views/TablaEmpleados-view.fxml");
     }
 
@@ -70,7 +78,12 @@ public class AdminController {
     }
 
     @FXML
-    private void mostrarInicio() {
+    private void mostrarTransacciones(){
+        cargarVistaEnCentro("/triplej/banco/Views/MonitoreoTransacciones-view.fxml");
+    }
+
+    @FXML
+    public void mostrarInicio() {
         contenedorCentro.getChildren().clear();
         contenedorCentro.getChildren().add(vistaInicio);
     }

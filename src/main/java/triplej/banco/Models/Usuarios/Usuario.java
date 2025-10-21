@@ -10,14 +10,15 @@ public abstract class Usuario {
     private LocalDate fechaRegistro;
     private RolUsuario rolUsuario;
     private Image foto;
+    private boolean activo;
 
-    public Usuario( String correo, String contrasenia, RolUsuario rolUsuario) {
+    public Usuario( String correo, String contrasenia, RolUsuario rolUsuario, boolean activo) {
         this.correo = correo;
         this.contrasenia = contrasenia;
         this.rolUsuario = rolUsuario;
         this.fechaRegistro = LocalDate.now();
+        this.activo = activo;
     }
-
 
 
     public boolean verificarCredenciales(String correo, String contrasenia){
@@ -65,6 +66,14 @@ public abstract class Usuario {
 
     public void setFoto(Image foto) {
         this.foto = foto;
+    }
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
     }
 
     @Override

@@ -2,11 +2,13 @@ package triplej.banco.Controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import triplej.banco.Models.Usuarios.*;
 import triplej.banco.Repositories.EmpleadoRepository;
 
 import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
+
 
 public class FormularioEmpleadoController {
 
@@ -23,12 +25,12 @@ public class FormularioEmpleadoController {
     @FXML private TextField txtCargo;
     @FXML private TextField txtSalario;
     @FXML private ComboBox<String> cmbDepartamento;
+    @FXML private StackPane contenedorCentro;
 
-    private Runnable onGuardarCallback; // Callback para refrescar la tabla
+    private AdminController adminController;
 
     @FXML
     public void initialize() {
-
 
         // Configurar ComboBox de departamentos
         cmbDepartamento.getItems().addAll(
@@ -76,8 +78,10 @@ public class FormularioEmpleadoController {
             }
         });
     }
-
- 
+    @FXML
+    private void cancelar(){
+        adminController.mostrarInicio();
+    }
 
     @FXML
     private void handleGuardar() {
@@ -126,10 +130,6 @@ public class FormularioEmpleadoController {
                     , Alert.AlertType.INFORMATION
             );
 
-            // Ejecutar callback para refrescar la tabla
-            if (onGuardarCallback != null) {
-                onGuardarCallback.run();
-            }
 
         } catch (IllegalArgumentException e) {
             mostrarAlerta(e.getMessage());
@@ -138,6 +138,9 @@ public class FormularioEmpleadoController {
         }
     }
 
+    public void setAdminController(AdminController adminController){
+        this.adminController = adminController;
+    }
 
     private boolean validarCampos() {
         if (txtNombre.getText().trim().isEmpty()) {
@@ -233,7 +236,5 @@ public class FormularioEmpleadoController {
 
         return true;
     }
-
-
 
 }

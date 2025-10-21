@@ -2,6 +2,8 @@ package triplej.banco.Models.Cajero;
 
 import triplej.banco.Models.Banco;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
+import triplej.banco.Models.Reportes.ReporteCliente;
+import triplej.banco.Models.Reportes.ReporteGenerado;
 import triplej.banco.Models.Usuarios.Cliente;
 import triplej.banco.Models.Usuarios.RolUsuario;
 import triplej.banco.Models.Usuarios.Usuario;
@@ -73,6 +75,10 @@ public class Cajero {
         return cuenta.getSaldo();
     }
 
+    public ReporteGenerado generarReporteCliente(CuentaBancaria cuenta){
+        ReporteCliente reporte = new ReporteCliente(cuenta);
+        return reporte.generarReporte();
+    }
 }
 
 

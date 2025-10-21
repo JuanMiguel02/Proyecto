@@ -21,6 +21,10 @@ public class Cliente {
         return usuarioAsociado;
     }
 
+    public String getNombrePropietario(){
+        return usuarioAsociado.getNombreCompleto();
+    }
+
     public void setUsuarioAsociado(Usuario usuarioAsociado) {
         this.usuarioAsociado = usuarioAsociado;
     }
