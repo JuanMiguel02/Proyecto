@@ -12,12 +12,12 @@ public abstract class Usuario {
     private Image foto;
     private boolean activo;
 
-    public Usuario( String correo, String contrasenia, RolUsuario rolUsuario, boolean activo) {
+    public Usuario( String correo, String contrasenia, RolUsuario rolUsuario) {
         this.correo = correo;
         this.contrasenia = contrasenia;
         this.rolUsuario = rolUsuario;
         this.fechaRegistro = LocalDate.now();
-        this.activo = activo;
+        this.activo = true;
     }
 
 

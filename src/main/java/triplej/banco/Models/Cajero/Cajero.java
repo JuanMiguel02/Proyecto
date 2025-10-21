@@ -58,11 +58,11 @@ public class Cajero {
             return;
         }
         if(descripcion == null || descripcion.isBlank()){
-            descripcion = "Déposito realizado";
+            descripcion = "Deposito realizado";
         }
         try{
             cuenta.depositar(monto, descripcion);
-            System.out.println("Déposito de " + monto + " realizado");
+            System.out.println("Deposito de " + monto + " realizado");
         }catch (IllegalArgumentException e){
             System.out.println("Error al realizar deposito");
         }

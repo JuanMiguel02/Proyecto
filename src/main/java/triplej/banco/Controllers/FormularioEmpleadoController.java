@@ -3,7 +3,6 @@ package triplej.banco.Controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 import triplej.banco.Models.Usuarios.*;
 import triplej.banco.Repositories.EmpleadoRepository;
 
@@ -125,7 +124,7 @@ public class FormularioEmpleadoController {
             mostrarAlerta(
                     "Éxito",
                     "Empleado registrado exitosamente\n\n" +
-                            "Número de empleado: " + nuevoEmpleado.getCargo() + "\n" +
+                            "Cargo de empleado: " + nuevoEmpleado.getCargo() + "\n" +
                             "Nombre: " + nuevoEmpleado.getPersona().getNombreCompleto()
                     , Alert.AlertType.INFORMATION
             );

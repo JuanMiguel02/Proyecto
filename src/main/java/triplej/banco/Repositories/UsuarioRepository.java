@@ -16,11 +16,12 @@ public class UsuarioRepository {
     // Unica lista para todos los usuarios.
     private final ObservableList<Usuario> usuarios;
 
+
     public UsuarioRepository() {
         this.usuarios = FXCollections.observableArrayList();
     }
 
-    public static synchronized UsuarioRepository getInstancia() {
+    public static UsuarioRepository getInstancia() {
         if (instancia == null) {
             instancia = new UsuarioRepository();
         }

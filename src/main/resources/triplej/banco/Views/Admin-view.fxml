@@ -15,7 +15,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="863.0" prefWidth="1480.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="triplej.banco.Controllers.AdminController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="920.0" prefWidth="1480.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="triplej.banco.Controllers.AdminController">
     <center>
         <StackPane fx:id="contenedorCentro" prefHeight="424.0" prefWidth="429.0" BorderPane.alignment="CENTER">
          <children>
@@ -82,7 +82,7 @@
                         </AnchorPane>
                      </children>
                   </AnchorPane>
-                  <AreaChart layoutX="352.0" layoutY="375.0" prefHeight="283.0" prefWidth="619.0">
+                  <AreaChart fx:id="graficaUsuarios" layoutX="352.0" layoutY="361.0" prefHeight="343.0" prefWidth="619.0" title="Usuarios">
                     <xAxis>
                       <CategoryAxis side="BOTTOM" />
                     </xAxis>
@@ -90,7 +90,7 @@
                       <NumberAxis side="LEFT" />
                     </yAxis>
                   </AreaChart>
-                  <Button layoutX="543.0" layoutY="658.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="237.0" text="Generar Reporte" />
+                  <Button layoutX="543.0" layoutY="726.0" mnemonicParsing="false" onAction="#generarReporte" prefHeight="48.0" prefWidth="237.0" text="Generar Reporte" />
                </children>
             </AnchorPane>
          </children>

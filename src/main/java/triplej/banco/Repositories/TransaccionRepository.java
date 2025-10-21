@@ -40,10 +40,10 @@ public class TransaccionRepository {
        Transaccion t1 = new Transaccion("123","Retiro", 20000,"12345", "213213");
         agregar(t1);
 
-        Transaccion t2 = new Transaccion("321","Déposito", 150000,"12341", "213413");
+        Transaccion t2 = new Transaccion("321","Deposito", 150000,"12341", "213413");
         agregar(t2);
 
-        Transaccion t3 = new Transaccion("321","Déposito", 15000000,"12341", "213413");
+        Transaccion t3 = new Transaccion("321","Deposito", 15000000,"12341", "213413");
         agregar(t3);
 
     }
