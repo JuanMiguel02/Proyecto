@@ -14,6 +14,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import triplej.banco.Models.Reportes.ReporteAdmin;
 import triplej.banco.Models.Reportes.ReporteGenerado;
+import triplej.banco.Repositories.ClienteRepository;
 import triplej.banco.Repositories.EmpleadoRepository;
 import triplej.banco.Repositories.UsuarioRepository;
 
@@ -42,6 +43,7 @@ public class AdminController {
     @FXML
     public void initialize() {
 
+        ClienteRepository clienteRepository = ClienteRepository.getInstancia();
         EmpleadoRepository empleadoRepository = EmpleadoRepository.getInstance();
         usuarioRepository = UsuarioRepository.getInstancia();
 

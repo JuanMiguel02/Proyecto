@@ -6,7 +6,6 @@ module triplej.banco {
     requires java.desktop;
 
 
-
     opens triplej.banco to javafx.fxml;
     opens triplej.banco.Controllers to javafx.fxml;
     opens triplej.banco.Models to javafx.fxml;

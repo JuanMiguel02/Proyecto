@@ -25,7 +25,6 @@ public class UsuarioRepository {
     public UsuarioRepository() {
         this.usuarios = FXCollections.observableArrayList();
         cargarDesdeArchivo();
-
     }
 
     public static UsuarioRepository getInstancia() {
@@ -37,8 +36,9 @@ public class UsuarioRepository {
 
     // Unico metodo para guardar cualquier tipo de usuario.
     public void guardar(Usuario usuario) {
-        if (buscarUsuarioPorEmail(usuario.getCorreo()).isPresent()) {
-            throw new IllegalArgumentException("Advertencia: Se intentó guardar un cliente con un email que ya existe: " + usuario.getCorreo());
+        Optional<Usuario> existente = buscarUsuarioPorEmail(usuario.getCorreo());
+        if (existente.isPresent()) {
+            return;
         }
         usuarios.add(usuario);
         guardarEnArchivo(usuario);
@@ -61,7 +61,7 @@ public class UsuarioRepository {
     }
 
     public void eliminarUsuario(Usuario usuario) {
-        usuarios.remove(usuario);
+        usuarios.removeIf(u -> u.getCorreo().equals(usuario.getCorreo()));
         reescribirArchivo();
     }
 

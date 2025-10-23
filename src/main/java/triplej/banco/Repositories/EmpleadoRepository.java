@@ -21,13 +21,25 @@ public class EmpleadoRepository {
         empleados = new ArrayList<>();
         this.usuarioRepository = UsuarioRepository.getInstancia();
 
-        cargarDesdeArchivo();
+        Path ruta = Paths.get("Banco", "Datos", "Empleado");
 
-        if(empleados.isEmpty()){
+        if(Files.exists(ruta)){
+            System.out.println("cargando empleados");
+//            cargarDesdeUsuarios();
+            cargarDesdeArchivo();
+        }else{
+            System.out.println("Primera ejecución");
             cargarDatosEjemplo();
         }
 
     }
+
+    private void cargarDesdeUsuarios() {
+        // Carga empleados que ya fueron guardados en UsuarioRepository
+        usuarioRepository.obtenerPorRol(RolUsuario.EMPLEADO)
+                .forEach(usuario -> empleados.add(new Empleado((PersonaNatural) usuario, "", 0, "Sin depto")));
+    }
+
 
     public static EmpleadoRepository getInstance() {
         if(instance == null) {
@@ -35,6 +47,7 @@ public class EmpleadoRepository {
         }
         return instance;
     }
+
 
     private void cargarDatosEjemplo() {
         PersonaNatural juan = new PersonaNatural(
@@ -160,7 +173,7 @@ public class EmpleadoRepository {
             }
 
 
-        StringBuilder contenido = new StringBuilder();
+            StringBuilder contenido = new StringBuilder();
             contenido.append(String.join(
                     "\t",
                     "Nombre", "Apellido", "Documento", "Teléfono",

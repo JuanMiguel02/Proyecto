@@ -2,12 +2,13 @@ package triplej.banco.Controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import triplej.banco.Models.Cuentas.CuentaAhorro;
+import triplej.banco.Models.Cuentas.CuentaBancaria;
 import triplej.banco.Models.Usuarios.Cliente;
 
 import java.io.IOException;
@@ -15,15 +16,27 @@ import java.io.IOException;
 public class ClienteController {
     private Cliente cliente;
     @FXML private Label lblNombre;
+    @FXML private Label lblDinero;
     @FXML private Button btnSalir;
 
     public void setCliente(Cliente cliente){
         this.cliente = cliente;
+        CuentaBancaria cuentaActiva = new CuentaAhorro(cliente);
+
+        cliente.agregarCuenta(cuentaActiva);
+        cliente.setCuentaActiva(cuentaActiva);
+
         lblNombre.setText(cliente.getNombre());
+        depositar();
+        lblDinero.setText(String.valueOf(cliente.getSaldo()));
     }
 
     public Cliente getCliente(){
         return cliente;
+    }
+
+    private void depositar(){
+         cliente.getCuentaActiva().depositar(200000.00);
     }
 
     @FXML
@@ -37,6 +50,7 @@ public class ClienteController {
             Stage stage = new Stage();
             stage.setTitle("Inicio");
             stage.setScene(new Scene(root));
+            stage.setMaximized(true);
             stage.show();
 
             ((Stage) btnSalir.getScene().getWindow()).close();

@@ -61,7 +61,7 @@ public class Cajero {
             descripcion = "Deposito realizado";
         }
         try{
-            cuenta.depositar(monto, descripcion);
+            cuenta.depositar(monto);
             System.out.println("Deposito de " + monto + " realizado");
         }catch (IllegalArgumentException e){
             System.out.println("Error al realizar deposito");

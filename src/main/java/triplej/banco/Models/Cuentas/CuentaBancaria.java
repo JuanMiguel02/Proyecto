@@ -90,7 +90,7 @@ public abstract class CuentaBancaria {
     public abstract void retirar(Double monto);
 
 
-    public void depositar(Double monto, String descripcion) {
+    public void depositar(Double monto) {
         if (monto <= 0) throw new IllegalArgumentException("El monto debe ser positivo");
         saldo += monto;
 
@@ -102,7 +102,7 @@ public abstract class CuentaBancaria {
                 this.numeroCuenta
         );
 
-        trans.setDescripcion(descripcion);
+        trans.setDescripcion("Déposito de: " + monto);
         trans.setExitosa(true);
 
         TransaccionRepository.getInstance().agregar(trans);

@@ -3,6 +3,9 @@ package triplej.banco.Repositories;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
 import triplej.banco.Models.Usuarios.*;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -14,8 +17,22 @@ public class ClienteRepository {
     private ClienteRepository(){
         this.clientes = new ArrayList<>();
         this.usuarioRepository = UsuarioRepository.getInstancia();
-        usuarioRepository.cargarDesdeArchivo();
 
+        Path ruta = Paths.get("Banco", "Datos", "Usuario");
+
+        if (Files.exists(ruta)) {
+            System.out.println("✅ Cargando clientes desde archivo existente...");
+            cargarDesdeUsuarios();
+        } else {
+            System.out.println("⚙️ Primera ejecución: creando datos de ejemplo de clientes...");
+            cargarDatosEjemplo();
+        }
+
+    }
+
+    private void cargarDesdeUsuarios() {
+        usuarioRepository.obtenerPorRol(RolUsuario.CLIENTE)
+                .forEach(usuario -> clientes.add(new Cliente((PersonaNatural) usuario)));
     }
 
     public static synchronized ClienteRepository getInstancia(){
@@ -47,7 +64,7 @@ public class ClienteRepository {
         return clientes.stream()
                 .filter(c -> c.getCuentas().stream()
                         .anyMatch(cuenta -> cuenta.getNumeroCuenta().equals(numeroCuenta)))
-                        .findFirst();
+                .findFirst();
     }
 
     private void cargarDatosEjemplo() {

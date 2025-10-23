@@ -10,11 +10,19 @@ public class Cliente {
 
     private Usuario usuarioAsociado;
     private final ArrayList<CuentaBancaria> cuentas;
+    private CuentaBancaria cuentaActiva;
 
     public Cliente(Usuario usuarioAsociado) {
         this.usuarioAsociado = usuarioAsociado;
         this.cuentas = new ArrayList<>();
 
+    }
+
+    public double getSaldo(){
+       if(cuentaActiva != null){
+           return cuentaActiva.getSaldo();
+       }
+        return 0.0;
     }
 
     public Usuario getUsuarioAsociado() {
@@ -43,6 +51,15 @@ public class Cliente {
      }
      return cuentas.stream().filter(cuenta -> cuenta.getNumeroCuenta().equals(numeroCuenta)).findFirst();
     }
+
+    public CuentaBancaria getCuentaActiva() {
+        return cuentaActiva;
+    }
+
+    public void setCuentaActiva(CuentaBancaria cuentaActiva) {
+        this.cuentaActiva = cuentaActiva;
+    }
+
     @Override
     public String toString() {
 
