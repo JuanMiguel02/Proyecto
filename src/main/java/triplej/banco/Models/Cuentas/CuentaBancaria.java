@@ -84,7 +84,7 @@ public abstract class CuentaBancaria {
     }
 
     public String getPropietario() {
-        return  propietario.getNombrePropietario();
+        return  propietario.getNombre();
     }
 
     public abstract void retirar(Double monto);

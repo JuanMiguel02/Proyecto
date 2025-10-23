@@ -30,6 +30,8 @@ public class AdminController {
     @FXML private StackPane contenedorCentro;
     @FXML private AnchorPane vistaInicio;
     @FXML private Label lblTotalUsuarios;
+    @FXML private AnchorPane vistaReporte;
+    @FXML private TextArea txtContenido;
 
     @FXML
     private AreaChart<String, Number> graficaUsuarios;
@@ -40,8 +42,9 @@ public class AdminController {
     @FXML
     public void initialize() {
 
-       usuarioRepository = UsuarioRepository.getInstancia();
         EmpleadoRepository empleadoRepository = EmpleadoRepository.getInstance();
+        usuarioRepository = UsuarioRepository.getInstancia();
+
 
         lblTotalUsuarios.textProperty().bind(
               Bindings.size(usuarioRepository.getUsuarios()).asString()
@@ -90,9 +93,27 @@ public class AdminController {
         for(String linea : reporte.getContenido()){
             texto.append(linea).append("\n");
         }
+        txtContenido.setText(texto.toString());
+        txtContenido.setWrapText(true);
 
-        exportarReportePdf(texto.toString());
+        // Asegurarnos de que la vistaReporte esté preparada para layout
+        vistaReporte.setVisible(true);
+        vistaReporte.setManaged(true);
 
+        // Mostrar sólo vistaReporte dentro del contenedor central
+        contenedorCentro.getChildren().clear();
+        contenedorCentro.getChildren().add(vistaReporte);
+
+    }
+
+    @FXML
+    private void guardarReporte(){
+        String contenido = txtContenido.getText();
+        if(contenido == null || contenido.isBlank()){
+            mostrarAlerta("No hay reporte para guardar");
+            return;
+        }
+        exportarReporteTxt(contenido);
     }
 
     private void inicializarGraficoUsuarios(){
@@ -134,12 +155,15 @@ public class AdminController {
     @FXML
     public void mostrarInicio() {
         contenedorCentro.getChildren().clear();
+        vistaInicio.setVisible(true);
+        vistaInicio.setManaged(true);
         contenedorCentro.getChildren().add(vistaInicio);
+
     }
 
-    private void exportarReportePdf(String contenido){
+    private void exportarReporteTxt(String contenido){
         try{
-            Path ruta = Paths.get("reportes", "Reportes");
+            Path ruta = Paths.get("reportes", "Reporte.txt");
             if(ruta.getParent() != null){
                 Files.createDirectories(ruta.getParent());
             }

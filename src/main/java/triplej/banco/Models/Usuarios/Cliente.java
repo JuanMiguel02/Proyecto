@@ -21,7 +21,7 @@ public class Cliente {
         return usuarioAsociado;
     }
 
-    public String getNombrePropietario(){
+    public String getNombre(){
         return usuarioAsociado.getNombreCompleto();
     }
 

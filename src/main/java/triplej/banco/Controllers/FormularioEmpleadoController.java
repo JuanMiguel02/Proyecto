@@ -2,9 +2,15 @@ package triplej.banco.Controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.StackPane;
+
 import triplej.banco.Models.Usuarios.*;
 import triplej.banco.Repositories.EmpleadoRepository;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
 
@@ -24,9 +30,9 @@ public class FormularioEmpleadoController {
     @FXML private TextField txtCargo;
     @FXML private TextField txtSalario;
     @FXML private ComboBox<String> cmbDepartamento;
-    @FXML private StackPane contenedorCentro;
 
     private AdminController adminController;
+    private EmpleadoRepository empleadoRepository;
 
     @FXML
     public void initialize() {
@@ -117,8 +123,8 @@ public class FormularioEmpleadoController {
                     salario,
                     cmbDepartamento.getValue()
             );
-
             EmpleadoRepository.getInstance().agregarEmpleado(nuevoEmpleado);
+
 
 
             mostrarAlerta(
@@ -235,5 +241,6 @@ public class FormularioEmpleadoController {
 
         return true;
     }
+
 
 }
