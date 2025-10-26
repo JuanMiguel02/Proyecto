@@ -29,6 +29,8 @@ public class Cliente {
         return usuarioAsociado;
     }
 
+    public String getCorreo(){return usuarioAsociado.getCorreo();}
+
     public String getNombre(){
         return usuarioAsociado.getNombreCompleto();
     }

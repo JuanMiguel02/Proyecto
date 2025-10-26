@@ -8,6 +8,10 @@ public class CuentaAhorro extends CuentaBancaria {
         super(propietario);
     }
 
+    public CuentaAhorro(Cliente propietario, String numeroCuenta, double saldo){
+        super(propietario,numeroCuenta,saldo);
+    }
+
     @Override
     public String getCodigoTipoCuenta() {
         return "1";

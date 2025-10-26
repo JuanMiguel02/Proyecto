@@ -28,6 +28,14 @@ public abstract class CuentaBancaria {
         this.historial = new ArrayList<>();
     }
 
+    public CuentaBancaria(Cliente propietario, String numeroCuenta, double saldo) {
+        this.propietario = propietario;
+        this.numeroCuenta = numeroCuenta;
+        this.saldo = saldo;
+        this.fechaApertura = LocalDate.now();
+        this.historial = new ArrayList<>();
+    }
+
     //Metodo para generar un numero de cuenta
     private String generarNumeroCuenta() {
         String numero;
@@ -83,8 +91,8 @@ public abstract class CuentaBancaria {
         this.saldo = saldo;
     }
 
-    public String getPropietario() {
-        return  propietario.getNombre();
+    public Cliente getPropietario() {
+        return this.propietario;
     }
 
     public abstract void retirar(Double monto);

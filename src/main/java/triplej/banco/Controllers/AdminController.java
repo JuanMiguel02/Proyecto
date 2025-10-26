@@ -6,12 +6,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import triplej.banco.Models.Reportes.ReporteAdmin;
 import triplej.banco.Models.Reportes.ReporteGenerado;
 import triplej.banco.Repositories.ClienteRepository;
@@ -33,6 +35,7 @@ public class AdminController {
     @FXML private Label lblTotalUsuarios;
     @FXML private AnchorPane vistaReporte;
     @FXML private TextArea txtContenido;
+    @FXML private Button btnSalir;
 
     @FXML
     private AreaChart<String, Number> graficaUsuarios;
@@ -175,6 +178,29 @@ public class AdminController {
 
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    private void volverMenu(){
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/SingIn-view.fxml"));
+            Parent root = loader.load();
+
+            SignInController signInController= loader.getController();
+
+            Stage stage = new Stage();
+            stage.setTitle("Inicio");
+            stage.setScene(new Scene(root));
+            stage.setMaximized(true);
+            stage.show();
+
+            ((Stage) btnSalir.getScene().getWindow()).close();
+
+
+        }
+        catch (IOException e){
+            e.printStackTrace();
         }
     }
 

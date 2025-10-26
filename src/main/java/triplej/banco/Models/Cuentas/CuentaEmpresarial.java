@@ -7,6 +7,10 @@ public class CuentaEmpresarial extends CuentaBancaria {
         super(propietario);
     }
 
+    public CuentaEmpresarial (Cliente propietario, String numeroCuenta, double saldo){
+        super(propietario,numeroCuenta,saldo);
+    }
+
     @Override
     public String getCodigoTipoCuenta() {
         return "3";
