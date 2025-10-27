@@ -27,6 +27,7 @@ public class Transaccion {
         this.exitosa = false;
     }
 
+
     public String getId() {
         return id;
     }
@@ -76,9 +77,12 @@ public class Transaccion {
         this.exitosa = exitosa;
     }
 
+    public void setFecha(LocalDateTime fecha){
+        this.fecha = fecha;
+    }
+
     public boolean esSospechosa(){
         if(monto > 10_000_000) return true;
-        if(cuentaOrigen != null && cuentaOrigen.equals(cuentaDestino)) return true;
 
         TransaccionRepository repo = TransaccionRepository.getInstance();
         List<Transaccion> historial = repo.getPorCuenta(cuentaOrigen);

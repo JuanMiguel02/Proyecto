@@ -21,11 +21,10 @@ public class EmpleadoRepository {
         empleados = new ArrayList<>();
         this.usuarioRepository = UsuarioRepository.getInstancia();
 
-        Path ruta = Paths.get("Banco", "Datos", "Empleado");
+        Path ruta = Paths.get("Banco", "Datos", "Empleados.txt");
 
         if(Files.exists(ruta)){
             System.out.println("cargando empleados");
-//            cargarDesdeUsuarios();
             cargarDesdeArchivo();
         }else{
             System.out.println("Primera ejecución");
@@ -33,13 +32,6 @@ public class EmpleadoRepository {
         }
 
     }
-
-    private void cargarDesdeUsuarios() {
-        // Carga empleados que ya fueron guardados en UsuarioRepository
-        usuarioRepository.obtenerPorRol(RolUsuario.EMPLEADO)
-                .forEach(usuario -> empleados.add(new Empleado((PersonaNatural) usuario, "", 0, "Sin depto")));
-    }
-
 
     public static EmpleadoRepository getInstance() {
         if(instance == null) {
@@ -59,6 +51,7 @@ public class EmpleadoRepository {
                 "Paco", "Jones", "paco@gmail", "1212321", RolUsuario.EMPLEADO, TipoDocumento.CEDULACIUDADANIA,
                 "1233", "21341", "Colombia", "Bogotá");
         agregarEmpleado(new Empleado(paco, "Celador", 2000, "Seguridad"));
+
     }
 
     public ArrayList<Empleado> getEmpleados() {
@@ -85,7 +78,7 @@ public class EmpleadoRepository {
     }
 
     public void cargarDesdeArchivo(){
-        Path ruta = Paths.get("Banco", "Datos", "Empleado");
+        Path ruta = Paths.get("Banco", "Datos", "Empleados.txt");
         if(!Files.exists(ruta)) return;
 
         try(BufferedReader lector = Files.newBufferedReader(ruta)) {
@@ -126,7 +119,7 @@ public class EmpleadoRepository {
 
     private void guardarEnArchivo(Empleado empleado){
         try {
-            Path ruta = Paths.get( "Banco","Datos", "Empleado");
+            Path ruta = Paths.get( "Banco","Datos", "Empleados.txt");
             if (ruta.getParent() != null) {
                 Files.createDirectories(ruta.getParent());
             }
@@ -167,7 +160,7 @@ public class EmpleadoRepository {
 
     private void reescribirArchivo(){
         try{
-            Path ruta = Paths.get( "Banco", "Datos", "Empleado");
+            Path ruta = Paths.get( "Banco", "Datos", "Empleados.txt");
             if(ruta.getParent() != null){
                 Files.createDirectories(ruta.getParent());
             }

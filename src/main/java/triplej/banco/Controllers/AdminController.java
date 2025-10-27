@@ -14,19 +14,19 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import triplej.banco.Models.Banco;
 import triplej.banco.Models.Reportes.ReporteAdmin;
 import triplej.banco.Models.Reportes.ReporteGenerado;
 import triplej.banco.Repositories.ClienteRepository;
 import triplej.banco.Repositories.EmpleadoRepository;
 import triplej.banco.Repositories.UsuarioRepository;
-
+import triplej.banco.Utils.GeneracionReporteVista;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
-
 
 public class AdminController {
 
@@ -46,16 +46,17 @@ public class AdminController {
     @FXML
     public void initialize() {
 
-        ClienteRepository clienteRepository = ClienteRepository.getInstancia();
-        EmpleadoRepository empleadoRepository = EmpleadoRepository.getInstance();
-        usuarioRepository = UsuarioRepository.getInstancia();
-
+        Banco banco = Banco.getInstancia();
+        usuarioRepository = banco.getUsuarioRepository();
 
         lblTotalUsuarios.textProperty().bind(
               Bindings.size(usuarioRepository.getUsuarios()).asString()
         );
 
         inicializarGraficoUsuarios();
+
+        // DEBUG: Verificar cuántos usuarios hay realmente
+        System.out.println("👥 Usuarios cargados: " + usuarioRepository.getUsuarios().size());
     }
 
     private void cargarVistaEnCentro(String fxmlRuta) {
@@ -94,20 +95,7 @@ public class AdminController {
         ReporteAdmin reporteAdmin = new ReporteAdmin();
         ReporteGenerado reporte = reporteAdmin.generarReporte();
 
-        StringBuilder texto = new StringBuilder();
-        for(String linea : reporte.getContenido()){
-            texto.append(linea).append("\n");
-        }
-        txtContenido.setText(texto.toString());
-        txtContenido.setWrapText(true);
-
-        // Asegurarnos de que la vistaReporte esté preparada para layout
-        vistaReporte.setVisible(true);
-        vistaReporte.setManaged(true);
-
-        // Mostrar sólo vistaReporte dentro del contenedor central
-        contenedorCentro.getChildren().clear();
-        contenedorCentro.getChildren().add(vistaReporte);
+        GeneracionReporteVista.generarReporte(reporte, txtContenido, vistaReporte, contenedorCentro);
 
     }
 

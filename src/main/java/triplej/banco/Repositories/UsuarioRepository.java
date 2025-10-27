@@ -11,7 +11,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,10 +20,19 @@ public class UsuarioRepository {
     // Unica lista para todos los usuarios.
     private final ObservableList<Usuario> usuarios;
 
-
     public UsuarioRepository() {
         this.usuarios = FXCollections.observableArrayList();
-        cargarDesdeArchivo();
+        Path ruta = Paths.get("Banco", "Datos", "Usuarios.txt");
+
+        if (Files.exists(ruta)) {
+                System.out.println("cargando empleados");
+                cargarDesdeArchivo();
+
+        }else{
+            System.out.println("Primera ejecución");
+            cargarDatosEjemplo();
+        }
+
     }
 
     public static UsuarioRepository getInstancia() {
@@ -69,8 +77,14 @@ public class UsuarioRepository {
         return usuarios.size();
     }
 
+    private void cargarDatosEjemplo(){
+        PersonaNatural admin = new PersonaNatural("Sancho", "Panza", "sancho@uqbank", "456313", RolUsuario.ADMIN,
+                TipoDocumento.CEDULACIUDADANIA, "312412", "313414", "Colombia", "Armenia");
+        guardar(admin);
+    }
+
     public void cargarDesdeArchivo() {
-        Path ruta = Paths.get("Banco", "Datos", "Usuario");
+        Path ruta = Paths.get("Banco", "Datos", "Usuarios.txt");
         if (!Files.exists(ruta)) return;
 
         try (BufferedReader lector = Files.newBufferedReader(ruta)) {
@@ -116,7 +130,7 @@ public class UsuarioRepository {
 
     private void guardarEnArchivo(Usuario usuario) {
         try {
-            Path ruta = Paths.get("Banco", "Datos", "Usuario");
+            Path ruta = Paths.get("Banco", "Datos", "Usuarios.txt");
             if (ruta.getParent() != null) {
                 Files.createDirectories(ruta.getParent());
             }
@@ -155,7 +169,7 @@ public class UsuarioRepository {
 
     private void reescribirArchivo() {
         try {
-            Path ruta = Paths.get("Banco", "Datos", "Usuario");
+            Path ruta = Paths.get("Banco", "Datos", "Usuarios.txt");
             if (ruta.getParent() != null) {
                 Files.createDirectories(ruta.getParent());
             }

@@ -37,7 +37,7 @@ public class MonitoreoTransaccionesController {
         colTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
 
        cargarTransacciones();
-
+        System.out.println("Transacciones cargadas: " + repoTransacciones.getTodasTransacciones().size());
 
        tablaTransacciones.setRowFactory(tv -> new TableRow<>(){
            @Override
@@ -74,5 +74,6 @@ public class MonitoreoTransaccionesController {
     private void cargarTransacciones(){
         listaTransacciones = FXCollections.observableArrayList(repoTransacciones.getTodasTransacciones());
         tablaTransacciones.setItems(listaTransacciones);
+
     }
 }

@@ -9,6 +9,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import triplej.banco.Models.Banco;
 import triplej.banco.Models.Usuarios.Cliente;
 import triplej.banco.Models.Usuarios.Usuario;
 import triplej.banco.Models.Usuarios.RolUsuario;
@@ -26,13 +27,13 @@ public class SignInController {
     @FXML private TextField txtCorreo;
     @FXML private PasswordField txtContrasenia;
 
-    private UsuarioRepository usuarioRepo = UsuarioRepository.getInstancia();
+    private UsuarioRepository usuarioRepo;
 
     @FXML
     public  void initialize(){
-        usuarioRepo = UsuarioRepository.getInstancia();
-        EmpleadoRepository empleadoRepository = EmpleadoRepository.getInstance();
-        ClienteRepository clienteRepository = ClienteRepository.getInstancia();
+        Banco banco = Banco.getInstancia();
+        usuarioRepo = banco.getUsuarioRepository();
+        System.out.println(usuarioRepo.getUsuarios().size());
     }
 
     @FXML
@@ -55,7 +56,7 @@ public class SignInController {
 
         // Login exitoso: abrir ventana según rol
         switch (usuario.getRolUsuario()) {
-            case EMPLEADO -> abrirVentanaEmpleado(usuario);
+            case ADMIN -> abrirVentanaAdmin(usuario);
             case CLIENTE -> abrirVentanaCliente(usuario);
             // puedes agregar ADMIN, etc.
         }
@@ -65,15 +66,44 @@ public class SignInController {
         stage.close();
     }
 
-    private void abrirVentanaEmpleado(Usuario usuario) {
-        // Aquí cargas el FXML de la ventana de empleado
-        // Por simplicidad, mostramos un mensaje
-        System.out.println("Empleado " + usuario.getNombreCompleto() + " inició sesión");
+    private void abrirVentanaAdmin(Usuario usuario) {
+        try{
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/Admin-view.fxml"));
+            Parent root = loader.load();
+
+            AdminController adminController = loader.getController();
+
+            Stage stage = new Stage();
+            stage.setTitle("Administrador");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+        System.out.println("Admin" + usuario.getNombreCompleto() + " inició sesión");
+
     }
 
     private void abrirVentanaCliente(Usuario usuario) {
-        try{
-            Cliente cliente = new Cliente(usuario);
+        try {
+            ClienteRepository clienteRepo = ClienteRepository.getInstancia();
+
+            // Buscar cliente existente por correo
+            Optional<Cliente> clienteExistente = clienteRepo.buscarPorEmail(usuario.getCorreo());
+
+            Cliente cliente;
+
+            if (clienteExistente.isPresent()) {
+                cliente = clienteExistente.get();
+                System.out.println("Cliente existente encontrado: " + cliente.getNombre());
+            } else {
+                cliente = new Cliente(usuario);
+                clienteRepo.guardar(cliente);
+                System.out.println("Nuevo cliente creado y guardado: " + cliente.getNombre());
+            }
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/Cliente-view.fxml"));
             Parent root = loader.load();
@@ -86,10 +116,11 @@ public class SignInController {
             stage.setScene(new Scene(root));
             stage.show();
 
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
+
         System.out.println("Cliente " + usuario.getNombreCompleto() + " inició sesión");
     }
+
 }

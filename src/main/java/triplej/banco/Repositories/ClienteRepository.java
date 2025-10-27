@@ -19,16 +19,16 @@ public class ClienteRepository {
     private final ArrayList<Cliente> clientes;
     private final UsuarioRepository usuarioRepository;
 
+
     private ClienteRepository() {
         this.clientes = new ArrayList<>();
         this.usuarioRepository = UsuarioRepository.getInstancia();
 
-        Path rutaUsuarios = Paths.get("Banco", "Datos", "Usuario");
-        Path rutaCuentas = Paths.get("Banco", "Datos", "Cuentas");
+        Path rutaUsuarios = Paths.get("Banco", "Datos", "Usuarios.txt");
+        Path rutaCuentas = Paths.get("Banco", "Datos", "Cuentas.txt");
 
         if (Files.exists(rutaUsuarios) && Files.exists(rutaCuentas)) {
             System.out.println("✅ Cargando clientes y cuentas desde archivos existentes...");
-            usuarioRepository.cargarDesdeArchivo();
             cargarDesdeArchivo();
         } else {
             System.out.println("⚙️ Primera ejecución: creando datos de ejemplo de clientes...");
@@ -65,7 +65,7 @@ public class ClienteRepository {
      */
     private boolean cuentaExisteEnArchivo(String numeroCuenta) {
         try {
-            Path ruta = Paths.get("Banco", "Datos", "Cuentas");
+            Path ruta = Paths.get("Banco", "Datos", "Cuentas.txt");
             if (!Files.exists(ruta)) return false;
 
             return Files.lines(ruta)
@@ -123,9 +123,8 @@ public class ClienteRepository {
      * Si el cliente no existía en memoria, se reconstruye desde UsuarioRepository.
      */
     public void cargarDesdeArchivo() {
-        usuarioRepository.cargarDesdeArchivo();
 
-        Path ruta = Paths.get("Banco", "Datos", "Cuentas");
+        Path ruta = Paths.get("Banco", "Datos", "Cuentas.txt");
         if (!Files.exists(ruta)) return;
 
         try (BufferedReader lector = Files.newBufferedReader(ruta)) {
@@ -175,7 +174,7 @@ public class ClienteRepository {
      */
     private void guardarCuentaEnArchivo(CuentaBancaria cuenta) {
         try {
-            Path ruta = Paths.get("Banco", "Datos", "Cuentas");
+            Path ruta = Paths.get("Banco", "Datos", "Cuentas.txt");
             if (ruta.getParent() != null) {
                 Files.createDirectories(ruta.getParent());
             }
@@ -209,7 +208,7 @@ public class ClienteRepository {
      */
     public void actualizarSaldoEnArchivo(CuentaBancaria cuentaActualizada) {
         try {
-            Path ruta = Paths.get("Banco", "Datos", "Cuentas");
+            Path ruta = Paths.get("Banco", "Datos", "Cuentas.txt");
             if (!Files.exists(ruta)) return;
 
             // Leer todas las líneas
@@ -236,7 +235,7 @@ public class ClienteRepository {
                             cuentaActualizada.getPropietario().getCorreo()
                     );
                     nuevasLineas.add(nuevaLinea);
-                    System.out.println("💰 Actualizando saldo de cuenta " + cuentaActualizada.getNumeroCuenta() +
+                    System.out.println(" Actualizando saldo de cuenta " + cuentaActualizada.getNumeroCuenta() +
                             " a: " + cuentaActualizada.getSaldo());
                 } else {
                     nuevasLineas.add(linea);

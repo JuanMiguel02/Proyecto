@@ -3,15 +3,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import triplej.banco.Models.Banco;
+import triplej.banco.Models.Cajero.Cajero;
 import triplej.banco.Models.Cuentas.CuentaAhorro;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
+import triplej.banco.Models.Reportes.ReporteGenerado;
 import triplej.banco.Models.Usuarios.Cliente;
 import triplej.banco.Repositories.ClienteRepository;
 import triplej.banco.Repositories.UsuarioRepository;
@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
+import static triplej.banco.Utils.GeneracionReporteVista.generarReporte;
 
 public class ClienteController {
     private Cliente cliente;
@@ -30,15 +31,17 @@ public class ClienteController {
     @FXML private TextField txtNumCuenta;
     @FXML private TextField txtConfirmacion;
     @FXML private TextField txtValorDeposito;
+    @FXML private TextArea txtContenido;
     @FXML private AnchorPane vistaInicio;
     @FXML private AnchorPane vistaDeposito;
+    @FXML private AnchorPane vistaTransacciones;
     @FXML private StackPane contenedorCentro;
+    private final Cajero cajero = new Cajero();
 
     @FXML
     public void initialize() {
-        // Inicializa los repositorios (singleton)
-        ClienteRepository clienteRepository = ClienteRepository.getInstancia();
-        UsuarioRepository usuarioRepository = UsuarioRepository.getInstancia();
+        Banco banco = Banco.getInstancia();
+        UsuarioRepository usuarioRepository = banco.getUsuarioRepository();
     }
 
     public void setCliente(Cliente cliente) {
@@ -60,7 +63,7 @@ public class ClienteController {
             repo.guardar(cliente);
         }
 
-        // ⚠️ Si el cliente ya existía, pero no tiene cuenta activa, creamos una
+        //  Si el cliente ya existía, pero no tiene cuenta activa, creamos una
         if (this.cliente.getCuentaActiva() == null) {
             System.out.println(" Cliente sin cuenta activa, generando una nueva...");
             CuentaBancaria cuentaActiva = new CuentaAhorro(this.cliente);
@@ -140,7 +143,19 @@ public class ClienteController {
     }
 
     @FXML
-    public void mostrarInicio() {
+    private void verTransacciones(){
+        if(cliente == null || cliente.getCuentaActiva() == null){
+            mostrarAlerta("No se encontró la cuenta activa del cliente");
+            return;
+        }
+        ReporteGenerado reporte = cajero.generarReporteCliente(cliente.getCuentaActiva());
+
+        generarReporte(reporte, txtContenido, vistaTransacciones, contenedorCentro);
+    }
+
+
+    @FXML
+    private void mostrarInicio() {
         contenedorCentro.getChildren().clear();
         vistaInicio.setVisible(true);
         vistaInicio.setManaged(true);
