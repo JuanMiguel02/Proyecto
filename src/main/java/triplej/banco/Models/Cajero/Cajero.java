@@ -5,13 +5,13 @@ import triplej.banco.Models.Cuentas.CuentaBancaria;
 import triplej.banco.Models.Reportes.ReporteCliente;
 import triplej.banco.Models.Reportes.ReporteGenerado;
 import triplej.banco.Models.Usuarios.Cliente;
+import triplej.banco.Models.Usuarios.Persona;
 import triplej.banco.Models.Usuarios.RolUsuario;
 import triplej.banco.Models.Usuarios.Usuario;
 import triplej.banco.Repositories.ClienteRepository;
 import triplej.banco.Repositories.UsuarioRepository;
 import triplej.banco.Utils.CuentaFactory;
 
-import java.util.Optional;
 
 public class Cajero {
     private final UsuarioRepository usuarioRepository;
@@ -36,20 +36,23 @@ public class Cajero {
         }
         usuario.setRolUsuario(RolUsuario.CLIENTE);
 
-        Cliente cliente = new Cliente(usuario);
+        Cliente cliente = new Cliente((Persona) usuario);
         CuentaBancaria cuenta = CuentaFactory.crearCuenta(tipoCuenta.toUpperCase(), cliente);
         cliente.agregarCuenta(cuenta);
         clienteRepository.guardar(cliente);
         return cliente;
     }
 
-    public void agregarCuentaACliente(Cliente cliente, String tipoCuenta){
+    public CuentaBancaria agregarCuentaACliente(Cliente cliente, String tipoCuenta){
         if(cliente == null){
             throw new IllegalArgumentException("El cliente no puede estar nulo");
         }
         CuentaBancaria nuevaCuenta = CuentaFactory.crearCuenta(tipoCuenta.toUpperCase(), cliente);
         cliente.agregarCuenta(nuevaCuenta);
+        clienteRepository.guardar(cliente);
         System.out.println("Cuenta " + nuevaCuenta.getNumeroCuenta() + " agregada ");
+
+        return nuevaCuenta;
     }
 
     public void realizarDeposito(CuentaBancaria cuenta, double monto, String descripcion) {

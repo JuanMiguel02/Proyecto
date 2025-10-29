@@ -58,6 +58,11 @@ public class UsuarioRepository {
                 .findFirst();
     }
 
+    public boolean existeUsuarioConEmail(String correo) {
+        return usuarios.stream()
+                .anyMatch(u -> u.getCorreo().equalsIgnoreCase(correo.trim()));
+    }
+
     public List<Usuario> obtenerPorRol(RolUsuario rol) {
         return usuarios.stream()
                 .filter(u -> u.getRolUsuario() == rol)

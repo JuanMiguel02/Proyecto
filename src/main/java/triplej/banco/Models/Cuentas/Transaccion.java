@@ -2,18 +2,18 @@ package triplej.banco.Models.Cuentas;
 
 import triplej.banco.Repositories.TransaccionRepository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Transaccion {
     private String id;
     private LocalDateTime fecha;
-    private String tipo;
-    private double monto;
+    private final String tipo;
+    private final double monto;
     private String descripcion;
-    private String cuentaOrigen;
+    private final String cuentaOrigen;
     private String cuentaDestino;
     private boolean exitosa;
 
@@ -96,9 +96,7 @@ public class Transaccion {
         if(recientes >= 5) return true;
 
         int hora = fecha.getHour();
-        if(hora >=0 && hora <= 4) return true;
-
-        return false;
+        return hora <= 4;
     }
 
     @Override
@@ -113,5 +111,11 @@ public class Transaccion {
                 ", cuentaDestino='" + cuentaDestino + '\'' +
                 ", exitosa=" + exitosa +
                 '}';
+    }
+
+
+    public static String generarIdTransaccion(){
+        return "TXN-" + System.currentTimeMillis() + "-" + ThreadLocalRandom.current().nextInt(1000, 9999);
+
     }
 }

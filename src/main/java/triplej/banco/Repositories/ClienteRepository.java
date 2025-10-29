@@ -18,20 +18,22 @@ public class ClienteRepository {
     private static ClienteRepository instancia;
     private final ArrayList<Cliente> clientes;
     private final UsuarioRepository usuarioRepository;
-
+    private final TransaccionRepository transaccionRepository;
 
     private ClienteRepository() {
         this.clientes = new ArrayList<>();
         this.usuarioRepository = UsuarioRepository.getInstancia();
+        this.transaccionRepository = TransaccionRepository.getInstance();
 
         Path rutaUsuarios = Paths.get("Banco", "Datos", "Usuarios.txt");
         Path rutaCuentas = Paths.get("Banco", "Datos", "Cuentas.txt");
 
         if (Files.exists(rutaUsuarios) && Files.exists(rutaCuentas)) {
-            System.out.println("✅ Cargando clientes y cuentas desde archivos existentes...");
+            System.out.println("Cargando clientes y cuentas desde archivos existentes...");
+            transaccionRepository.cargarDatos();
             cargarDesdeArchivo();
         } else {
-            System.out.println("⚙️ Primera ejecución: creando datos de ejemplo de clientes...");
+            System.out.println(" Primera ejecución: creando datos de ejemplo de clientes...");
             cargarDatosEjemplo();
         }
     }
@@ -59,6 +61,13 @@ public class ClienteRepository {
             }
         }
     }
+
+    public Optional<Cliente> buscarPorDocumento(String documento) {
+        return clientes.stream()
+                .filter(c -> c.getDocumento().equalsIgnoreCase(documento))
+                .findFirst();
+    }
+
 
     /**
      * Verifica si una cuenta ya existe en el archivo
@@ -146,7 +155,7 @@ public class ClienteRepository {
                     Usuario usuario = usuarioRepository.buscarUsuarioPorEmail(correo).orElse(null);
                     if (usuario == null) continue;
 
-                    cliente = new Cliente(usuario);
+                    cliente = new Cliente((Persona) usuario);
                     clientes.add(cliente);
                 }
 

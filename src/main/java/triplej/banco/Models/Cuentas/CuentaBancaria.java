@@ -7,7 +7,11 @@ import triplej.banco.Repositories.TransaccionRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static triplej.banco.Models.Cuentas.Transaccion.generarIdTransaccion;
+
 /*
 *Clase que representa una Cuenta de Banco
 */
@@ -34,6 +38,8 @@ public abstract class CuentaBancaria {
         this.saldo = saldo;
         this.fechaApertura = LocalDate.now();
         this.historial = new ArrayList<>();
+
+        cargarTransaccionesDesdeArchivo();
     }
 
     //Metodo para generar un numero de cuenta
@@ -66,12 +72,12 @@ public abstract class CuentaBancaria {
 
     @Override
     public String toString() {
-        return "CuentaBanco{" +
-                "Cliente=" + propietario +
-                ", numeroCuenta='" + numeroCuenta + '\'' +
-                ", saldo=" + saldo +
-                ", fechaApertura=" + fechaApertura +
-                '}';
+        return String.format(
+                "%s - %s - %s",
+                numeroCuenta,
+                propietario.getNombre(),
+                fechaApertura
+        );
     }
 
 
@@ -118,13 +124,19 @@ public abstract class CuentaBancaria {
         historial.add(trans);
     }
 
-
-    private String generarIdTransaccion(){
-        return "TXN-" + System.currentTimeMillis() + "-" + ThreadLocalRandom.current().nextInt(1000, 9999);
-
-    }
     public ArrayList<Transaccion> getHistorial() {
         return historial;
+    }
+
+    private void cargarTransaccionesDesdeArchivo() {
+        List<Transaccion> transaccionesDeEstaCuenta =
+                TransaccionRepository.getInstance().getPorCuenta(this.numeroCuenta);
+
+        this.historial.clear();
+        this.historial.addAll(transaccionesDeEstaCuenta);
+
+        System.out.println(" Cargadas " + transaccionesDeEstaCuenta.size() +
+                " transacciones para cuenta " + this.numeroCuenta);
     }
 }
 

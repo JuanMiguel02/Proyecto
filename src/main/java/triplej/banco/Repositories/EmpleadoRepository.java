@@ -77,6 +77,11 @@ public class EmpleadoRepository {
                 .orElse(null);
     }
 
+    public boolean existeEmpleadoConEmail(String correo) {
+        return empleados.stream()
+                .anyMatch(e -> e.getCorreo().equalsIgnoreCase(correo.trim()));
+    }
+
     public void cargarDesdeArchivo(){
         Path ruta = Paths.get("Banco", "Datos", "Empleados.txt");
         if(!Files.exists(ruta)) return;

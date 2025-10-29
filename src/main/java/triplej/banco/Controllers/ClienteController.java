@@ -12,6 +12,7 @@ import triplej.banco.Models.Cajero.Cajero;
 import triplej.banco.Models.Cuentas.CuentaAhorro;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
 import triplej.banco.Models.Reportes.ReporteGenerado;
+
 import triplej.banco.Models.Usuarios.Cliente;
 import triplej.banco.Repositories.ClienteRepository;
 import triplej.banco.Repositories.UsuarioRepository;
@@ -82,9 +83,6 @@ public class ClienteController {
         return cliente;
     }
 
-    private void depositar(){
-         cliente.getCuentaActiva().depositar(200000.00);
-    }
 
     @FXML
     private void onDepositar(){
@@ -115,13 +113,13 @@ public class ClienteController {
         }
 
         Optional<CuentaBancaria> cuentaDestino = ClienteRepository.getInstancia().buscarCuentaPorNumero(numCuenta);
-        if(!cuentaDestino.isPresent()) {
+        if(cuentaDestino.isEmpty()) {
             mostrarAlerta("Error", "El número de cuenta no existe", Alert.AlertType.ERROR);
             return;
         }
 
         // 5. Realizar el depósito
-        cuentaDestino.get().depositar(valor);
+       cajero.realizarDeposito(cuentaDestino.get(), valor, "Deposito realizado");
 
         // 6. Actualizar el repositorio para guardar el cambio
         ClienteRepository.getInstancia().guardar(cliente);
@@ -179,10 +177,9 @@ public class ClienteController {
 
             ((Stage) btnSalir.getScene().getWindow()).close();
 
-
         }
         catch (IOException e){
-            e.printStackTrace();
+            throw new RuntimeException("Error al volver al menú " + e.getMessage(), e);
         }
     }
 
@@ -191,6 +188,6 @@ public class ClienteController {
         double saldoActual = cliente.getCuentaActiva().getSaldo();
         lblDinero.setText(String.format("$%,.2f", saldoActual));
 
-        System.out.println("🔄 Interfaz actualizada - Saldo: " + saldoActual);
+        System.out.println(" Interfaz actualizada - Saldo: " + saldoActual);
     }
 }

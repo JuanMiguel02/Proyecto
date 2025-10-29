@@ -14,7 +14,7 @@ public class HelloApplication extends Application {
 
         Banco.getInstancia();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/triplej/banco/Views/SingIn-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/triplej/banco/Views/CajeroViews/Cajero-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1200, 900);
         stage.setMaximized(true);
         stage.setTitle("UQ Bank");

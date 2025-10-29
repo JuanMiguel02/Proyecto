@@ -8,7 +8,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="804.0" prefWidth="1234.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/24.0.1" fx:controller="triplej.banco.Controllers.TablaEmpleadosController">
+<AnchorPane prefHeight="804.0" prefWidth="1234.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/24.0.1" fx:controller="triplej.banco.Controllers.VistaAdmin.TablaEmpleadosController">
     <children>
       <AnchorPane fx:id="vistaTabla" layoutX="49.0" layoutY="36.0" prefHeight="703.0" prefWidth="1154.0">
          <children>

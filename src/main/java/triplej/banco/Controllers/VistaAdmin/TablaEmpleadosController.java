@@ -1,4 +1,4 @@
-package triplej.banco.Controllers;
+package triplej.banco.Controllers.VistaAdmin;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,11 +10,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import triplej.banco.Models.Usuarios.*;
 import triplej.banco.Repositories.EmpleadoRepository;
 import triplej.banco.Models.Usuarios.Empleado;
-
-import java.util.ArrayList;
 
 import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
 

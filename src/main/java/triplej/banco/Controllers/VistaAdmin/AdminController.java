@@ -1,5 +1,4 @@
-package triplej.banco.Controllers;
-
+package triplej.banco.Controllers.VistaAdmin;
 
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
@@ -14,11 +13,10 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import triplej.banco.Controllers.SignInController;
 import triplej.banco.Models.Banco;
 import triplej.banco.Models.Reportes.ReporteAdmin;
 import triplej.banco.Models.Reportes.ReporteGenerado;
-import triplej.banco.Repositories.ClienteRepository;
-import triplej.banco.Repositories.EmpleadoRepository;
 import triplej.banco.Repositories.UsuarioRepository;
 import triplej.banco.Utils.GeneracionReporteVista;
 import java.io.IOException;
@@ -86,7 +84,7 @@ public class AdminController {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Error al cargar la vista: " + e.getMessage(), e);
         }
     }
 
@@ -185,10 +183,9 @@ public class AdminController {
 
             ((Stage) btnSalir.getScene().getWindow()).close();
 
-
         }
         catch (IOException e){
-            e.printStackTrace();
+            throw new RuntimeException("Error al volver al menú " + e.getMessage(), e);
         }
     }
 

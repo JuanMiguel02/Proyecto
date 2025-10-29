@@ -8,11 +8,11 @@ import java.util.stream.Collectors;
 
 public class Cliente {
 
-    private Usuario usuarioAsociado;
+    private Persona usuarioAsociado;
     private final ArrayList<CuentaBancaria> cuentas;
     private CuentaBancaria cuentaActiva;
 
-    public Cliente(Usuario usuarioAsociado) {
+    public Cliente(Persona usuarioAsociado) {
         this.usuarioAsociado = usuarioAsociado;
         this.cuentas = new ArrayList<>();
 
@@ -35,7 +35,13 @@ public class Cliente {
         return usuarioAsociado.getNombreCompleto();
     }
 
-    public void setUsuarioAsociado(Usuario usuarioAsociado) {
+    public String getCiudad(){ return usuarioAsociado.getCiudad();}
+
+    public String getTelefono(){return usuarioAsociado.getTelefono();}
+
+    public String getTipoDocumento(){ return usuarioAsociado.getTipoDocumento().toString();}
+
+    public void setUsuarioAsociado(Persona usuarioAsociado) {
         this.usuarioAsociado = usuarioAsociado;
     }
 
@@ -52,6 +58,10 @@ public class Cliente {
          return Optional.empty();
      }
      return cuentas.stream().filter(cuenta -> cuenta.getNumeroCuenta().equals(numeroCuenta)).findFirst();
+    }
+
+    public String getDocumento(){
+        return usuarioAsociado.getNumeroDocumento();
     }
 
     public CuentaBancaria getCuentaActiva() {

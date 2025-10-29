@@ -5,16 +5,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import triplej.banco.Controllers.VistaAdmin.AdminController;
 import triplej.banco.Models.Banco;
 import triplej.banco.Models.Usuarios.Cliente;
+import triplej.banco.Models.Usuarios.Persona;
 import triplej.banco.Models.Usuarios.Usuario;
-import triplej.banco.Models.Usuarios.RolUsuario;
 import triplej.banco.Repositories.ClienteRepository;
-import triplej.banco.Repositories.EmpleadoRepository;
 import triplej.banco.Repositories.UsuarioRepository;
 
 import java.io.IOException;
@@ -58,7 +57,6 @@ public class SignInController {
         switch (usuario.getRolUsuario()) {
             case ADMIN -> abrirVentanaAdmin(usuario);
             case CLIENTE -> abrirVentanaCliente(usuario);
-            // puedes agregar ADMIN, etc.
         }
 
         // cerrar ventana de login
@@ -81,7 +79,7 @@ public class SignInController {
 
         }
         catch (IOException e){
-            e.printStackTrace();
+            throw new RuntimeException("Error al abrir la ventana del admin: " + e.getMessage(), e);
         }
         System.out.println("Admin" + usuario.getNombreCompleto() + " inició sesión");
 
@@ -100,7 +98,7 @@ public class SignInController {
                 cliente = clienteExistente.get();
                 System.out.println("Cliente existente encontrado: " + cliente.getNombre());
             } else {
-                cliente = new Cliente(usuario);
+                cliente = new Cliente((Persona) usuario);
                 clienteRepo.guardar(cliente);
                 System.out.println("Nuevo cliente creado y guardado: " + cliente.getNombre());
             }
@@ -112,12 +110,12 @@ public class SignInController {
             clienteController.setCliente(cliente);
 
             Stage stage = new Stage();
-            stage.setTitle("Cliente");
+            stage.setTitle("UQ Bank");
             stage.setScene(new Scene(root));
             stage.show();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Error al abrir la ventana del cliente: " + e.getMessage(), e);
         }
 
         System.out.println("Cliente " + usuario.getNombreCompleto() + " inició sesión");

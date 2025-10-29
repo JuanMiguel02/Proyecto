@@ -1,4 +1,4 @@
-package triplej.banco.Controllers;
+package triplej.banco.Controllers.VistaAdmin;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
