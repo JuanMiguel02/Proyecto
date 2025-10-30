@@ -88,6 +88,7 @@ public class FormularioClienteController {
             Cliente nuevoCliente = cajero.registrarCliente(persona, tipoCuenta);
 
             CuentaBancaria cuenta = nuevoCliente.getCuentas().getFirst();
+            nuevoCliente.setCuentaActiva(cuenta);
             cuenta.setSaldo(saldo);
 
             mostrarAlerta(

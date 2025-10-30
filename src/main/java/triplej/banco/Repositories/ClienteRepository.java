@@ -111,7 +111,7 @@ public class ClienteRepository {
 
         PersonaNatural paco = new PersonaNatural(
                 "Paco", "Jones", "pacojones@gmail", "123456", RolUsuario.CLIENTE,
-                TipoDocumento.CEDULACIUDADANIA, "1233", "21341", "Colombia", "Bogotá");
+                TipoDocumento.CEDULACIUDADANIA, "123345", "21341", "Colombia", "Bogotá");
 
         Cliente cliente1 = new Cliente(juan);
         Cliente cliente2 = new Cliente(paco);

@@ -28,7 +28,7 @@
                            <children>
                               <ImageView fitHeight="164.0" fitWidth="132.0" layoutX="14.0" layoutY="43.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../Images/experiencia-del-usuario.png" />
+                                    <Image url="@../../Images/experiencia-del-usuario.png" />
                                  </image>
                               </ImageView>
                               <Label layoutX="150.0" layoutY="165.0" prefHeight="39.0" prefWidth="134.0" text="Total Usuarios">
@@ -47,7 +47,7 @@
                            <children>
                               <ImageView fitHeight="162.0" fitWidth="132.0" layoutX="41.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../Images/check.png" />
+                                    <Image url="@../../Images/check.png" />
                                  </image>
                               </ImageView>
                               <Label layoutX="129.0" layoutY="152.0" prefHeight="39.0" prefWidth="164.0" text="Usuarios Activos">
@@ -66,7 +66,7 @@
                            <children>
                               <ImageView fitHeight="117.0" fitWidth="121.0" layoutX="21.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../Images/close.png" />
+                                    <Image url="@../../Images/close.png" />
                                  </image>
                               </ImageView>
                               <Label layoutX="108.0" layoutY="158.0" prefHeight="39.0" prefWidth="184.0" text="Usuarios Inactivos">
@@ -129,7 +129,7 @@
             <children>
                 <ImageView fitHeight="130.0" fitWidth="168.0" layoutX="80.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@../Images/avatar.png" />
+                        <Image url="@../../Images/avatar.png" />
                     </image></ImageView>
                 <Label layoutX="99.0" layoutY="150.0" text="Bienvenido,">
                     <font>

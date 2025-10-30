@@ -75,4 +75,8 @@ public class Empleado{
     public void setDepartamento(String departamento) {
         this.departamento = departamento;
     }
+
+    public void setContrasenia(String contrasenia) {
+        this.persona.setContrasenia(contrasenia);
+    }
 }

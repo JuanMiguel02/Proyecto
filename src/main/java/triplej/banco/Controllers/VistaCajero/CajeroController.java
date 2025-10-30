@@ -18,9 +18,13 @@ import triplej.banco.Models.Cajero.Cajero;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
 import triplej.banco.Models.Reportes.ReporteGenerado;
 import triplej.banco.Models.Usuarios.Cliente;
+import triplej.banco.Models.Usuarios.Empleado;
 import triplej.banco.Repositories.ClienteRepository;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
@@ -28,12 +32,12 @@ import static triplej.banco.Utils.GeneracionReporteVista.generarReporte;
 
 public class CajeroController {
 
-
-    @FXML private VBox contenedorCentro;
+    @FXML private StackPane contenedorCentro;
     @FXML private AnchorPane vistaInicio;
+    @FXML private AnchorPane vistaReporte;
 
     //  Campos de búsqueda y selección
-    @FXML private TextField txtBuscarDocumento;
+    @FXML private TextField txtBusquedaCliente;
     @FXML private Button btnBuscarCliente;
     @FXML private ComboBox<CuentaBancaria> cmbCuentasCliente;
 
@@ -44,7 +48,10 @@ public class CajeroController {
     @FXML private TextField txtCiudad;
     @FXML private TextField txtTipoDocumento;
     @FXML private TextField txtNumeroDocumento;
+    @FXML private TextArea  txtReporteGeneral;
     @FXML private ImageView imgFotoCliente;
+
+    @FXML private Label lblNombre;
 
     // Botones principales
     @FXML private Button btnDepositar;
@@ -61,12 +68,19 @@ public class CajeroController {
     @FXML
     public void initialize() {
         cmbCuentasCliente.setOnAction(e -> seleccionarCuenta());
+
+    }
+
+    public void setCajero(Empleado cajero) {
+        if (lblNombre != null && cajero != null) {
+            lblNombre.setText(cajero.getNombreCompleto());
+        }
     }
 
     //  Buscar cliente por documento
     @FXML
-    private void buscarClientePorDocumento() {
-        String documento = txtBuscarDocumento.getText().trim();
+    private void buscarCliente() {
+        String documento = txtBusquedaCliente.getText().trim();
 
         if (documento.isEmpty()) {
             mostrarAlerta("Error", "Ingrese un número de documento.", Alert.AlertType.WARNING);
@@ -74,6 +88,7 @@ public class CajeroController {
         }
 
         Optional<Cliente> clienteOpt = repoClientes.buscarPorDocumento(documento);
+
 
         if (clienteOpt.isEmpty()) {
             mostrarAlerta("No encontrado", "No se encontró ningún cliente con ese documento.", Alert.AlertType.INFORMATION);
@@ -152,6 +167,7 @@ public class CajeroController {
             try {
                 double monto = Double.parseDouble(valor);
                 cajero.realizarDeposito(cuentaSeleccionada, monto, "Depósito por cajero");
+                ClienteRepository.getInstancia().guardar(clienteActual);
                 mostrarAlerta("Éxito", "Depósito realizado correctamente.", Alert.AlertType.INFORMATION);
             } catch (NumberFormatException e) {
                 mostrarAlerta("Error", "Monto inválido.", Alert.AlertType.ERROR);
@@ -186,19 +202,9 @@ public class CajeroController {
 
 
     @FXML
-    private void onGenerarReporte(){
-        if(cuentaSeleccionada == null) {
-            mostrarAlerta("No se encontró la cuenta activa del cliente");
-            return;
-        }
-        ReporteGenerado reporte = cajero.generarReporteCliente(cuentaSeleccionada);
-
-    }
-
-    @FXML
     private void volverMenu(){
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/SingIn-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/Login-view.fxml"));
             Parent root = loader.load();
 
             SignInController signInController= loader.getController();
@@ -247,6 +253,44 @@ public class CajeroController {
             throw new RuntimeException("Error al cargar la vista: " + e.getMessage(), e);
         }
     }
+
+    @FXML
+    private void onGenerarReporte(){
+        if(clienteActual == null || clienteActual.getCuentaActiva() == null){
+            mostrarAlerta("No se encontró la cuenta activa del cliente");
+            return;
+        }
+        ReporteGenerado reporte = cajero.generarReporteCliente(clienteActual.getCuentaActiva());
+
+        generarReporte(reporte, txtReporteGeneral, vistaReporte, contenedorCentro);
+    }
+
+    @FXML
+    private void onGuardarReporte(){
+        String contenido = txtReporteGeneral.getText();
+        if(contenido == null || contenido.isBlank()){
+            mostrarAlerta("No hay reporte para guardar");
+            return;
+        }
+        exportarReporteTxt(contenido);
+    }
+
+    private void exportarReporteTxt(String contenido){
+        try{
+            Path ruta = Paths.get("Reportes Clientes", "ReporteCliente.txt");
+            if(ruta.getParent() != null){
+                Files.createDirectories(ruta.getParent());
+            }
+            Files.writeString(ruta, contenido);
+            mostrarAlerta("Reporte Guardado","Reporte guardado exitosamente en: " + ruta.getFileName()
+                    , Alert.AlertType.INFORMATION);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 
     @FXML
     private void mostrarFormulario() {

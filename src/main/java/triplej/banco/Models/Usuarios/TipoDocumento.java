@@ -7,13 +7,4 @@ public enum TipoDocumento {
     REGISTROCIVIL,
     NIT;
 
-//    private final String documento;
-//
-//    TipoDocumento(String documento) {
-//        this.documento = documento;
-//    }
-//
-//    public String toString(){
-//        return this.documento;
-//    }
 }

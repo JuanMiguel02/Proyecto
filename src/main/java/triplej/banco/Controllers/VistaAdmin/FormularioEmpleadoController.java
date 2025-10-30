@@ -106,13 +106,16 @@ public class FormularioEmpleadoController {
                 return;
             }
 
+            String cargo = txtCargo.getText().trim().toUpperCase();
+            RolUsuario rol = cargo.contains("CAJERO") ? RolUsuario.CAJERO : RolUsuario.EMPLEADO;
+
             // Crear PersonaNatural
             PersonaNatural persona = new PersonaNatural(
                     txtNombre.getText().trim(),
                     txtApellido.getText().trim(),
                     txtEmail.getText().trim().toLowerCase(),
                     txtPassword.getText(),
-                    RolUsuario.EMPLEADO,
+                    rol,
                     TipoDocumento.CEDULACIUDADANIA,
                     txtCedula.getText().trim(),
                     txtTelefono.getText().trim(),
@@ -129,7 +132,6 @@ public class FormularioEmpleadoController {
                     cmbDepartamento.getValue()
             );
             EmpleadoRepository.getInstance().agregarEmpleado(nuevoEmpleado);
-
 
 
             mostrarAlerta(

@@ -83,7 +83,7 @@ public class UsuarioRepository {
     }
 
     private void cargarDatosEjemplo(){
-        PersonaNatural admin = new PersonaNatural("Sancho", "Panza", "sancho@uqbank", "456313", RolUsuario.ADMIN,
+        PersonaNatural admin = new PersonaNatural("Sancho", "Panza", "sancho@uqbank", "123456", RolUsuario.ADMIN,
                 TipoDocumento.CEDULACIUDADANIA, "312412", "313414", "Colombia", "Armenia");
         guardar(admin);
     }

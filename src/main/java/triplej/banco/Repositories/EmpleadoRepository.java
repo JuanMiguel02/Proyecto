@@ -49,7 +49,7 @@ public class EmpleadoRepository {
 
         PersonaNatural paco = new PersonaNatural(
                 "Paco", "Jones", "paco@gmail", "1212321", RolUsuario.EMPLEADO, TipoDocumento.CEDULACIUDADANIA,
-                "1233", "21341", "Colombia", "Bogotá");
+                "1238912", "21341", "Colombia", "Bogotá");
         agregarEmpleado(new Empleado(paco, "Celador", 2000, "Seguridad"));
 
     }
@@ -75,6 +75,12 @@ public class EmpleadoRepository {
                 .filter(e -> e.getPersona().getNombreCompleto().equals(nombre + " " + apellido))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public Optional<Empleado> buscarPorEmail(String email) {
+        return empleados.stream()
+                .filter(e -> e.getPersona().getCorreo().equals(email))
+                .findFirst();
     }
 
     public boolean existeEmpleadoConEmail(String correo) {

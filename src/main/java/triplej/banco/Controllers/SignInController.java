@@ -9,11 +9,11 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import triplej.banco.Controllers.VistaAdmin.AdminController;
+import triplej.banco.Controllers.VistaCajero.CajeroController;
 import triplej.banco.Models.Banco;
-import triplej.banco.Models.Usuarios.Cliente;
-import triplej.banco.Models.Usuarios.Persona;
-import triplej.banco.Models.Usuarios.Usuario;
+import triplej.banco.Models.Usuarios.*;
 import triplej.banco.Repositories.ClienteRepository;
+import triplej.banco.Repositories.EmpleadoRepository;
 import triplej.banco.Repositories.UsuarioRepository;
 
 import java.io.IOException;
@@ -27,11 +27,13 @@ public class SignInController {
     @FXML private PasswordField txtContrasenia;
 
     private UsuarioRepository usuarioRepo;
+    private EmpleadoRepository empleadoRepository;
 
     @FXML
     public  void initialize(){
         Banco banco = Banco.getInstancia();
         usuarioRepo = banco.getUsuarioRepository();
+        empleadoRepository = banco.getEmpleadoRepository();
         System.out.println(usuarioRepo.getUsuarios().size());
     }
 
@@ -57,6 +59,7 @@ public class SignInController {
         switch (usuario.getRolUsuario()) {
             case ADMIN -> abrirVentanaAdmin(usuario);
             case CLIENTE -> abrirVentanaCliente(usuario);
+            case CAJERO -> abrirVentanaCajero(usuario);
         }
 
         // cerrar ventana de login
@@ -67,14 +70,15 @@ public class SignInController {
     private void abrirVentanaAdmin(Usuario usuario) {
         try{
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/Admin-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/AdminViews/Admin-view.fxml"));
             Parent root = loader.load();
 
             AdminController adminController = loader.getController();
 
             Stage stage = new Stage();
-            stage.setTitle("Administrador");
+            stage.setTitle("Sistema Administración UQBANK");
             stage.setScene(new Scene(root));
+            stage.setMaximized(true);
             stage.show();
 
         }
@@ -82,6 +86,37 @@ public class SignInController {
             throw new RuntimeException("Error al abrir la ventana del admin: " + e.getMessage(), e);
         }
         System.out.println("Admin" + usuario.getNombreCompleto() + " inició sesión");
+
+    }
+
+    private void abrirVentanaCajero(Usuario usuario) {
+        try{
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/CajeroViews/Cajero-view.fxml"));
+            Parent root = loader.load();
+
+            Optional<Empleado> empleadoExistente = empleadoRepository.buscarPorEmail(usuario.getCorreo());
+
+            Empleado empleado;
+
+            if (empleadoExistente.isPresent()) {
+                empleado = empleadoExistente.get();
+                System.out.println("Cliente existente encontrado: " + empleado.getNombre());
+
+                CajeroController cajeroController = loader.getController();
+                cajeroController.setCajero(empleado);
+
+                Stage stage = new Stage();
+                stage.setTitle("Sistema de Trabajo UQBANK");
+                stage.setScene(new Scene(root));
+                stage.setMaximized(true);
+                stage.show();
+            }
+        }
+        catch (IOException e){
+            throw new RuntimeException("Error al abrir la ventana del cajero " + e.getMessage(), e);
+        }
+        System.out.println("cajero" + usuario.getNombreCompleto() + " inició sesión");
 
     }
 
@@ -112,6 +147,7 @@ public class SignInController {
             Stage stage = new Stage();
             stage.setTitle("UQ Bank");
             stage.setScene(new Scene(root));
+            stage.setMaximized(true);
             stage.show();
 
         } catch (IOException e) {

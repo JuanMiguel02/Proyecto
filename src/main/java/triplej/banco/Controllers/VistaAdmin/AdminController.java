@@ -54,7 +54,7 @@ public class AdminController {
         inicializarGraficoUsuarios();
 
         // DEBUG: Verificar cuántos usuarios hay realmente
-        System.out.println("👥 Usuarios cargados: " + usuarioRepository.getUsuarios().size());
+        System.out.println(" Usuarios cargados: " + usuarioRepository.getUsuarios().size());
     }
 
     private void cargarVistaEnCentro(String fxmlRuta) {
@@ -130,17 +130,17 @@ public class AdminController {
 
     @FXML
     private void mostrarEmpleados() {
-        cargarVistaEnCentro("/triplej/banco/Views/TablaEmpleados-view.fxml");
+        cargarVistaEnCentro("/triplej/banco/Views/AdminViews/TablaEmpleados-view.fxml");
     }
 
     @FXML
     private void mostrarFormulario() {
-        cargarVistaEnCentro("/triplej/banco/Views/FormularioEmpleado-view.fxml");
+        cargarVistaEnCentro("/triplej/banco/Views/AdminViews/FormularioEmpleado-view.fxml");
     }
 
     @FXML
     private void mostrarTransacciones(){
-        cargarVistaEnCentro("/triplej/banco/Views/MonitoreoTransacciones-view.fxml");
+        cargarVistaEnCentro("/triplej/banco/Views/AdminViews/MonitoreoTransacciones-view.fxml");
     }
 
     @FXML
@@ -154,7 +154,7 @@ public class AdminController {
 
     private void exportarReporteTxt(String contenido){
         try{
-            Path ruta = Paths.get("reportes", "Reporte.txt");
+            Path ruta = Paths.get("Reportes Admin", "ReporteAdmin.txt");
             if(ruta.getParent() != null){
                 Files.createDirectories(ruta.getParent());
             }
@@ -170,7 +170,7 @@ public class AdminController {
     @FXML
     private void volverMenu(){
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/SingIn-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/Login-view.fxml"));
             Parent root = loader.load();
 
             SignInController signInController= loader.getController();

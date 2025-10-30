@@ -1,5 +1,2 @@
 NumeroCuenta	Saldo	TipoCuenta	CorreoCliente
-6661005048	52000,00	1	juancho@gmail
-6661075472	10000,00	1	pacojones@gmail
-6661019188	0,00	1	juanperez@gmail
-6661096699	0,00	1	pedrosanchez@gmail
+6662024499	2000,00	2	juanperez@gmail
