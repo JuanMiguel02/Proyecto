@@ -31,18 +31,19 @@ public class ReporteCliente implements Reporte {
                 tipoMovimiento = "Enviada a: " + t.getCuentaDestino();
             }
             else if(cuentaBancaria.getNumeroCuenta().equals(t.getCuentaDestino())){
-                tipoMovimiento = "Recibida de : " + t.getCuentaDestino();
+                tipoMovimiento = "Recibida de : " + t.getCuentaOrigen();
             }
             else{
                 tipoMovimiento = t.getTipo();
             }
             String linea = String.format(
-                    "ID: %s | %s | %s | Monto: $%.2f | %s",
+                    "ID: %s | %s | %s | Monto: $%.2f | %s | %s%n",
                     t.getId(),
                     t.getFecha(),
                     tipoMovimiento,
                     t.getMonto(),
-                    t.getDescripcion()
+                    t.getDescripcion(),
+                    t.isExitosa() ? "Exitosa" : "Fallida"
             );
             contenido.add(linea);
         }

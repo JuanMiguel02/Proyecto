@@ -1,10 +1,11 @@
-package triplej.banco.Controllers;
+package triplej.banco.Controllers.VistaAdmin;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.StackPane;
+
 import triplej.banco.Models.Usuarios.*;
 import triplej.banco.Repositories.EmpleadoRepository;
+import triplej.banco.Repositories.UsuarioRepository;
 
 import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
 
@@ -24,12 +25,16 @@ public class FormularioEmpleadoController {
     @FXML private TextField txtCargo;
     @FXML private TextField txtSalario;
     @FXML private ComboBox<String> cmbDepartamento;
-    @FXML private StackPane contenedorCentro;
 
     private AdminController adminController;
+    private EmpleadoRepository empleadoRepository;
+    private UsuarioRepository usuarioRepository;
 
     @FXML
     public void initialize() {
+
+        empleadoRepository = EmpleadoRepository.getInstance();
+        usuarioRepository = UsuarioRepository.getInstancia();
 
         // Configurar ComboBox de departamentos
         cmbDepartamento.getItems().addAll(
@@ -77,6 +82,7 @@ public class FormularioEmpleadoController {
             }
         });
     }
+
     @FXML
     private void cancelar(){
         adminController.mostrarInicio();
@@ -95,13 +101,21 @@ public class FormularioEmpleadoController {
                 return;
             }
 
+            if(correoYaExiste(txtEmail.getText())){
+                mostrarAlerta("Este correo ya está registrado");
+                return;
+            }
+
+            String cargo = txtCargo.getText().trim().toUpperCase();
+            RolUsuario rol = cargo.contains("CAJERO") ? RolUsuario.CAJERO : RolUsuario.EMPLEADO;
+
             // Crear PersonaNatural
             PersonaNatural persona = new PersonaNatural(
                     txtNombre.getText().trim(),
                     txtApellido.getText().trim(),
                     txtEmail.getText().trim().toLowerCase(),
                     txtPassword.getText(),
-                    RolUsuario.EMPLEADO,
+                    rol,
                     TipoDocumento.CEDULACIUDADANIA,
                     txtCedula.getText().trim(),
                     txtTelefono.getText().trim(),
@@ -117,7 +131,6 @@ public class FormularioEmpleadoController {
                     salario,
                     cmbDepartamento.getValue()
             );
-
             EmpleadoRepository.getInstance().agregarEmpleado(nuevoEmpleado);
 
 
@@ -129,6 +142,7 @@ public class FormularioEmpleadoController {
                     , Alert.AlertType.INFORMATION
             );
 
+            limpiarFormulario();
 
         } catch (IllegalArgumentException e) {
             mostrarAlerta(e.getMessage());
@@ -139,6 +153,18 @@ public class FormularioEmpleadoController {
 
     public void setAdminController(AdminController adminController){
         this.adminController = adminController;
+    }
+
+    private boolean correoYaExiste(String email) {
+        String emailNormalizado = email.trim().toLowerCase();
+
+        // Verificar en empleados
+        boolean existeEnEmpleados = empleadoRepository.existeEmpleadoConEmail(emailNormalizado);
+
+        // Verificar en usuarios generales
+        boolean existeEnUsuarios = usuarioRepository.existeUsuarioConEmail(emailNormalizado);
+
+        return existeEnEmpleados || existeEnUsuarios;
     }
 
     private boolean validarCampos() {
@@ -234,6 +260,23 @@ public class FormularioEmpleadoController {
         }
 
         return true;
+    }
+
+    private void limpiarFormulario() {
+        txtNombre.clear();
+        txtApellido.clear();
+        txtCedula.clear();
+        txtTelefono.clear();
+        txtCiudad.clear();
+        txtPais.clear();
+        txtEmail.clear();
+        txtPassword.clear();
+        txtConfirmarPassword.clear();
+        txtCargo.clear();
+        txtSalario.clear();
+        txtEmail.setStyle("");
+        cmbDepartamento.setValue("Atención al Cliente");
+        txtNombre.requestFocus();
     }
 
 }

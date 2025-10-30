@@ -6,6 +6,7 @@
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -15,7 +16,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="920.0" prefWidth="1480.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="triplej.banco.Controllers.AdminController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="920.0" prefWidth="1480.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="triplej.banco.Controllers.VistaAdmin.AdminController">
     <center>
         <StackPane fx:id="contenedorCentro" prefHeight="424.0" prefWidth="429.0" BorderPane.alignment="CENTER">
          <children>
@@ -27,7 +28,7 @@
                            <children>
                               <ImageView fitHeight="164.0" fitWidth="132.0" layoutX="14.0" layoutY="43.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../Images/experiencia-del-usuario.png" />
+                                    <Image url="@../../Images/experiencia-del-usuario.png" />
                                  </image>
                               </ImageView>
                               <Label layoutX="150.0" layoutY="165.0" prefHeight="39.0" prefWidth="134.0" text="Total Usuarios">
@@ -46,7 +47,7 @@
                            <children>
                               <ImageView fitHeight="162.0" fitWidth="132.0" layoutX="41.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../Images/check.png" />
+                                    <Image url="@../../Images/check.png" />
                                  </image>
                               </ImageView>
                               <Label layoutX="129.0" layoutY="152.0" prefHeight="39.0" prefWidth="164.0" text="Usuarios Activos">
@@ -65,7 +66,7 @@
                            <children>
                               <ImageView fitHeight="117.0" fitWidth="121.0" layoutX="21.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../Images/close.png" />
+                                    <Image url="@../../Images/close.png" />
                                  </image>
                               </ImageView>
                               <Label layoutX="108.0" layoutY="158.0" prefHeight="39.0" prefWidth="184.0" text="Usuarios Inactivos">
@@ -82,7 +83,7 @@
                         </AnchorPane>
                      </children>
                   </AnchorPane>
-                  <AreaChart fx:id="graficaUsuarios" layoutX="352.0" layoutY="361.0" prefHeight="343.0" prefWidth="619.0" title="Usuarios">
+                  <AreaChart fx:id="graficaUsuarios" layoutX="323.0" layoutY="364.0" prefHeight="343.0" prefWidth="653.0" title="Usuarios">
                     <xAxis>
                       <CategoryAxis side="BOTTOM" />
                     </xAxis>
@@ -91,6 +92,19 @@
                     </yAxis>
                   </AreaChart>
                   <Button layoutX="543.0" layoutY="726.0" mnemonicParsing="false" onAction="#generarReporte" prefHeight="48.0" prefWidth="237.0" text="Generar Reporte" />
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="vistaReporte" prefHeight="806.0" prefWidth="1179.0" visible="false">
+               <children>
+                  <Line endX="373.0" layoutX="123.0" layoutY="87.0" startX="-100.0" />
+                  <Label layoutX="23.0" layoutY="27.0" text="Reporte del Sistema">
+                     <font>
+                        <Font size="48.0" />
+                     </font>
+                  </Label>
+                  <Button layoutX="454.0" layoutY="685.0" mnemonicParsing="false" onAction="#guardarReporte" prefHeight="57.0" prefWidth="191.0" text="Guardar " />
+                  <AnchorPane layoutX="301.0" layoutY="113.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: 0,0,0,0.5;" />
+                  <TextArea fx:id="txtContenido" editable="false" layoutX="177.0" layoutY="97.0" prefHeight="535.0" prefWidth="744.0" />
                </children>
             </AnchorPane>
          </children>
@@ -111,33 +125,58 @@
         </HBox>
     </top>
     <left>
-        <AnchorPane prefHeight="749.0" prefWidth="245.0" style="-fx-background-color: #C1FFC1;" BorderPane.alignment="CENTER">
+        <AnchorPane prefHeight="806.0" prefWidth="269.0" style="-fx-background-color: #C1FFC1;" BorderPane.alignment="CENTER">
             <children>
-                <ImageView fitHeight="130.0" fitWidth="168.0" layoutX="59.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fitHeight="130.0" fitWidth="168.0" layoutX="80.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@../Images/avatar.png" />
+                        <Image url="@../../Images/avatar.png" />
                     </image></ImageView>
-                <Label layoutX="76.0" layoutY="150.0" text="Bienvenido,">
+                <Label layoutX="99.0" layoutY="150.0" text="Bienvenido,">
                     <font>
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <Line endX="100.0" layoutX="123.0" layoutY="228.0" startX="-100.0" />
-                <Label layoutX="56.0" layoutY="177.0" text="Pepe">
+                <Line endX="144.0" layoutX="123.0" layoutY="228.0" startX="-100.0" />
+                <Label layoutX="79.0" layoutY="179.0" text="Pepe">
                     <font>
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <Button fx:id="btnEmpleados" layoutX="39.0" layoutY="423.0" mnemonicParsing="false" onAction="#mostrarEmpleados" prefHeight="37.0" prefWidth="167.0" text="Ver Empleados" />
-                <Button fx:id="btnAgregarEmpleado" layoutX="40.0" layoutY="478.0" mnemonicParsing="false" onAction="#mostrarFormulario" prefHeight="36.0" prefWidth="164.0" text="Añadir Empleado" />
-                <Label layoutX="109.0" layoutY="175.0" prefHeight="31.0" prefWidth="80.0" text="(admin)">
+                <Button fx:id="btnEmpleados" layoutX="49.0" layoutY="431.0" mnemonicParsing="false" onAction="#mostrarEmpleados" prefHeight="37.0" prefWidth="167.0" style="-fx-background-color: transparent;" text="Ver Empleados">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font></Button>
+                <Button fx:id="btnAgregarEmpleado" layoutX="88.0" layoutY="491.0" mnemonicParsing="false" onAction="#mostrarFormulario" prefHeight="36.0" prefWidth="164.0" text="Añadir Empleado" />
+                <Label layoutX="132.0" layoutY="177.0" prefHeight="31.0" prefWidth="80.0" text="(admin)">
                     <font>
                         <Font size="18.0" />
                     </font>
                 </Label>
-            <Button fx:id="btnInicio" layoutX="40.0" layoutY="273.0" mnemonicParsing="false" onAction="#mostrarInicio" prefHeight="37.0" prefWidth="166.0" text="Inicio" />
-            <Button fx:id="btnInicio1" layoutX="40.0" layoutY="323.0" mnemonicParsing="false" onAction="#mostrarTransacciones" prefHeight="37.0" prefWidth="167.0" text="Monitorear Transacciones" />
-            <Button layoutX="39.0" layoutY="375.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="167.0" text="Ver Clientes" />
+            <Button fx:id="btnInicio" layoutX="23.0" layoutY="273.0" mnemonicParsing="false" onAction="#mostrarInicio" prefHeight="37.0" prefWidth="122.0" style="-fx-background-color: transparent;" text="Inicio">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font></Button>
+            <Button fx:id="btnInicio1" layoutX="39.0" layoutY="325.0" mnemonicParsing="false" onAction="#mostrarTransacciones" prefHeight="39.0" prefWidth="261.0" style="-fx-background-color: transparent;" text="Monitorear Transacciones">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font></Button>
+            <Button layoutX="86.0" layoutY="385.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="167.0" text="Ver Clientes" />
+            <Button fx:id="btnSalir" layoutX="27.0" layoutY="736.0" mnemonicParsing="false" onAction="#volverMenu" prefHeight="36.0" prefWidth="94.0" text="Salir" />
+            <ImageView fitHeight="25.0" fitWidth="46.0" layoutX="27.0" layoutY="280.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../../../../Downloads/home.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="25.0" fitWidth="46.0" layoutX="26.0" layoutY="332.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../../../../Downloads/search.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="34.0" fitWidth="36.0" layoutX="23.0" layoutY="433.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../../../../Downloads/man.png" />
+               </image>
+            </ImageView>
             </children>
         </AnchorPane>
     </left>

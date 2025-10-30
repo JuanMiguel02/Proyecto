@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<AnchorPane prefHeight="863.0" prefWidth="1174.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="triplej.banco.Controllers.MonitoreoTransaccionesController">
+<AnchorPane prefHeight="863.0" prefWidth="1174.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="triplej.banco.Controllers.VistaAdmin.MonitoreoTransaccionesController">
    <children>
       <TableView fx:id="tablaTransacciones" layoutX="110.0" layoutY="66.0" prefHeight="594.0" prefWidth="974.0">
         <columns>

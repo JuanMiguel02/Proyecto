@@ -1,4 +1,4 @@
-package triplej.banco.Controllers;
+package triplej.banco.Controllers.VistaAdmin;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,11 +10,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import triplej.banco.Models.Usuarios.*;
 import triplej.banco.Repositories.EmpleadoRepository;
 import triplej.banco.Models.Usuarios.Empleado;
-
-import java.util.ArrayList;
+import triplej.banco.Repositories.UsuarioRepository;
 
 import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
 
@@ -41,6 +39,7 @@ public class TablaEmpleadosController {
     @FXML private TextField txtTelefono;
     @FXML private TextField txtSalario;
     @FXML private TextField txtCargo;
+    @FXML private PasswordField txtContrasenia;
     @FXML private ComboBox<String> cmbDepartamento;
 
     @FXML private TextField txtBuscar;
@@ -155,7 +154,6 @@ public class TablaEmpleadosController {
         txtSalario.setText(String.valueOf(empleadoSeleccionado.getSalario()));
         cmbDepartamento.setValue(empleadoSeleccionado.getDepartamento());
 
-
         // Mostrar panel de edición
         vistaTabla.setVisible(true);
         vistaTabla.setManaged(false);
@@ -173,11 +171,18 @@ public class TablaEmpleadosController {
             empleadoSeleccionado.setSalario(Double.parseDouble(txtSalario.getText()));
             empleadoSeleccionado.setCargo(txtCargo.getText());
             empleadoSeleccionado.setDepartamento(cmbDepartamento.getValue());
+            empleadoSeleccionado.getPersona().setContrasenia(txtContrasenia.getText());
+
+            if (!txtContrasenia.getText().isBlank()) {
+                empleadoSeleccionado.getPersona().setContrasenia(txtContrasenia.getText());
+            }
 
             tablaEmpleados.refresh();
 
             mostrarAlerta("Éxito", "Empleado actualizado correctamente", Alert.AlertType.INFORMATION);
 
+//            repo.actualizarEmpleado(empleadoSeleccionado);
+//            UsuarioRepository.getInstancia().actualizarUsuario(empleadoSeleccionado.getPersona());
             cancelarEdicion();
         }else{
             mostrarAlerta("No hay empleado seleccionado para editar");
