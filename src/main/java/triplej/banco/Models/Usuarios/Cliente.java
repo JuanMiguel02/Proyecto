@@ -57,13 +57,6 @@ public class Cliente {
         this.cuentas.add(cuenta);
     }
 
-    public Optional<CuentaBancaria> buscarCuenta(String numeroCuenta){
-     if(numeroCuenta == null || numeroCuenta.trim().isEmpty()){
-         return Optional.empty();
-     }
-     return cuentas.stream().filter(cuenta -> cuenta.getNumeroCuenta().equals(numeroCuenta)).findFirst();
-    }
-
     public String getDocumento(){
         return usuarioAsociado.getNumeroDocumento();
     }
@@ -81,10 +74,9 @@ public class Cliente {
 
         String cuentasString = nombrarCuentasTipo();
 
-        return "Cliente{" +
-                "usuario=" + usuarioAsociado.getNombreCompleto() +
-                ", cuentas= " + cuentasString +'\'' +
-                '}';
+        return "Cliente: " +
+                usuarioAsociado.getNombreCompleto() +
+                ", cuentas= " + cuentasString +'\'';
     }
 
     private String nombrarCuentasTipo() {

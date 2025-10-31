@@ -290,8 +290,6 @@ public class CajeroController {
         }
     }
 
-
-
     @FXML
     private void mostrarFormulario() {
         cargarVistaEnCentro("/triplej/banco/Views/CajeroViews/FormularioCliente-view.fxml");

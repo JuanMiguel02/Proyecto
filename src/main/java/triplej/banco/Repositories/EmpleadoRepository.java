@@ -17,7 +17,7 @@ public class EmpleadoRepository {
     private final ArrayList<Empleado> empleados;
     private final UsuarioRepository usuarioRepository;
 
-    private EmpleadoRepository() {
+    public EmpleadoRepository() {
         empleados = new ArrayList<>();
         this.usuarioRepository = UsuarioRepository.getInstancia();
 
@@ -52,6 +52,10 @@ public class EmpleadoRepository {
                 "1238912", "21341", "Colombia", "Bogotá");
         agregarEmpleado(new Empleado(paco, "Celador", 2000, "Seguridad"));
 
+        PersonaNatural persona = new PersonaNatural("Sancho", "Panza", "sancho@uqbank", "123456", RolUsuario.ADMIN,
+                TipoDocumento.CEDULACIUDADANIA, "312412", "313414", "Colombia", "Armenia");
+        agregarEmpleado(new Empleado(persona, "Admin", 1000.0, "Gestión"));
+
     }
 
     public ArrayList<Empleado> getEmpleados() {
@@ -70,12 +74,19 @@ public class EmpleadoRepository {
         reescribirArchivo();
     }
 
-    public Empleado buscarPorNombreYApellido(String nombre,String apellido){
-        return empleados.stream()
-                .filter(e -> e.getPersona().getNombreCompleto().equals(nombre + " " + apellido))
-                .findFirst()
-                .orElse(null);
+    public void actualizarEmpleado(Empleado empleadoActualizado){
+        for(int i = 0; i < empleados.size(); i++){
+            Empleado empleadoActual = empleados.get(i);
+            if(empleadoActual.getCorreo().equals(empleadoActualizado.getCorreo())){
+                empleados.set(i, empleadoActualizado);
+                break;
+            }
+        }
+        UsuarioRepository usuarioRepo = UsuarioRepository.getInstancia();
+        usuarioRepo.actualizarUsuario(empleadoActualizado.getPersona());
+        reescribirArchivo();
     }
+
 
     public Optional<Empleado> buscarPorCorreo(String email) {
         return empleados.stream()

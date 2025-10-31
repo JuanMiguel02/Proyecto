@@ -107,7 +107,15 @@ public class FormularioEmpleadoController {
             }
 
             String cargo = txtCargo.getText().trim().toUpperCase();
-            RolUsuario rol = cargo.contains("CAJERO") ? RolUsuario.CAJERO : RolUsuario.EMPLEADO;
+
+            RolUsuario rol;
+            if (cargo.contains("ADMIN")) {
+                rol = RolUsuario.ADMIN;
+            } else if (cargo.contains("CAJERO")) {
+                rol = RolUsuario.CAJERO;
+            } else {
+                rol = RolUsuario.EMPLEADO;
+            }
 
             // Crear PersonaNatural
             PersonaNatural persona = new PersonaNatural(

@@ -1,5 +1,6 @@
 package triplej.banco.Repositories;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import triplej.banco.Models.Usuarios.PersonaNatural;
@@ -24,8 +25,18 @@ class UsuarioRepositoryTest {
             if(Files.exists(ruta)) {
                 Files.delete(ruta);
             }
+        PersonaNatural usuarioOriginal = new PersonaNatural(
+                "Paco", "Jones", "paco@gmail", "12345",
+                RolUsuario.EMPLEADO,
+                TipoDocumento.CEDULACIUDADANIA, "123456", "321654", "Colombia", "Bogotá"
+        );
         usuarioRepository = new UsuarioRepository();
-            //Limpiar los datos del repositorio para no cargar los del ejemplo
+        usuarioRepository.guardar(usuarioOriginal);
+    }
+
+    @AfterEach
+    void tearDown() {
+        //Limpiar los datos del repositorio para no cargar los del ejemplo
         usuarioRepository.getUsuarios().clear();
     }
 
@@ -105,4 +116,7 @@ class UsuarioRepositoryTest {
         assertEquals(0, usuarioRepository.contarTodos());
     }
 
+    @Test
+    void actualizarUsuario() {
+    }
 }

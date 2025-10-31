@@ -30,7 +30,7 @@ public class UsuarioRepository {
 
         }else{
             System.out.println("Primera ejecución");
-            cargarDatosEjemplo();
+//            cargarDatosEjemplo();
         }
 
     }
@@ -50,6 +50,24 @@ public class UsuarioRepository {
         }
         usuarios.add(usuario);
         guardarEnArchivo(usuario);
+    }
+
+    public void actualizarUsuario(Usuario usuarioActualizado) {
+        Optional<Usuario> existenteOpt = buscarUsuarioPorCorreo(usuarioActualizado.getCorreo());
+        if (existenteOpt.isPresent()) {
+            Usuario existente = existenteOpt.get();
+
+            if (existente instanceof PersonaNatural personaExistente && usuarioActualizado instanceof PersonaNatural personaNueva) {
+                personaExistente.setNombre(personaNueva.getNombre());
+                personaExistente.setApellido(personaNueva.getApellido());
+                personaExistente.setTelefono(personaNueva.getTelefono());
+                personaExistente.setCiudad(personaNueva.getCiudad());
+                personaExistente.setPais(personaNueva.getPais());
+                personaExistente.setRolUsuario(personaNueva.getRolUsuario());
+            }
+
+            reescribirArchivo();
+        }
     }
 
     public Optional<Usuario> buscarUsuarioPorCorreo(String correo) {
@@ -82,11 +100,13 @@ public class UsuarioRepository {
         return usuarios.size();
     }
 
-    private void cargarDatosEjemplo(){
-        PersonaNatural admin = new PersonaNatural("Sancho", "Panza", "sancho@uqbank", "123456", RolUsuario.ADMIN,
-                TipoDocumento.CEDULACIUDADANIA, "312412", "313414", "Colombia", "Armenia");
-        guardar(admin);
-    }
+//    private void cargarDatosEjemplo(){
+//        PersonaNatural persona = new PersonaNatural("Sancho", "Panza", "sancho@uqbank", "123456", RolUsuario.ADMIN,
+//                TipoDocumento.CEDULACIUDADANIA, "312412", "313414", "Colombia", "Armenia");
+//        Empleado admin = new Empleado(persona, "Admin", 1000.0, "Gestión");
+//
+//        guardar(persona);
+//    }
 
     public void cargarDesdeArchivo() {
         Path ruta = Paths.get("Banco", "Datos", "Usuarios.txt");
@@ -172,7 +192,7 @@ public class UsuarioRepository {
         }
     }
 
-    private void reescribirArchivo() {
+    public void reescribirArchivo() {
         try {
             Path ruta = Paths.get("Banco", "Datos", "Usuarios.txt");
             if (ruta.getParent() != null) {
@@ -183,7 +203,8 @@ public class UsuarioRepository {
             StringBuilder contenido = new StringBuilder();
             contenido.append(String.join(
                     "\t",
-                    "Correo", "Contraseña", "Rol usuario"
+                    "Nombre", "Apellido", "Correo", "Contraseña", "Rol",
+                    "TipoDocumento", "Documento", "Teléfono", "País", "Ciudad"
             )).append("\n");
 
             for (Usuario usuario : usuarios) {

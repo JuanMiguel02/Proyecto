@@ -73,19 +73,29 @@ public class SignInController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/AdminViews/Admin-view.fxml"));
             Parent root = loader.load();
 
-            AdminController adminController = loader.getController();
+            Optional<Empleado> adminExistente = empleadoRepository.buscarPorCorreo(usuario.getCorreo());
 
-            Stage stage = new Stage();
-            stage.setTitle("Sistema Administración UQBANK");
-            stage.setScene(new Scene(root));
-            stage.setMaximized(true);
-            stage.show();
+            Empleado admin;
+
+            if (adminExistente.isPresent()) {
+                admin = adminExistente.get();
+                System.out.println("Admin existente encontrado: " + admin.getNombre());
+
+                AdminController adminController = loader.getController();
+                adminController.setAdmin(admin);
+
+                Stage stage = new Stage();
+                stage.setTitle("Sistema de Administración UQBANK");
+                stage.setScene(new Scene(root));
+                stage.setMaximized(true);
+                stage.show();
+            }
 
         }
         catch (IOException e){
             throw new RuntimeException("Error al abrir la ventana del admin: " + e.getMessage(), e);
         }
-        System.out.println("Admin" + usuario.getNombreCompleto() + " inició sesión");
+        System.out.println("Admin " + usuario.getNombreCompleto() + " inició sesión");
 
     }
 

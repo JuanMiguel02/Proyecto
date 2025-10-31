@@ -1,5 +1,6 @@
 package triplej.banco.Repositories;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
@@ -26,6 +27,10 @@ class ClienteRepositoryTest {
             Files.delete(ruta);
         }
         clienteRepository = new ClienteRepository();
+    }
+
+    @AfterEach
+    void tearDown() {
         //Limpiar los datos del repositorio para no cargar los del ejemplo
         clienteRepository.getClientes().clear();
     }
@@ -40,6 +45,9 @@ class ClienteRepositoryTest {
         );
         Cliente cliente = new Cliente(usuario);
         clienteRepository.guardar(cliente);
+
+        assertNotNull(clienteRepository.getClientes());
+        assertFalse(clienteRepository.getClientes().isEmpty());
         assertTrue(clienteRepository.getClientes().contains(cliente));
         assertEquals(1, clienteRepository.getClientes().size());
     }

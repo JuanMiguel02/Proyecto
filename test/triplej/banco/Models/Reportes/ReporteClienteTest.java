@@ -67,5 +67,6 @@ class ReporteClienteTest {
         assertTrue(reporte.getContenido().stream().anyMatch(linea -> linea.contains("2000")));
         assertTrue(reporte.getContenido().stream().anyMatch(linea -> linea.contains("Aquiles Tengo")));
         assertTrue(reporte.getContenido().stream().anyMatch(linea -> linea.contains("T001")));
+        assertTrue(reporte.getContenido().stream().anyMatch(linea -> linea.contains("Depósito")));
     }
 }

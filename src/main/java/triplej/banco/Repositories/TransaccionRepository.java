@@ -18,7 +18,7 @@ public class TransaccionRepository {
     private final List<Transaccion> transacciones;
     private boolean datosCargados = false;
 
-    private TransaccionRepository() {
+    public TransaccionRepository() {
         transacciones  = new ArrayList<>();
         
     }

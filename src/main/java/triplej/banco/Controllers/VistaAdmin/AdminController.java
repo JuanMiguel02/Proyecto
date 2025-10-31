@@ -17,6 +17,7 @@ import triplej.banco.Controllers.SignInController;
 import triplej.banco.Models.Banco;
 import triplej.banco.Models.Reportes.ReporteAdmin;
 import triplej.banco.Models.Reportes.ReporteGenerado;
+import triplej.banco.Models.Usuarios.Empleado;
 import triplej.banco.Repositories.UsuarioRepository;
 import triplej.banco.Utils.GeneracionReporteVista;
 import java.io.IOException;
@@ -34,6 +35,8 @@ public class AdminController {
     @FXML private AnchorPane vistaReporte;
     @FXML private TextArea txtContenido;
     @FXML private Button btnSalir;
+
+    @FXML private Label lblNombre;
 
     @FXML
     private AreaChart<String, Number> graficaUsuarios;
@@ -55,6 +58,12 @@ public class AdminController {
 
         // DEBUG: Verificar cuántos usuarios hay realmente
         System.out.println(" Usuarios cargados: " + usuarioRepository.getUsuarios().size());
+    }
+
+    public void setAdmin(Empleado admin) {
+        if (lblNombre != null && admin != null) {
+            lblNombre.setText(admin.getNombreCompleto());
+        }
     }
 
     private void cargarVistaEnCentro(String fxmlRuta) {
