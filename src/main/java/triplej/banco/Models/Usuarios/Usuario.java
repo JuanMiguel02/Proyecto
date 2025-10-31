@@ -20,11 +20,6 @@ public abstract class Usuario {
         this.activo = true;
     }
 
-
-    public boolean verificarCredenciales(String correo, String contrasenia){
-        return this.correo.equals(correo) && this.contrasenia.equals(contrasenia);
-    }
-
     public String getCorreo() {
         return correo;
     }

@@ -77,13 +77,13 @@ public class EmpleadoRepository {
                 .orElse(null);
     }
 
-    public Optional<Empleado> buscarPorEmail(String email) {
+    public Optional<Empleado> buscarPorCorreo(String email) {
         return empleados.stream()
                 .filter(e -> e.getPersona().getCorreo().equals(email))
                 .findFirst();
     }
 
-    public boolean existeEmpleadoConEmail(String correo) {
+    public boolean existeEmpleadoConCorreo(String correo) {
         return empleados.stream()
                 .anyMatch(e -> e.getCorreo().equalsIgnoreCase(correo.trim()));
     }
@@ -101,7 +101,7 @@ public class EmpleadoRepository {
                 if(datos.length < 9) continue;
 
                 String correo = datos[4];
-                Optional<Usuario> usuarioExistente = usuarioRepository.buscarUsuarioPorEmail(correo);
+                Optional<Usuario> usuarioExistente = usuarioRepository.buscarUsuarioPorCorreo(correo);
                 String contrasenia = usuarioExistente.map(Usuario::getContrasenia).orElse("");
 
                 PersonaNatural persona = new PersonaNatural(

@@ -19,6 +19,12 @@ public  class ReporteAdmin implements Reporte{
         this.usuarioRepository = UsuarioRepository.getInstancia();
     }
 
+    public ReporteAdmin(TransaccionRepository transaccionRepository, UsuarioRepository usuarioRepository) {
+        this.transaccionRepository = transaccionRepository;
+        this.usuarioRepository = usuarioRepository;
+    }
+
+
     @Override
     public ReporteGenerado generarReporte() {
         List<String> contenido = new ArrayList<>();

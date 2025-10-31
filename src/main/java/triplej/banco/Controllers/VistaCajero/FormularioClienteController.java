@@ -6,15 +6,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
-import triplej.banco.Controllers.VistaAdmin.AdminController;
 import triplej.banco.Models.Cajero.Cajero;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
 import triplej.banco.Models.Usuarios.*;
 import triplej.banco.Repositories.ClienteRepository;
 
-import java.io.IOException;
 
 import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
 
@@ -78,7 +74,7 @@ public class FormularioClienteController {
                 }
             }
 
-            if (clienteRepository.buscarPorEmail(correo).isPresent() || clienteRepository.buscarPorDocumento(numDocumento).isPresent()) {
+            if (clienteRepository.buscarPorCorreo(correo).isPresent() || clienteRepository.buscarPorDocumento(numDocumento).isPresent()) {
                 mostrarAlerta("Este cliente ya está registrado");
                 return;
             }

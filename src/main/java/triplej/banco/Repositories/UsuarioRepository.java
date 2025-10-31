@@ -44,7 +44,7 @@ public class UsuarioRepository {
 
     // Unico metodo para guardar cualquier tipo de usuario.
     public void guardar(Usuario usuario) {
-        Optional<Usuario> existente = buscarUsuarioPorEmail(usuario.getCorreo());
+        Optional<Usuario> existente = buscarUsuarioPorCorreo(usuario.getCorreo());
         if (existente.isPresent()) {
             return;
         }
@@ -52,13 +52,13 @@ public class UsuarioRepository {
         guardarEnArchivo(usuario);
     }
 
-    public Optional<Usuario> buscarUsuarioPorEmail(String correo) {
+    public Optional<Usuario> buscarUsuarioPorCorreo(String correo) {
         return usuarios.stream()
                 .filter(u -> u.getCorreo().equalsIgnoreCase(correo))
                 .findFirst();
     }
 
-    public boolean existeUsuarioConEmail(String correo) {
+    public boolean existeUsuarioConCorreo(String correo) {
         return usuarios.stream()
                 .anyMatch(u -> u.getCorreo().equalsIgnoreCase(correo.trim()));
     }

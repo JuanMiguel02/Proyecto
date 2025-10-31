@@ -42,7 +42,7 @@ public class SignInController {
         String correo = txtCorreo.getText();
         String contrasenia = txtContrasenia.getText();
 
-        Optional<Usuario> usuarioOpt = usuarioRepo.buscarUsuarioPorEmail(correo);
+        Optional<Usuario> usuarioOpt = usuarioRepo.buscarUsuarioPorCorreo(correo);
 
         if (usuarioOpt.isEmpty()) {
             mostrarAlerta("Usuario no encontrado");
@@ -95,7 +95,7 @@ public class SignInController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/CajeroViews/Cajero-view.fxml"));
             Parent root = loader.load();
 
-            Optional<Empleado> empleadoExistente = empleadoRepository.buscarPorEmail(usuario.getCorreo());
+            Optional<Empleado> empleadoExistente = empleadoRepository.buscarPorCorreo(usuario.getCorreo());
 
             Empleado empleado;
 
@@ -125,7 +125,7 @@ public class SignInController {
             ClienteRepository clienteRepo = ClienteRepository.getInstancia();
 
             // Buscar cliente existente por correo
-            Optional<Cliente> clienteExistente = clienteRepo.buscarPorEmail(usuario.getCorreo());
+            Optional<Cliente> clienteExistente = clienteRepo.buscarPorCorreo(usuario.getCorreo());
 
             Cliente cliente;
 

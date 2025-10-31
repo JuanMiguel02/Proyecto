@@ -20,7 +20,7 @@ public class ClienteRepository {
     private final UsuarioRepository usuarioRepository;
     private final TransaccionRepository transaccionRepository;
 
-    private ClienteRepository() {
+    public ClienteRepository() {
         this.clientes = new ArrayList<>();
         this.usuarioRepository = UsuarioRepository.getInstancia();
         this.transaccionRepository = TransaccionRepository.getInstance();
@@ -38,6 +38,7 @@ public class ClienteRepository {
         }
     }
 
+
     public static synchronized ClienteRepository getInstancia() {
         if (instancia == null) {
             instancia = new ClienteRepository();
@@ -48,7 +49,7 @@ public class ClienteRepository {
     public void guardar(Cliente cliente) {
         usuarioRepository.guardar(cliente.getUsuarioAsociado());
 
-        if (!clientes.contains(cliente)) {
+        if (!clientes.contains(cliente) && cliente.getUsuarioAsociado().getRolUsuario() == RolUsuario.CLIENTE) {
             clientes.add(cliente);
         }
 
@@ -68,6 +69,9 @@ public class ClienteRepository {
                 .findFirst();
     }
 
+    public ArrayList<Cliente> getClientes() {
+        return this.clientes;
+    }
 
     /**
      * Verifica si una cuenta ya existe en el archivo
@@ -84,13 +88,13 @@ public class ClienteRepository {
         }
     }
 
-    public Optional<Cliente> buscarPorEmail(String email) {
+    public Optional<Cliente> buscarPorCorreo(String email) {
         return clientes.stream()
                 .filter(c -> c.getUsuarioAsociado().getCorreo().equals(email))
                 .findFirst();
     }
 
-    public Optional<CuentaBancaria> buscarCuentaPorNumero(String numeroCuenta) {
+    public Optional<CuentaBancaria> buscarCuentaDeClientePorNumero(String numeroCuenta) {
         return clientes.stream()
                 .flatMap(cliente -> cliente.getCuentas().stream())
                 .filter(cuenta -> cuenta.getNumeroCuenta().equals(numeroCuenta))
@@ -107,7 +111,7 @@ public class ClienteRepository {
     private void cargarDatosEjemplo() {
         PersonaNatural juan = new PersonaNatural(
                 "Juan", "Henao", "juancho@gmail", "12345", RolUsuario.CLIENTE,
-                TipoDocumento.CEDULACIUDADANIA, "123213", "2132141", "Colombia", "Bogotá");
+                TipoDocumento.CEDULACIUDADANIA, "1232190", "2132141", "Colombia", "Bogotá");
 
         PersonaNatural paco = new PersonaNatural(
                 "Paco", "Jones", "pacojones@gmail", "123456", RolUsuario.CLIENTE,
@@ -149,10 +153,10 @@ public class ClienteRepository {
                 String correo = datos[3];
 
                 // Busca el cliente por correo
-                Cliente cliente = buscarPorEmail(correo).orElse(null);
+                Cliente cliente = buscarPorCorreo(correo).orElse(null);
                 if (cliente == null) {
                     // Si no existe en memoria, se reconstruye a partir del usuario asociado
-                    Usuario usuario = usuarioRepository.buscarUsuarioPorEmail(correo).orElse(null);
+                    Usuario usuario = usuarioRepository.buscarUsuarioPorCorreo(correo).orElse(null);
                     if (usuario == null) continue;
 
                     cliente = new Cliente((Persona) usuario);

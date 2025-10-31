@@ -23,7 +23,7 @@ public class Cajero {
     }
 
     public Cliente registrarCliente(Usuario usuario, String tipoCuenta) {
-        if(usuarioRepository.buscarUsuarioPorEmail(usuario.getCorreo()).isPresent()) {
+        if(usuarioRepository.buscarUsuarioPorCorreo(usuario.getCorreo()).isPresent()) {
             throw  new IllegalArgumentException(
                     "El correo ya está registrado: " + usuario.getCorreo()
             );
@@ -67,7 +67,7 @@ public class Cajero {
             cuenta.depositar(monto);
             System.out.println("Deposito de " + monto + " realizado");
         }catch (IllegalArgumentException e){
-            System.out.println("Error al realizar deposito");
+            throw new IllegalArgumentException(e.getMessage());
         }
     }
 

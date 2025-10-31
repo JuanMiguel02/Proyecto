@@ -22,7 +22,7 @@ public abstract class CuentaBancaria {
     private String numeroCuenta;
     private double saldo;
     private final LocalDate fechaApertura;
-    private Cliente propietario;
+    private final Cliente propietario;
 
     public CuentaBancaria(Cliente propietario) {
         this.propietario = propietario;
@@ -102,7 +102,6 @@ public abstract class CuentaBancaria {
     }
 
     public abstract void retirar(Double monto);
-
 
     public void depositar(Double monto) {
         if (monto <= 0) throw new IllegalArgumentException("El monto debe ser positivo");

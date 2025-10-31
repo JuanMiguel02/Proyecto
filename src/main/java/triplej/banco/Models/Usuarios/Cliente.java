@@ -49,6 +49,10 @@ public class Cliente {
         return cuentas;
     }
 
+    public int getNumeroCuentas(){
+        return cuentas.size();
+    }
+
     public void agregarCuenta(CuentaBancaria cuenta) {
         this.cuentas.add(cuenta);
     }
