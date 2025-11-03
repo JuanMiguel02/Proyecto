@@ -6,34 +6,39 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
-import triplej.banco.Controllers.VistaAdmin.AdminController;
+import javafx.scene.layout.VBox;
 import triplej.banco.Models.Cajero.Cajero;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
 import triplej.banco.Models.Usuarios.*;
 import triplej.banco.Repositories.ClienteRepository;
 
-import java.io.IOException;
 
 import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
 
 public class FormularioClienteController {
 
-
     // Campos del formulario
     @FXML private TextField txtNombre;
     @FXML private TextField txtApellido;
     @FXML private TextField txtNumDocumento;
-    @FXML private ComboBox<TipoDocumento> cmbDocumento;
     @FXML private TextField txtTelefono;
     @FXML private TextField txtCiudad;
     @FXML private TextField txtPais;
     @FXML private TextField txtCorreo;
+    @FXML private TextField txtRazonSocial;
+    @FXML private TextField txtRepresentante;
+    @FXML private TextField txtTipoEmpresa;
     @FXML private PasswordField txtPassword;
     @FXML private PasswordField txtConfirmarPassword;
     @FXML private TextField txtSaldo;
+
+    @FXML private ComboBox<TipoDocumento> cmbDocumento;
     @FXML private ComboBox<String> cmbCuenta;
+    @FXML private ComboBox<String> cmbTipoCliente;
+
+    @FXML private VBox boxJuridica;
+    @FXML private VBox datosPersonaNatural;
+
     private final Cajero cajero = new Cajero();
     private CajeroController cajeroController;
 
@@ -41,8 +46,29 @@ public class FormularioClienteController {
 
     @FXML
     public void initialize() {
+        cmbTipoCliente.getItems().addAll("Persona Natural", "Persona Jurídica");
         cmbDocumento.setItems(FXCollections.observableArrayList(TipoDocumento.values()));
+        cmbTipoCliente.setOnAction(e -> onTipoClienteSeleccionado());
         cmbCuenta.getItems().addAll("Ahorro", "Corriente", "Empresarial");
+    }
+
+    @FXML
+    private void onTipoClienteSeleccionado(){
+        String tipo = cmbTipoCliente.getValue();
+        boolean esJuridica = "Persona Jurídica".equalsIgnoreCase(tipo);
+
+        datosPersonaNatural.setVisible(!esJuridica);
+        datosPersonaNatural.setManaged(!esJuridica);
+
+        boxJuridica.setVisible(esJuridica);
+        boxJuridica.setManaged(esJuridica);
+
+        cmbCuenta.getItems().clear();
+        if(esJuridica){
+            cmbCuenta.getItems().addAll("Empresarial", "Corriente");
+            cmbDocumento.getItems().clear();
+            cmbDocumento.getItems().addAll(TipoDocumento.NIT);
+        }
     }
 
     @FXML
@@ -50,21 +76,17 @@ public class FormularioClienteController {
         if (!validarCampos()) return;
 
         try {
-
             if (!txtPassword.getText().equals(txtConfirmarPassword.getText())) {
                 mostrarAlerta("Las contraseñas no coinciden");
                 return;
             }
 
-            String nombre = txtNombre.getText().trim();
-            String apellido = txtApellido.getText().trim();
-            TipoDocumento tipoDocumento = cmbDocumento.getSelectionModel().getSelectedItem();
-            String numDocumento = txtNumDocumento.getText().trim();
             String telefono = txtTelefono.getText().trim();
             String ciudad = txtCiudad.getText().trim();
             String pais = txtPais.getText().trim();
             String correo = txtCorreo.getText().trim();
             String contrasenia = txtPassword.getText().trim();
+            String numDocumento = txtNumDocumento.getText().trim();
             String tipoCuenta = cmbCuenta.getValue();
 
             double saldo = 0.0;
@@ -78,12 +100,55 @@ public class FormularioClienteController {
                 }
             }
 
-            if (clienteRepository.buscarPorEmail(correo).isPresent() || clienteRepository.buscarPorDocumento(numDocumento).isPresent()) {
-                mostrarAlerta("Este cliente ya está registrado");
+            if (clienteRepository.buscarPorCorreo(correo).isPresent()) {
+                mostrarAlerta("Este ocorreo ya está registrado");
                 return;
             }
 
-            Persona persona = new PersonaNatural(nombre, apellido, correo, contrasenia, RolUsuario.CLIENTE, tipoDocumento, numDocumento, telefono, pais, ciudad);
+            //----CREAR PERSONA SEGÚN EL TIPO DE CLIENTE----
+            String tipoCliente = cmbTipoCliente.getValue();
+            Persona persona;
+
+            if("Persona Jurídica".equalsIgnoreCase(tipoCliente)){
+                //----CREAR PERSONA JURÍDICA-----
+                String razonSocial = txtRazonSocial.getText().trim();
+                String representante = txtRepresentante.getText().trim();
+                String tipoEmpresa = txtTipoEmpresa.getText().trim();
+                TipoDocumento nit = this.cmbDocumento.getValue();
+
+                if(razonSocial.isEmpty() || representante.isEmpty() || tipoEmpresa.isEmpty()){
+                    mostrarAlerta("Debe completar todos los campos");
+                    return;
+                }
+                if(clienteRepository.buscarPorDocumento(nit.toString()).isPresent()){
+                    mostrarAlerta("Ya existe una empresa registrada con este NIT");
+                    return;
+                }
+                persona = new PersonaJuridica(
+                        razonSocial,
+                        representante,
+                        tipoEmpresa,
+                        correo,
+                        contrasenia,
+                        RolUsuario.CLIENTE,
+                        nit,
+                        numDocumento,
+                        telefono,
+                        pais,
+                        ciudad
+                );
+            }else{
+                //---- PERSONA NATURAL----//
+                String nombre = txtNombre.getText().trim();
+                String apellido = txtApellido.getText().trim();
+                TipoDocumento tipoDocumento = cmbDocumento.getSelectionModel().getSelectedItem();
+
+                if(nombre.isEmpty() || apellido.isEmpty()){
+                    mostrarAlerta("Debe completar todos los campos");
+                    return;
+                }
+                persona = new PersonaNatural(nombre, apellido, correo, contrasenia, RolUsuario.CLIENTE, tipoDocumento, numDocumento, telefono, pais, ciudad);
+            }
 
             Cliente nuevoCliente = cajero.registrarCliente(persona, tipoCuenta);
 
@@ -104,17 +169,6 @@ public class FormularioClienteController {
 
     }
     private boolean validarCampos() {
-            if (txtNombre.getText().trim().isEmpty()) {
-                mostrarAlerta("El nombre es obligatorio");
-                txtNombre.requestFocus();
-                return false;
-            }
-
-            if (txtApellido.getText().trim().isEmpty()) {
-                mostrarAlerta("El apellido es obligatorio");
-                txtApellido.requestFocus();
-                return false;
-            }
 
             if (cmbDocumento.getSelectionModel().isEmpty()) {
                 mostrarAlerta("Debe seleccionar un tipo de documento");

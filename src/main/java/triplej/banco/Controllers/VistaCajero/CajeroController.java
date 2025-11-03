@@ -12,13 +12,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import triplej.banco.Controllers.SignInController;
-import triplej.banco.Controllers.VistaAdmin.AdminController;
+import triplej.banco.Controllers.LoginController;
 import triplej.banco.Models.Cajero.Cajero;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
 import triplej.banco.Models.Reportes.ReporteGenerado;
 import triplej.banco.Models.Usuarios.Cliente;
 import triplej.banco.Models.Usuarios.Empleado;
+import triplej.banco.Models.Usuarios.PersonaJuridica;
 import triplej.banco.Repositories.ClienteRepository;
 
 import java.io.IOException;
@@ -34,6 +34,7 @@ public class CajeroController {
 
     @FXML private StackPane contenedorCentro;
     @FXML private AnchorPane vistaInicio;
+    @FXML private VBox panelJuridica;
     @FXML private AnchorPane vistaReporte;
 
     //  Campos de búsqueda y selección
@@ -48,6 +49,9 @@ public class CajeroController {
     @FXML private TextField txtCiudad;
     @FXML private TextField txtTipoDocumento;
     @FXML private TextField txtNumeroDocumento;
+    @FXML private TextField txtRazonSocial;
+    @FXML private TextField txtTipoEmpresa;
+    @FXML private TextField txtRepresentanteLegal;
     @FXML private TextArea  txtReporteGeneral;
     @FXML private ImageView imgFotoCliente;
 
@@ -80,15 +84,21 @@ public class CajeroController {
     //  Buscar cliente por documento
     @FXML
     private void buscarCliente() {
-        String documento = txtBusquedaCliente.getText().trim();
+        String busqueda = txtBusquedaCliente.getText().trim();
 
-        if (documento.isEmpty()) {
+        if (busqueda.isEmpty()) {
             mostrarAlerta("Error", "Ingrese un número de documento.", Alert.AlertType.WARNING);
             return;
         }
 
-        Optional<Cliente> clienteOpt = repoClientes.buscarPorDocumento(documento);
+        Optional<Cliente> clienteOpt = repoClientes.buscarPorDocumento(busqueda);
 
+        if(clienteOpt.isEmpty()){
+            Optional<Cliente> clienteCuenta = repoClientes.buscarClientePorCuenta(busqueda);
+            if(clienteCuenta.isPresent()){
+                clienteOpt = clienteCuenta;
+            }
+        }
 
         if (clienteOpt.isEmpty()) {
             mostrarAlerta("No encontrado", "No se encontró ningún cliente con ese documento.", Alert.AlertType.INFORMATION);
@@ -103,6 +113,14 @@ public class CajeroController {
     //  Cargar información del cliente encontrado
     private void cargarDatosCliente() {
 
+        if(clienteActual.getUsuarioAsociado() instanceof PersonaJuridica juridica){
+            panelJuridica.setVisible(true);
+            panelJuridica.setManaged(true);
+
+            txtRazonSocial.setText(juridica.getRazonSocial());
+            txtRepresentanteLegal.setText(juridica.getRepresentanteLegal());
+            txtTipoEmpresa.setText(juridica.getTipoEmpresa());
+        }
         txtNombre.setText(clienteActual.getNombre());
         txtCorreo.setText(clienteActual.getCorreo());
         txtTelefono.setText(clienteActual.getTelefono());
@@ -146,6 +164,7 @@ public class CajeroController {
     private void seleccionarCuenta() {
         cuentaSeleccionada = cmbCuentasCliente.getValue();
         if (cuentaSeleccionada != null) {
+            clienteActual.setCuentaActiva(cuentaSeleccionada);
             System.out.println("Cuenta seleccionada: " + cuentaSeleccionada.getNumeroCuenta());
         }
     }
@@ -167,7 +186,7 @@ public class CajeroController {
             try {
                 double monto = Double.parseDouble(valor);
                 cajero.realizarDeposito(cuentaSeleccionada, monto, "Depósito por cajero");
-                ClienteRepository.getInstancia().guardar(clienteActual);
+                ClienteRepository.getInstancia().actualizarCliente(clienteActual);
                 mostrarAlerta("Éxito", "Depósito realizado correctamente.", Alert.AlertType.INFORMATION);
             } catch (NumberFormatException e) {
                 mostrarAlerta("Error", "Monto inválido.", Alert.AlertType.ERROR);
@@ -181,6 +200,7 @@ public class CajeroController {
             mostrarAlerta("Error", "Seleccione una cuenta para operar.", Alert.AlertType.WARNING);
             return;
         }
+
         double saldo = cajero.consultarSaldo(cuentaSeleccionada);
 
         Stage ventanaSaldo = new Stage();
@@ -207,7 +227,7 @@ public class CajeroController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/Login-view.fxml"));
             Parent root = loader.load();
 
-            SignInController signInController= loader.getController();
+            LoginController loginController = loader.getController();
 
             Stage stage = new Stage();
             stage.setTitle("Inicio");
@@ -232,7 +252,7 @@ public class CajeroController {
 
             try {
                 controller.getClass()
-                        .getMethod("setAdminController", AdminController.class)
+                        .getMethod("setCajeroController", CajeroController.class)
                         .invoke(controller, this);
             }  catch (Exception ignored) {}
 
@@ -255,12 +275,43 @@ public class CajeroController {
     }
 
     @FXML
+    private void abrirFormularioNuevaCuenta(){
+        if (clienteActual == null) {
+            mostrarAlerta("Error", "Debe buscar y seleccionar un cliente antes de crear una nueva cuenta.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/CajeroViews/FormularioNuevaCuenta-view.fxml"));
+            Parent root = loader.load();
+
+            // Obtener el controlador del formulario
+            FormularioNuevaCuentaController controlador = loader.getController();
+
+            // Pasar el cliente actual al nuevo formulario
+            controlador.setCliente(clienteActual);
+
+            // Crear y mostrar la nueva ventana
+            Stage stage = new Stage();
+            stage.setTitle("Apertura de nueva cuenta");
+            stage.setScene(new Scene(root));
+            stage.initOwner(btnBuscarCliente.getScene().getWindow());
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarAlerta("Error", "No se pudo abrir el formulario de nueva cuenta.", Alert.AlertType.ERROR);
+        }
+    }
+
+    @FXML
     private void onGenerarReporte(){
         if(clienteActual == null || clienteActual.getCuentaActiva() == null){
             mostrarAlerta("No se encontró la cuenta activa del cliente");
             return;
         }
-        ReporteGenerado reporte = cajero.generarReporteCliente(clienteActual.getCuentaActiva());
+
+        ReporteGenerado reporte = cajero.generarReporteCliente(cuentaSeleccionada);
 
         generarReporte(reporte, txtReporteGeneral, vistaReporte, contenedorCentro);
     }
@@ -290,8 +341,6 @@ public class CajeroController {
         }
     }
 
-
-
     @FXML
     private void mostrarFormulario() {
         cargarVistaEnCentro("/triplej/banco/Views/CajeroViews/FormularioCliente-view.fxml");
@@ -303,6 +352,5 @@ public class CajeroController {
         vistaInicio.setVisible(true);
         vistaInicio.setManaged(true);
         contenedorCentro.getChildren().add(vistaInicio);
-
     }
 }

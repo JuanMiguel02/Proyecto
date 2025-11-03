@@ -1,2 +1,2 @@
 NumeroCuenta	Saldo	TipoCuenta	CorreoCliente
-6662024499	2000,00	2	juanperez@gmail
+6663056147	0,00	3	empresax@gmail

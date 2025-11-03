@@ -10,6 +10,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import triplej.banco.Models.Usuarios.RolUsuario;
 import triplej.banco.Repositories.EmpleadoRepository;
 import triplej.banco.Models.Usuarios.Empleado;
 import triplej.banco.Repositories.UsuarioRepository;
@@ -39,8 +40,13 @@ public class TablaEmpleadosController {
     @FXML private TextField txtTelefono;
     @FXML private TextField txtSalario;
     @FXML private TextField txtCargo;
+    @FXML private TextField txtContraseniaVisible;
     @FXML private PasswordField txtContrasenia;
     @FXML private ComboBox<String> cmbDepartamento;
+
+    @FXML
+    private CheckBox chkMostrarContrasenia;
+
 
     @FXML private TextField txtBuscar;
     @FXML private ImageView imgEmpleado;
@@ -49,12 +55,14 @@ public class TablaEmpleadosController {
 
     private static final Image IMAGEN_POR_DEFECTO = new Image(AdminController.class.getResource("/triplej/banco/Images/avatar.png").toExternalForm());
 
-    private EmpleadoRepository repo;
+    private EmpleadoRepository empleadoRepository;
+    private UsuarioRepository usuarioRepository;
     private ObservableList<Empleado> listaEmpleados;
 
     @FXML
     public void initialize() {
-        repo = EmpleadoRepository.getInstance();
+        empleadoRepository = EmpleadoRepository.getInstance();
+        usuarioRepository = UsuarioRepository.getInstancia();
 
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre")); // llama a getNombre()
         colApellido.setCellValueFactory(new PropertyValueFactory<>("apellido")); // llama a getApellido()
@@ -88,24 +96,22 @@ public class TablaEmpleadosController {
 //        });
 
 
-        listaEmpleados = FXCollections.observableArrayList(repo.getEmpleados());
+        listaEmpleados = FXCollections.observableArrayList(empleadoRepository.getEmpleados());
         FilteredList<Empleado> listaFiltrada = new FilteredList<>(listaEmpleados);
 
         tablaEmpleados.setItems(listaFiltrada);
 
-        txtBuscar.textProperty().addListener((obs, oldVal, newVal) -> {
-            listaFiltrada.setPredicate(emp -> {
-                if (newVal == null || newVal.isEmpty()) return true;
-                String filtro = newVal.toLowerCase();
-                return emp.getNombre().toLowerCase().contains(filtro)
-                        || emp.getApellido().toLowerCase().contains(filtro)
-                        || emp.getCargo().toLowerCase().contains(filtro);
-            });
-        });
+        txtBuscar.textProperty().addListener((obs, oldVal, newVal) -> listaFiltrada.setPredicate(emp -> {
+            if (newVal == null || newVal.isEmpty()) return true;
+            String filtro = newVal.toLowerCase();
+            return emp.getNombre().toLowerCase().contains(filtro)
+                    || emp.getApellido().toLowerCase().contains(filtro)
+                    || emp.getCargo().toLowerCase().contains(filtro);
+        }));
     }
 
     private void cargarEmpleados(){
-        listaEmpleados = FXCollections.observableArrayList(repo.getEmpleados());
+        listaEmpleados = FXCollections.observableArrayList(empleadoRepository.getEmpleados());
         tablaEmpleados.setItems(listaEmpleados);
     }
 
@@ -126,7 +132,7 @@ public class TablaEmpleadosController {
 
         confirmacion.showAndWait().ifPresent(respuesta ->{
             if(respuesta == ButtonType.OK){
-                repo.eliminarEmpleado(empleadoSeleccionado);
+                empleadoRepository.eliminarEmpleado(empleadoSeleccionado);
                 listaEmpleados.remove(empleadoSeleccionado);
 
                 mostrarAlerta("Éxito", "Empleado eliminado correctamente.", Alert.AlertType.INFORMATION);
@@ -136,55 +142,101 @@ public class TablaEmpleadosController {
 
     @FXML
     private void editarEmpleado(){
-        empleadoSeleccionado = tablaEmpleados.getSelectionModel().getSelectedItem();
+            empleadoSeleccionado = tablaEmpleados.getSelectionModel().getSelectedItem();
 
-        if(empleadoSeleccionado == null){
-            mostrarAlerta("Por favor seleccione un empleado para editar");
-            return;
-        }
+            if (empleadoSeleccionado == null) {
+                mostrarAlerta("Por favor seleccione un empleado para editar");
+                return;
+            }
 
-        // Llenar los campos del formulario
-        txtNombre.setText(empleadoSeleccionado.getNombre());
-        txtApellido.setText(empleadoSeleccionado.getApellido());
-        txtCorreo.setText(empleadoSeleccionado.getCorreo());
-        txtCargo.setText(empleadoSeleccionado.getCargo());
-        txtCedula.setText(empleadoSeleccionado.getDocumento());
-        txtTelefono.setText(empleadoSeleccionado.getTelefono());
-        txtCiudad.setText(empleadoSeleccionado.getCiudad());
-        txtSalario.setText(String.valueOf(empleadoSeleccionado.getSalario()));
-        cmbDepartamento.setValue(empleadoSeleccionado.getDepartamento());
+            // Llenar los campos del formulario con los datos actuales
+            txtNombre.setText(empleadoSeleccionado.getNombre());
+            txtApellido.setText(empleadoSeleccionado.getApellido());
+            txtCorreo.setText(empleadoSeleccionado.getCorreo());
+            txtCargo.setText(empleadoSeleccionado.getCargo());
+            txtCedula.setText(empleadoSeleccionado.getDocumento());
+            txtTelefono.setText(empleadoSeleccionado.getTelefono());
+            txtCiudad.setText(empleadoSeleccionado.getCiudad());
+            txtSalario.setText(String.valueOf(empleadoSeleccionado.getSalario()));
+            cmbDepartamento.setValue(empleadoSeleccionado.getDepartamento());
 
-        // Mostrar panel de edición
-        vistaTabla.setVisible(true);
-        vistaTabla.setManaged(false);
+            // Manejo de contraseña visible/oculta ---
+            String contraseniaActual = empleadoSeleccionado.getPersona().getContrasenia();
 
-        vistaEdicion.setVisible(true);
-        vistaEdicion.setManaged(true);
+            // Mostrar la contraseña tanto en el PasswordField como en el TextField
+            txtContrasenia.setText(contraseniaActual);
+            txtContraseniaVisible.setText(contraseniaActual);
+
+            // Por defecto ocultar el campo visible (mostrar el PasswordField)
+            txtContraseniaVisible.setVisible(false);
+            txtContraseniaVisible.setManaged(false);
+            txtContrasenia.setVisible(true);
+            txtContrasenia.setManaged(true);
+
+            // Asegurarnos de que el checkbox esté desmarcado
+            chkMostrarContrasenia.setSelected(false);
+
+            // Mostrar el panel de edición
+            vistaTabla.setVisible(false);
+            vistaTabla.setManaged(false);
+            vistaEdicion.setVisible(true);
+            vistaEdicion.setManaged(true);
     }
 
     @FXML
-    private void guardarEdicion(){
-        if(empleadoSeleccionado != null){
-            empleadoSeleccionado.getPersona().setCiudad(txtCiudad.getText());
-            empleadoSeleccionado.getPersona().setTelefono(txtTelefono.getText());
-            empleadoSeleccionado.getPersona().setCorreo(txtCorreo.getText());
-            empleadoSeleccionado.setSalario(Double.parseDouble(txtSalario.getText()));
-            empleadoSeleccionado.setCargo(txtCargo.getText());
-            empleadoSeleccionado.setDepartamento(cmbDepartamento.getValue());
-            empleadoSeleccionado.getPersona().setContrasenia(txtContrasenia.getText());
+    private void guardarEdicion() {
+        if (empleadoSeleccionado != null) {
+            // Obtener la contraseña dependiendo del modo visible
+            String nuevaContrasenia = chkMostrarContrasenia.isSelected()
+                    ? txtContraseniaVisible.getText()
+                    : txtContrasenia.getText();
 
-            if (!txtContrasenia.getText().isBlank()) {
-                empleadoSeleccionado.getPersona().setContrasenia(txtContrasenia.getText());
+            // Actualizar datos personales
+            empleadoSeleccionado.getPersona().setNombre(txtNombre.getText());
+            empleadoSeleccionado.getPersona().setApellido(txtApellido.getText());
+            empleadoSeleccionado.getPersona().setCorreo(txtCorreo.getText());
+            empleadoSeleccionado.getPersona().setTelefono(txtTelefono.getText());
+            empleadoSeleccionado.getPersona().setCiudad(txtCiudad.getText());
+
+            // Determinar rol según el cargo
+            String cargo = txtCargo.getText().trim().toUpperCase();
+            RolUsuario nuevoRol;
+
+            if (cargo.contains("ADMIN")) {
+                nuevoRol = RolUsuario.ADMIN;
+            } else if (cargo.contains("CAJERO")) {
+                nuevoRol = RolUsuario.CAJERO;
+            } else {
+                nuevoRol = RolUsuario.EMPLEADO;
             }
 
-            tablaEmpleados.refresh();
+            // Actualizar cargo y rol
+            empleadoSeleccionado.setCargo(cargo);
+            empleadoSeleccionado.getPersona().setRolUsuario(nuevoRol);
 
+            empleadoSeleccionado.setDepartamento(cmbDepartamento.getValue());
+            empleadoSeleccionado.setSalario(Double.parseDouble(txtSalario.getText()));
+
+            if (!nuevaContrasenia.isBlank()) {
+                empleadoSeleccionado.getPersona().setContrasenia(nuevaContrasenia);
+            }
+
+            //  Actualizar en EmpleadoRepository
+            EmpleadoRepository empleadoRepo = EmpleadoRepository.getInstance();
+
+            // Actualizar también en UsuarioRepository y Reescribir archivo con los cambios actualizados
+            UsuarioRepository usuarioRepo = UsuarioRepository.getInstancia();
+
+            usuarioRepo.actualizarUsuario(empleadoSeleccionado.getPersona());
+            empleadoRepo.actualizarEmpleado(empleadoSeleccionado);
+
+            // Refrescar tabla y mostrar confirmación
+            tablaEmpleados.refresh();
             mostrarAlerta("Éxito", "Empleado actualizado correctamente", Alert.AlertType.INFORMATION);
 
-//            repo.actualizarEmpleado(empleadoSeleccionado);
-//            UsuarioRepository.getInstancia().actualizarUsuario(empleadoSeleccionado.getPersona());
+            // Volver a la vista de tabla
             cancelarEdicion();
-        }else{
+        } else {
             mostrarAlerta("No hay empleado seleccionado para editar");
         }
     }
@@ -196,6 +248,21 @@ public class TablaEmpleadosController {
 
         vistaTabla.setManaged(true);
         vistaTabla.setVisible(true);
+    }
+
+    @FXML
+    private void mostrarContrasenia() {
+        boolean mostrar = chkMostrarContrasenia.isSelected();
+        txtContraseniaVisible.setVisible(mostrar);
+        txtContraseniaVisible.setManaged(mostrar);
+        txtContrasenia.setVisible(!mostrar);
+        txtContrasenia.setManaged(!mostrar);
+
+        if (mostrar) {
+            txtContraseniaVisible.setText(txtContrasenia.getText());
+        } else {
+            txtContrasenia.setText(txtContraseniaVisible.getText());
+        }
     }
 }
 

@@ -19,7 +19,7 @@ public class ReporteCliente implements Reporte {
         List<String> contenido = new ArrayList<>();
 
         contenido.add("Reporte de movimientos de la cuenta: " + cuentaBancaria.getNumeroCuenta());
-        contenido.add("Titular: " + cuentaBancaria.getPropietario());
+        contenido.add("Titular: " + cuentaBancaria.getPropietario().getNombre());
         contenido.add("Saldo actual: $" + String.format("%.2f", cuentaBancaria.getSaldo()));
         contenido.add("Fecha de generación: " + LocalDateTime.now());
         contenido.add("-----------------------------------------------------");

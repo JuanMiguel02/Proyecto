@@ -1,7 +1,5 @@
 package triplej.banco.Models.Usuarios;
 
-import triplej.banco.Models.Cuentas.CuentaBancaria;
-
 public class PersonaNatural extends Persona{
 
     private String nombre;

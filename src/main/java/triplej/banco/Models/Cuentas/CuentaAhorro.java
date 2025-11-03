@@ -4,7 +4,7 @@ import triplej.banco.Models.Usuarios.Cliente;
 
 public class CuentaAhorro extends CuentaBancaria {
 
-    public CuentaAhorro( Cliente propietario){
+    public CuentaAhorro(Cliente propietario){
         super(propietario);
     }
 

@@ -1,7 +1,5 @@
 package triplej.banco.Models.Usuarios;
 
-import triplej.banco.Models.Cuentas.CuentaBancaria;
-
 public class PersonaJuridica extends Persona{
 
     private String razonSocial;
@@ -25,8 +23,10 @@ public class PersonaJuridica extends Persona{
     }
 
     public String getTipoEmpresa() {
-        return tipoEmpresa;
+        return this.tipoEmpresa;
     }
+
+    public String getRazonSocial() {return this.razonSocial;}
 
     public void setTipoEmpresa(String tipoEmpresa) {
         this.tipoEmpresa = tipoEmpresa;
@@ -39,4 +39,5 @@ public class PersonaJuridica extends Persona{
     public void setRepresentanteLegal(String representanteLegal) {
         this.representanteLegal = representanteLegal;
     }
+
 }

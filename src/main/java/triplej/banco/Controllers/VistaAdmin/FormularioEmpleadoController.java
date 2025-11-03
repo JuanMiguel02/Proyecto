@@ -19,7 +19,7 @@ public class FormularioEmpleadoController {
     @FXML private TextField txtTelefono;
     @FXML private TextField txtCiudad;
     @FXML private TextField txtPais;
-    @FXML private TextField txtEmail;
+    @FXML private TextField txtCorreo;
     @FXML private PasswordField txtPassword;
     @FXML private PasswordField txtConfirmarPassword;
     @FXML private TextField txtCargo;
@@ -74,11 +74,11 @@ public class FormularioEmpleadoController {
         });
 
         // Validación de email en tiempo real
-        txtEmail.textProperty().addListener((obs, oldVal, newVal) -> {
+        txtCorreo.textProperty().addListener((obs, oldVal, newVal) -> {
             if (!newVal.matches("^[A-Za-z0-9+_.-]*@?[A-Za-z0-9.-]*$") && !newVal.isEmpty()) {
-                txtEmail.setStyle("-fx-border-color: red;");
+                txtCorreo.setStyle("-fx-border-color: red;");
             } else {
-                txtEmail.setStyle("");
+                txtCorreo.setStyle("");
             }
         });
     }
@@ -101,19 +101,27 @@ public class FormularioEmpleadoController {
                 return;
             }
 
-            if(correoYaExiste(txtEmail.getText())){
+            if(correoYaExiste(txtCorreo.getText())){
                 mostrarAlerta("Este correo ya está registrado");
                 return;
             }
 
             String cargo = txtCargo.getText().trim().toUpperCase();
-            RolUsuario rol = cargo.contains("CAJERO") ? RolUsuario.CAJERO : RolUsuario.EMPLEADO;
+
+            RolUsuario rol;
+            if (cargo.contains("ADMIN")) {
+                rol = RolUsuario.ADMIN;
+            } else if (cargo.contains("CAJERO")) {
+                rol = RolUsuario.CAJERO;
+            } else {
+                rol = RolUsuario.EMPLEADO;
+            }
 
             // Crear PersonaNatural
             PersonaNatural persona = new PersonaNatural(
                     txtNombre.getText().trim(),
                     txtApellido.getText().trim(),
-                    txtEmail.getText().trim().toLowerCase(),
+                    txtCorreo.getText().trim().toLowerCase(),
                     txtPassword.getText(),
                     rol,
                     TipoDocumento.CEDULACIUDADANIA,
@@ -159,10 +167,10 @@ public class FormularioEmpleadoController {
         String emailNormalizado = email.trim().toLowerCase();
 
         // Verificar en empleados
-        boolean existeEnEmpleados = empleadoRepository.existeEmpleadoConEmail(emailNormalizado);
+        boolean existeEnEmpleados = empleadoRepository.existeEmpleadoConCorreo(emailNormalizado);
 
         // Verificar en usuarios generales
-        boolean existeEnUsuarios = usuarioRepository.existeUsuarioConEmail(emailNormalizado);
+        boolean existeEnUsuarios = usuarioRepository.existeUsuarioConCorreo(emailNormalizado);
 
         return existeEnEmpleados || existeEnUsuarios;
     }
@@ -204,15 +212,15 @@ public class FormularioEmpleadoController {
             return false;
         }
 
-        if (txtEmail.getText().trim().isEmpty()) {
+        if (txtCorreo.getText().trim().isEmpty()) {
             mostrarAlerta("El correo electrónico es obligatorio");
-            txtEmail.requestFocus();
+            txtCorreo.requestFocus();
             return false;
         }
 
-        if (!txtEmail.getText().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+        if (!txtCorreo.getText().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
             mostrarAlerta("El correo electrónico no es válido");
-            txtEmail.requestFocus();
+            txtCorreo.requestFocus();
             return false;
         }
 
@@ -269,12 +277,12 @@ public class FormularioEmpleadoController {
         txtTelefono.clear();
         txtCiudad.clear();
         txtPais.clear();
-        txtEmail.clear();
+        txtCorreo.clear();
         txtPassword.clear();
         txtConfirmarPassword.clear();
         txtCargo.clear();
         txtSalario.clear();
-        txtEmail.setStyle("");
+        txtCorreo.setStyle("");
         cmbDepartamento.setValue("Atención al Cliente");
         txtNombre.requestFocus();
     }

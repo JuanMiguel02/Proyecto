@@ -68,7 +68,7 @@
 
                 <VBox spacing="5">
                     <Label text="Correo Electrónico:*" />
-                    <TextField fx:id="txtEmail" promptText="Ej: carlos@banco.com" />
+                    <TextField fx:id="txtCorreo" promptText="Ej: carlos@banco.com" />
                 </VBox>
 
                 <VBox spacing="5">

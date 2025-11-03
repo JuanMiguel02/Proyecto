@@ -21,7 +21,7 @@ import java.util.Optional;
 
 import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
 
-public class SignInController {
+public class LoginController {
 
     @FXML private TextField txtCorreo;
     @FXML private PasswordField txtContrasenia;
@@ -42,7 +42,7 @@ public class SignInController {
         String correo = txtCorreo.getText();
         String contrasenia = txtContrasenia.getText();
 
-        Optional<Usuario> usuarioOpt = usuarioRepo.buscarUsuarioPorEmail(correo);
+        Optional<Usuario> usuarioOpt = usuarioRepo.buscarUsuarioPorCorreo(correo);
 
         if (usuarioOpt.isEmpty()) {
             mostrarAlerta("Usuario no encontrado");
@@ -73,19 +73,29 @@ public class SignInController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/AdminViews/Admin-view.fxml"));
             Parent root = loader.load();
 
-            AdminController adminController = loader.getController();
+            Optional<Empleado> adminExistente = empleadoRepository.buscarPorCorreo(usuario.getCorreo());
 
-            Stage stage = new Stage();
-            stage.setTitle("Sistema Administración UQBANK");
-            stage.setScene(new Scene(root));
-            stage.setMaximized(true);
-            stage.show();
+            Empleado admin;
+
+            if (adminExistente.isPresent()) {
+                admin = adminExistente.get();
+                System.out.println("Admin existente encontrado: " + admin.getNombre());
+
+                AdminController adminController = loader.getController();
+                adminController.setAdmin(admin);
+
+                Stage stage = new Stage();
+                stage.setTitle("Sistema de Administración UQBANK");
+                stage.setScene(new Scene(root));
+                stage.setMaximized(true);
+                stage.show();
+            }
 
         }
         catch (IOException e){
             throw new RuntimeException("Error al abrir la ventana del admin: " + e.getMessage(), e);
         }
-        System.out.println("Admin" + usuario.getNombreCompleto() + " inició sesión");
+        System.out.println("Admin " + usuario.getNombreCompleto() + " inició sesión");
 
     }
 
@@ -95,7 +105,7 @@ public class SignInController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/CajeroViews/Cajero-view.fxml"));
             Parent root = loader.load();
 
-            Optional<Empleado> empleadoExistente = empleadoRepository.buscarPorEmail(usuario.getCorreo());
+            Optional<Empleado> empleadoExistente = empleadoRepository.buscarPorCorreo(usuario.getCorreo());
 
             Empleado empleado;
 
@@ -125,7 +135,7 @@ public class SignInController {
             ClienteRepository clienteRepo = ClienteRepository.getInstancia();
 
             // Buscar cliente existente por correo
-            Optional<Cliente> clienteExistente = clienteRepo.buscarPorEmail(usuario.getCorreo());
+            Optional<Cliente> clienteExistente = clienteRepo.buscarPorCorreo(usuario.getCorreo());
 
             Cliente cliente;
 

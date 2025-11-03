@@ -3,6 +3,7 @@ package triplej.banco.Models.Usuarios;
 import javafx.scene.image.Image;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public abstract class Usuario {
     private String correo;
@@ -11,6 +12,7 @@ public abstract class Usuario {
     private RolUsuario rolUsuario;
     private Image foto;
     private boolean activo;
+    private UUID id;
 
     public Usuario( String correo, String contrasenia, RolUsuario rolUsuario) {
         this.correo = correo;
@@ -18,11 +20,7 @@ public abstract class Usuario {
         this.rolUsuario = rolUsuario;
         this.fechaRegistro = LocalDate.now();
         this.activo = true;
-    }
-
-
-    public boolean verificarCredenciales(String correo, String contrasenia){
-        return this.correo.equals(correo) && this.contrasenia.equals(contrasenia);
+        this.id = UUID.randomUUID();
     }
 
     public String getCorreo() {
@@ -41,6 +39,9 @@ public abstract class Usuario {
         this.contrasenia = contrasenia;
     }
 
+    public UUID getId(){return this.id; }
+
+    public void setId(UUID id){this.id = id;}
 
     public LocalDate getFechaRegistro() {
         return fechaRegistro;

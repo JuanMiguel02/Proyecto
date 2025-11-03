@@ -1,8 +1,7 @@
-Nombre	Apellido	Correo	Contraseña	Rol	TipoDocumento	Documento	Teléfono	País	Ciudad
-Sancho	Panza	sancho@uqbank	123456	ADMIN	CEDULACIUDADANIA	312412	313414	Colombia	Armenia
-Juan	Henao	juancho@gmail	12345	CLIENTE	CEDULACIUDADANIA	123213	2132141	Colombia	Bogotá
-Paco	Jones	pacojones@gmail	123456	CLIENTE	CEDULACIUDADANIA	123345	21341	Colombia	Bogotá
-Juan	Henao	juan@gmail	1212321	EMPLEADO	CEDULACIUDADANIA	123213	2132141	Colombia	Bogotá
-Paco	Jones	paco@gmail	1212321	EMPLEADO	CEDULACIUDADANIA	1238912	21341	Colombia	Bogotá
-Kepo	Jhon	kepojhon@gmail	123456	CAJERO	CEDULACIUDADANIA	12345671	300124124	colombia	armenia
-Juan	Perez	juanperez@gmail	123456	CLIENTE	CEDULACIUDADANIA	12414112	39141241	colombia	cali
+Id	Nombre/RazónSocial	Apellido/Representante	Correo	Contraseña	Rol	TipoDocumento	Documento	Teléfono	País	Ciudad	TipoEmpresa
+ea0f6d32-1fc9-4ff2-a259-85809a08d4e5	Juan	Henao	juancho@gmail	12345	CLIENTE	CEDULACIUDADANIA	1232190	2132141	Colombia	Bogotá	
+f3b8fbc0-46c9-4f4a-98c7-bb2e4833e803	Paco	Jones	pacojones@gmail	123456	CLIENTE	CEDULACIUDADANIA	123345	21341	Colombia	Bogotá	
+c588ad5c-e273-49d0-b694-770e9cc3ed99	Juan	Henao	juan@gmail	1212321	EMPLEADO	CEDULACIUDADANIA	123213	2132141	Colombia	Bogotá	
+f26b9438-ad39-4dfd-b2ae-6fc7828ae5b4	Paco	Jones	paco@gmail	1212321	EMPLEADO	CEDULACIUDADANIA	1238912	21341	Colombia	Bogotá	
+0ca0e1b4-0d25-425f-9f13-736fa6c77676	Sancho	Panza	sancho@uqbank	123456	ADMIN	CEDULACIUDADANIA	312412	313414	Colombia	Armenia	
+8475665c-61d7-4370-81e4-3f069500c813	Empresa X	Pepe	empresax@gmail	1234567	CLIENTE	NIT	12412412	312312412	colombia	armenia	Empresa Privada

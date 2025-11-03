@@ -18,7 +18,7 @@ public class TransaccionRepository {
     private final List<Transaccion> transacciones;
     private boolean datosCargados = false;
 
-    private TransaccionRepository() {
+    public TransaccionRepository() {
         transacciones  = new ArrayList<>();
         
     }
@@ -61,12 +61,15 @@ public class TransaccionRepository {
 
     private void cargarDatosEjemplo() {
         Transaccion t1 = new Transaccion("123","Retiro", 20000,"12345", "213213");
+        t1.setExitosa(true);
         agregar(t1);
 
         Transaccion t2 = new Transaccion("321","Deposito", 150000,"12341", "213413");
+        t2.setExitosa(true);
         agregar(t2);
 
         Transaccion t3 = new Transaccion("321","Deposito", 15000000,"12341", "213413");
+        t3.setExitosa(true);
         agregar(t3);
 
     }
@@ -79,7 +82,7 @@ public class TransaccionRepository {
             }
 
             if(!Files.exists(ruta)){
-                Files.writeString(ruta,"ID\tTipo\tMonto\tCuentaOrigen\tCuentaDestino\tFecha\n");
+                Files.writeString(ruta,"ID\tTipo\tMonto\tCuentaOrigen\tCuentaDestino\tFecha\tDescripción\tExitosan");
             }
 
             String linea = String.format(

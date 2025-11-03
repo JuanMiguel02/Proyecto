@@ -131,36 +131,36 @@
                     <image>
                         <Image url="@../../Images/avatar.png" />
                     </image></ImageView>
-                <Label layoutX="99.0" layoutY="150.0" text="Bienvenido,">
+                <Label layoutX="91.0" layoutY="150.0" text="Bienvenido/a,">
                     <font>
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <Line endX="144.0" layoutX="123.0" layoutY="228.0" startX="-100.0" />
-                <Label layoutX="79.0" layoutY="179.0" text="Pepe">
+                <Line endX="144.0" layoutX="128.0" layoutY="273.0" startX="-100.0" />
+                <Label fx:id="lblNombre" alignment="CENTER" layoutX="48.0" layoutY="179.0" prefHeight="27.0" prefWidth="194.0">
                     <font>
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <Button fx:id="btnEmpleados" layoutX="49.0" layoutY="431.0" mnemonicParsing="false" onAction="#mostrarEmpleados" prefHeight="37.0" prefWidth="167.0" style="-fx-background-color: transparent;" text="Ver Empleados">
+                <Button fx:id="btnEmpleados" layoutX="50.0" layoutY="441.0" mnemonicParsing="false" onAction="#mostrarEmpleados" prefHeight="37.0" prefWidth="167.0" style="-fx-background-color: transparent;" text="Ver Empleados">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font></Button>
-                <Button fx:id="btnAgregarEmpleado" layoutX="88.0" layoutY="491.0" mnemonicParsing="false" onAction="#mostrarFormulario" prefHeight="36.0" prefWidth="164.0" text="Añadir Empleado" />
-                <Label layoutX="132.0" layoutY="177.0" prefHeight="31.0" prefWidth="80.0" text="(admin)">
+                <Button fx:id="btnAgregarEmpleado" layoutX="69.0" layoutY="504.0" mnemonicParsing="false" onAction="#mostrarFormulario" prefHeight="36.0" prefWidth="164.0" text="Añadir Empleado" />
+                <Label layoutX="110.0" layoutY="219.0" prefHeight="31.0" prefWidth="80.0" text="(admin)">
                     <font>
                         <Font size="18.0" />
                     </font>
                 </Label>
-            <Button fx:id="btnInicio" layoutX="23.0" layoutY="273.0" mnemonicParsing="false" onAction="#mostrarInicio" prefHeight="37.0" prefWidth="122.0" style="-fx-background-color: transparent;" text="Inicio">
+            <Button fx:id="btnInicio" layoutX="27.0" layoutY="286.0" mnemonicParsing="false" onAction="#mostrarInicio" prefHeight="39.0" prefWidth="260.0" style="-fx-background-color: transparent;" text="Inicio">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font></Button>
-            <Button fx:id="btnInicio1" layoutX="39.0" layoutY="325.0" mnemonicParsing="false" onAction="#mostrarTransacciones" prefHeight="39.0" prefWidth="261.0" style="-fx-background-color: transparent;" text="Monitorear Transacciones">
+            <Button fx:id="btnInicio1" layoutX="41.0" layoutY="325.0" mnemonicParsing="false" onAction="#mostrarTransacciones" prefHeight="39.0" prefWidth="261.0" style="-fx-background-color: transparent;" text="Monitorear Transacciones">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font></Button>
-            <Button layoutX="86.0" layoutY="385.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="167.0" text="Ver Clientes" />
+            <Button layoutX="68.0" layoutY="385.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="167.0" text="Ver Clientes" />
             <Button fx:id="btnSalir" layoutX="27.0" layoutY="736.0" mnemonicParsing="false" onAction="#volverMenu" prefHeight="36.0" prefWidth="94.0" text="Salir" />
             <ImageView fitHeight="25.0" fitWidth="46.0" layoutX="27.0" layoutY="280.0" pickOnBounds="true" preserveRatio="true">
                <image>

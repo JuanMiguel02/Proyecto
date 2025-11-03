@@ -49,7 +49,7 @@ public class ClienteController {
         ClienteRepository repo = ClienteRepository.getInstancia();
 
         // Buscar si ya existe un cliente en memoria o en archivo
-        Optional<Cliente> clienteExistente = repo.buscarPorEmail(cliente.getUsuarioAsociado().getCorreo());
+        Optional<Cliente> clienteExistente = repo.buscarPorCorreo(cliente.getUsuarioAsociado().getCorreo());
 
         if (clienteExistente.isPresent()) {
             this.cliente = clienteExistente.get();
@@ -112,7 +112,7 @@ public class ClienteController {
             return;
         }
 
-        Optional<CuentaBancaria> cuentaDestino = ClienteRepository.getInstancia().buscarCuentaPorNumero(numCuenta);
+        Optional<CuentaBancaria> cuentaDestino = ClienteRepository.getInstancia().buscarCuentaDeClientePorNumero(numCuenta);
         if(cuentaDestino.isEmpty()) {
             mostrarAlerta("Error", "El número de cuenta no existe", Alert.AlertType.ERROR);
             return;
@@ -167,7 +167,7 @@ public class ClienteController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/Login-view.fxml"));
             Parent root = loader.load();
 
-            SignInController signInController= loader.getController();
+            LoginController loginController = loader.getController();
 
             Stage stage = new Stage();
             stage.setTitle("Inicio");
