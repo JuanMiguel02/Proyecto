@@ -10,7 +10,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import triplej.banco.Models.Usuarios.PersonaNatural;
 import triplej.banco.Models.Usuarios.RolUsuario;
 import triplej.banco.Repositories.EmpleadoRepository;
 import triplej.banco.Models.Usuarios.Empleado;
@@ -56,12 +55,14 @@ public class TablaEmpleadosController {
 
     private static final Image IMAGEN_POR_DEFECTO = new Image(AdminController.class.getResource("/triplej/banco/Images/avatar.png").toExternalForm());
 
-    private EmpleadoRepository repo;
+    private EmpleadoRepository empleadoRepository;
+    private UsuarioRepository usuarioRepository;
     private ObservableList<Empleado> listaEmpleados;
 
     @FXML
     public void initialize() {
-        repo = EmpleadoRepository.getInstance();
+        empleadoRepository = EmpleadoRepository.getInstance();
+        usuarioRepository = UsuarioRepository.getInstancia();
 
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre")); // llama a getNombre()
         colApellido.setCellValueFactory(new PropertyValueFactory<>("apellido")); // llama a getApellido()
@@ -95,7 +96,7 @@ public class TablaEmpleadosController {
 //        });
 
 
-        listaEmpleados = FXCollections.observableArrayList(repo.getEmpleados());
+        listaEmpleados = FXCollections.observableArrayList(empleadoRepository.getEmpleados());
         FilteredList<Empleado> listaFiltrada = new FilteredList<>(listaEmpleados);
 
         tablaEmpleados.setItems(listaFiltrada);
@@ -110,7 +111,7 @@ public class TablaEmpleadosController {
     }
 
     private void cargarEmpleados(){
-        listaEmpleados = FXCollections.observableArrayList(repo.getEmpleados());
+        listaEmpleados = FXCollections.observableArrayList(empleadoRepository.getEmpleados());
         tablaEmpleados.setItems(listaEmpleados);
     }
 
@@ -131,7 +132,7 @@ public class TablaEmpleadosController {
 
         confirmacion.showAndWait().ifPresent(respuesta ->{
             if(respuesta == ButtonType.OK){
-                repo.eliminarEmpleado(empleadoSeleccionado);
+                empleadoRepository.eliminarEmpleado(empleadoSeleccionado);
                 listaEmpleados.remove(empleadoSeleccionado);
 
                 mostrarAlerta("Éxito", "Empleado eliminado correctamente.", Alert.AlertType.INFORMATION);
@@ -222,12 +223,12 @@ public class TablaEmpleadosController {
 
             //  Actualizar en EmpleadoRepository
             EmpleadoRepository empleadoRepo = EmpleadoRepository.getInstance();
-            empleadoRepo.actualizarEmpleado(empleadoSeleccionado);
 
             // Actualizar también en UsuarioRepository y Reescribir archivo con los cambios actualizados
             UsuarioRepository usuarioRepo = UsuarioRepository.getInstancia();
 
             usuarioRepo.actualizarUsuario(empleadoSeleccionado.getPersona());
+            empleadoRepo.actualizarEmpleado(empleadoSeleccionado);
 
             // Refrescar tabla y mostrar confirmación
             tablaEmpleados.refresh();

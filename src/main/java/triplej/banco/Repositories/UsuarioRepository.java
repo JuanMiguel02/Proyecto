@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class UsuarioRepository {
@@ -45,17 +46,25 @@ public class UsuarioRepository {
     // Unico metodo para guardar cualquier tipo de usuario.
     public void guardar(Usuario usuario) {
         Optional<Usuario> existente = buscarUsuarioPorCorreo(usuario.getCorreo());
-        if (existente.isPresent()) {
+        if (existente.isPresent() && !existente.get().getId().equals(usuario.getId())) {
             return;
         }
-        usuarios.add(usuario);
+
+        if (existente.isEmpty()) {
+            usuarios.add(usuario);
+        }
         guardarEnArchivo(usuario);
     }
 
     public void actualizarUsuario(Usuario usuarioActualizado) {
-        Optional<Usuario> existenteOpt = buscarUsuarioPorCorreo(usuarioActualizado.getCorreo());
+        Optional<Usuario> existenteOpt = buscarUsuarioPorId(usuarioActualizado.getId());
+
         if (existenteOpt.isPresent()) {
             Usuario existente = existenteOpt.get();
+
+            existente.setCorreo(usuarioActualizado.getCorreo());
+            existente.setContrasenia(usuarioActualizado.getContrasenia());
+            existente.setRolUsuario(usuarioActualizado.getRolUsuario());
 
             if (existente instanceof PersonaNatural personaExistente && usuarioActualizado instanceof PersonaNatural personaNueva) {
                 personaExistente.setNombre(personaNueva.getNombre());
@@ -63,7 +72,6 @@ public class UsuarioRepository {
                 personaExistente.setTelefono(personaNueva.getTelefono());
                 personaExistente.setCiudad(personaNueva.getCiudad());
                 personaExistente.setPais(personaNueva.getPais());
-                personaExistente.setRolUsuario(personaNueva.getRolUsuario());
             }
 
             reescribirArchivo();
@@ -73,6 +81,12 @@ public class UsuarioRepository {
     public Optional<Usuario> buscarUsuarioPorCorreo(String correo) {
         return usuarios.stream()
                 .filter(u -> u.getCorreo().equalsIgnoreCase(correo))
+                .findFirst();
+    }
+
+    public Optional<Usuario> buscarUsuarioPorId(UUID id) {
+        return usuarios.stream()
+                .filter(u -> u.getId().equals(id))
                 .findFirst();
     }
 
@@ -100,14 +114,6 @@ public class UsuarioRepository {
         return usuarios.size();
     }
 
-//    private void cargarDatosEjemplo(){
-//        PersonaNatural persona = new PersonaNatural("Sancho", "Panza", "sancho@uqbank", "123456", RolUsuario.ADMIN,
-//                TipoDocumento.CEDULACIUDADANIA, "312412", "313414", "Colombia", "Armenia");
-//        Empleado admin = new Empleado(persona, "Admin", 1000.0, "Gestión");
-//
-//        guardar(persona);
-//    }
-
     public void cargarDesdeArchivo() {
         Path ruta = Paths.get("Banco", "Datos", "Usuarios.txt");
         if (!Files.exists(ruta)) return;
@@ -119,34 +125,71 @@ public class UsuarioRepository {
             String linea;
             while ((linea = lector.readLine()) != null) {
                 String[] datos = linea.split("\t");
-                if (datos.length < 10) continue;
+                if (datos.length < 12) continue;
 
-                String nombre = datos[0];
-                String apellido = datos[1];
-                String correo = datos[2];
-                String contrasenia = datos[3];
-                RolUsuario rol = RolUsuario.valueOf(datos[4]);
-                TipoDocumento tipoDoc = TipoDocumento.valueOf(datos[5]);
-                String documento = datos[6];
-                String telefono = datos[7];
-                String pais = datos[8];
-                String ciudad = datos[9];
+                UUID id = UUID.fromString(datos[0]);
+                String campo12 = datos[11].trim(); // TipoEmpresa
 
-                PersonaNatural persona = new PersonaNatural(
-                        nombre,
-                        apellido,
-                        correo,
-                        contrasenia,
-                        rol,
-                        tipoDoc,
-                        documento,
-                        telefono,
-                        pais,
-                        ciudad
-                );
+                // Si está vacío o es "-", es persona natural
+                if (campo12.isEmpty() || campo12.equals("-")) {
+                    String nombre = datos[1];
+                    String apellido = datos[2];
+                    String correo = datos[3];
+                    String contrasenia = datos[4];
+                    RolUsuario rol = RolUsuario.valueOf(datos[5]);
+                    TipoDocumento tipoDoc = TipoDocumento.valueOf(datos[6]);
+                    String documento = datos[7];
+                    String telefono = datos[8];
+                    String pais = datos[9];
+                    String ciudad = datos[10];
 
-                usuarios.add(persona);
+                    PersonaNatural persona = new PersonaNatural(
+                            nombre,
+                            apellido,
+                            correo,
+                            contrasenia,
+                            rol,
+                            tipoDoc,
+                            documento,
+                            telefono,
+                            pais,
+                            ciudad
+                    );
+                    persona.setId(id);
+                    usuarios.add(persona);
+
+                } else {
+                    // Persona Jurídica
+                    String razonSocial = datos[1];
+                    String representante = datos[2];
+                    String correo = datos[3];
+                    String contrasenia = datos[4];
+                    RolUsuario rol = RolUsuario.valueOf(datos[5]);
+                    TipoDocumento tipoDoc = TipoDocumento.valueOf(datos[6]);
+                    String nit = datos[7];
+                    String telefono = datos[8];
+                    String pais = datos[9];
+                    String ciudad = datos[10];
+                    String tipoEmpresa = datos[11];
+
+                    PersonaJuridica persona = new PersonaJuridica(
+                            razonSocial,
+                            representante,
+                            tipoEmpresa,
+                            correo,
+                            contrasenia,
+                            rol,
+                            tipoDoc,
+                            nit,
+                            telefono,
+                            pais,
+                            ciudad
+                    );
+                    persona.setId(id);
+                    usuarios.add(persona);
+                }
             }
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -163,15 +206,18 @@ public class UsuarioRepository {
             // Si el archivo no existe, agregamos encabezado
             if (!Files.exists(ruta)) {
                 String encabezado = String.join("\t",
-                        "Nombre", "Apellido", "Correo", "Contraseña", "Rol",
-                        "TipoDocumento", "Documento", "Teléfono", "País", "Ciudad"
+                        "Id", "Nombre/RazónSocial", "Apellido/Representante", "Correo", "Contraseña", "Rol",
+                        "TipoDocumento", "Documento", "Teléfono", "País", "Ciudad", "TipoEmpresa"
                 ) + "\n";
                 Files.writeString(ruta, encabezado, StandardOpenOption.CREATE);
             }
 
+            String linea = "";
+
             if (usuario instanceof PersonaNatural persona) {
-                String linea = String.format(
-                        "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s%n",
+                linea = String.format(
+                        "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s%n",
+                        persona.getId(),
                         persona.getNombre(),
                         persona.getApellido(),
                         persona.getCorreo(),
@@ -181,11 +227,33 @@ public class UsuarioRepository {
                         persona.getNumeroDocumento(),
                         persona.getTelefono(),
                         persona.getPais(),
-                        persona.getCiudad()
+                        persona.getCiudad(),
+                        ""
                 );
 
-                Files.writeString(ruta, linea, StandardOpenOption.APPEND);
             }
+
+            else if (usuario instanceof PersonaJuridica persona) {
+                 linea = String.format(
+                        "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s%n",
+                        persona.getId(),
+                        persona.getRazonSocial(),
+                        persona.getRepresentanteLegal(),
+                        persona.getCorreo(),
+                        persona.getContrasenia(),
+                        persona.getRolUsuario(),
+                        persona.getTipoDocumento(),
+                        persona.getNumeroDocumento(),
+                        persona.getTelefono(),
+                        persona.getPais(),
+                        persona.getCiudad(),
+                        persona.getTipoEmpresa()
+                );
+            }
+
+        if(!linea.isEmpty()){
+            Files.writeString(ruta, linea, StandardOpenOption.APPEND);
+        }
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -199,19 +267,20 @@ public class UsuarioRepository {
                 Files.createDirectories(ruta.getParent());
             }
 
-
             StringBuilder contenido = new StringBuilder();
             contenido.append(String.join(
                     "\t",
-                    "Nombre", "Apellido", "Correo", "Contraseña", "Rol",
-                    "TipoDocumento", "Documento", "Teléfono", "País", "Ciudad"
+                    "Id", "Nombre/RazónSocial", "Apellido/Representante", "Correo", "Contraseña", "Rol",
+                    "TipoDocumento", "Documento", "Teléfono", "País", "Ciudad", "TipoEmpresa"
             )).append("\n");
 
             for (Usuario usuario : usuarios) {
+
                 if (usuario instanceof PersonaNatural persona) {
 
                     contenido.append(String.format(
-                            "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s%n",
+                            "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s%n",
+                            persona.getId(),
                             persona.getNombre(),
                             persona.getApellido(),
                             persona.getCorreo(),
@@ -221,11 +290,29 @@ public class UsuarioRepository {
                             persona.getNumeroDocumento(),
                             persona.getTelefono(),
                             persona.getPais(),
-                            persona.getCiudad()
-
+                            persona.getCiudad(),
+                            "-"
+                    ));
+                }
+                else if (usuario instanceof PersonaJuridica persona) {
+                    contenido.append(String.format(
+                            "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s%n",
+                            persona.getId(),
+                            persona.getRazonSocial(),
+                            persona.getRepresentanteLegal(),
+                            persona.getCorreo(),
+                            persona.getContrasenia(),
+                            persona.getRolUsuario(),
+                            persona.getTipoDocumento(),
+                            persona.getNumeroDocumento(),
+                            persona.getTelefono(),
+                            persona.getPais(),
+                            persona.getCiudad(),
+                            persona.getTipoEmpresa()
                     ));
                 }
             }
+
             Files.writeString(ruta, contenido.toString(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
             throw new RuntimeException(e);

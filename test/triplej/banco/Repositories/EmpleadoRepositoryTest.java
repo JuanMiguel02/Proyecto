@@ -89,4 +89,23 @@ class EmpleadoRepositoryTest {
         assertTrue(empleadoRepository.existeEmpleadoConCorreo("jacobo@test.com"));
     }
 
+    @Test
+    void actualizarEmpleado() {
+        PersonaNatural persona = new PersonaNatural("Jacobo", "Valencia",
+                "jacobo@test.com", "1234",
+                RolUsuario.EMPLEADO, TipoDocumento.CEDULACIUDADANIA, "1021",
+                "2414", "Colombia", "Circasia");
+        Empleado empleado = new Empleado(persona, "Jefe", 2000.0, "Sistemas");
+        empleadoRepository.agregarEmpleado(empleado);
+
+        assertEquals(2000.0, empleado.getSalario());
+        assertTrue(empleadoRepository.existeEmpleadoConCorreo("jacobo@test.com"));
+
+        empleado.setSalario(5000.0);
+        persona.setCorreo("jacobo@gmail.com");
+        empleadoRepository.actualizarEmpleado(empleado);
+
+        assertEquals(5000.0, empleado.getSalario());
+        assertTrue(empleadoRepository.existeEmpleadoConCorreo("jacobo@gmail.com"));
+    }
 }

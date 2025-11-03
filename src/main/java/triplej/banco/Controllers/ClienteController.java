@@ -167,7 +167,7 @@ public class ClienteController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/Login-view.fxml"));
             Parent root = loader.load();
 
-            SignInController signInController= loader.getController();
+            LoginController loginController = loader.getController();
 
             Stage stage = new Stage();
             stage.setTitle("Inicio");

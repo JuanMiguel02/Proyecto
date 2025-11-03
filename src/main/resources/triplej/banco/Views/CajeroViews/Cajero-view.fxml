@@ -61,10 +61,9 @@
 
                 <Button fx:id="btnInicio" layoutX="39.0" layoutY="349.0" onAction="#mostrarInicio" prefHeight="37" prefWidth="166" text="Inicio" />
                 <Button fx:id="btnTransacciones" layoutX="42" layoutY="420" onAction="#onGenerarReporte" prefHeight="37" prefWidth="166" text="Generar Reporte Cliente" />
-                <Button fx:id="btnConfig" layoutX="42.0" layoutY="604.0" prefHeight="37" prefWidth="166" text="Configuración" />
                 <Button fx:id="btnSalir" layoutX="23.0" layoutY="754.0" onAction="#volverMenu" prefHeight="32" prefWidth="95" text="Salir" />
             <Button layoutX="42.0" layoutY="481.0" onAction="#mostrarFormulario" prefHeight="37" prefWidth="166" text="Agregar un Nuevo Cliente" />
-            <Button layoutX="39.0" layoutY="541.0" prefHeight="37" prefWidth="166" text="Abrir Nueva Cuenta" />
+            <Button layoutX="39.0" layoutY="541.0" onAction="#abrirFormularioNuevaCuenta" prefHeight="37" prefWidth="166" text="Abrir Nueva Cuenta" />
             <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="52.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../Images/avatar.png" />
@@ -135,7 +134,7 @@
 
                           <Label layoutX="267.0" layoutY="307.0" text="Cuentas del cliente:" />
                           <ComboBox fx:id="cmbCuentasCliente" layoutX="392.0" layoutY="303.0" prefWidth="250" promptText="Seleccione una cuenta" />
-                     <Label layoutX="29.0" layoutY="27.0" text="Datos del Cliente">
+                     <Label layoutX="50.0" layoutY="30.0" text="Datos del Cliente">
                         <font>
                            <Font size="36.0" />
                         </font>

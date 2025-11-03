@@ -21,7 +21,7 @@ import java.util.Optional;
 
 import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
 
-public class SignInController {
+public class LoginController {
 
     @FXML private TextField txtCorreo;
     @FXML private PasswordField txtContrasenia;

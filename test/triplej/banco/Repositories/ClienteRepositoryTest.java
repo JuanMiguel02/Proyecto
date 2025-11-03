@@ -120,4 +120,29 @@ class ClienteRepositoryTest {
 
         assertTrue(clienteRepository.buscarClientePorCuenta("1234").isPresent());
     }
+
+    @Test
+    void actualizarCliente() {
+        Persona usuario = new PersonaNatural(
+                "Tom", "York",
+                "tom@test.com", "1234",
+                RolUsuario.CLIENTE, TipoDocumento.PASAPORTE, "1021",
+                "2414", "Colombia", "Medellín"
+        );
+        Cliente cliente = new Cliente(usuario);
+        clienteRepository.guardar(cliente);
+
+        assertTrue(clienteRepository.buscarPorDocumento("1021").isPresent());
+        assertEquals("Medellín", cliente.getCiudad());
+        assertEquals("tom@test.com", cliente.getCorreo());
+
+        usuario.setNumeroDocumento("1234");
+        usuario.setCiudad("Armenia");
+        usuario.setCorreo("tom123@gmail.com");
+
+        clienteRepository.actualizarCliente(cliente);
+        assertTrue(clienteRepository.buscarPorDocumento("1234").isPresent());
+        assertEquals("Armenia", cliente.getCiudad());
+        assertEquals("tom123@gmail.com", cliente.getCorreo());
+    }
 }

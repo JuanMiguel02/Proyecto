@@ -63,6 +63,17 @@ public class ClienteRepository {
         }
     }
 
+    public void actualizarCliente(Cliente cLienteActualizado) {
+        for (int i = 0; i < clientes.size(); i++) {
+            Cliente clienteActual = clientes.get(i);
+            //  Comparar por documento, accediendo desde PersonaNatural
+            if (clienteActual.getUsuarioAsociado().getId().equals(clienteActual.getUsuarioAsociado().getId())) {
+                clientes.set(i, cLienteActualizado);
+                break;
+            }
+        }
+    }
+
     public Optional<Cliente> buscarPorDocumento(String documento) {
         return clientes.stream()
                 .filter(c -> c.getDocumento().equalsIgnoreCase(documento))

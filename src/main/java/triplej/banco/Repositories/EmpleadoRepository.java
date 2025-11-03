@@ -74,19 +74,18 @@ public class EmpleadoRepository {
         reescribirArchivo();
     }
 
-    public void actualizarEmpleado(Empleado empleadoActualizado){
-        for(int i = 0; i < empleados.size(); i++){
+    public void actualizarEmpleado(Empleado empleadoActualizado) {
+        for (int i = 0; i < empleados.size(); i++) {
             Empleado empleadoActual = empleados.get(i);
-            if(empleadoActual.getCorreo().equals(empleadoActualizado.getCorreo())){
+            //  Comparar por documento, accediendo desde PersonaNatural
+            if (empleadoActual.getPersona().getId().equals(empleadoActualizado.getPersona().getId())) {
                 empleados.set(i, empleadoActualizado);
                 break;
             }
         }
-        UsuarioRepository usuarioRepo = UsuarioRepository.getInstancia();
-        usuarioRepo.actualizarUsuario(empleadoActualizado.getPersona());
+        UsuarioRepository.getInstancia().actualizarUsuario(empleadoActualizado.getPersona());
         reescribirArchivo();
     }
-
 
     public Optional<Empleado> buscarPorCorreo(String email) {
         return empleados.stream()
@@ -113,26 +112,30 @@ public class EmpleadoRepository {
 
                 String correo = datos[4];
                 Optional<Usuario> usuarioExistente = usuarioRepository.buscarUsuarioPorCorreo(correo);
-                String contrasenia = usuarioExistente.map(Usuario::getContrasenia).orElse("");
 
-                PersonaNatural persona = new PersonaNatural(
-                        datos[0],
-                        datos[1],
-                        correo,
-                        contrasenia,
-                        RolUsuario.EMPLEADO,
-                        TipoDocumento.CEDULACIUDADANIA,
-                        datos[2],
-                        datos[3],
-                        "",
-                        datos[7]
-
-                );
+                PersonaNatural persona;
+                if (usuarioExistente.isPresent() && usuarioExistente.get() instanceof PersonaNatural) {
+                    // Usar el usuario completo del repositorio
+                    persona = (PersonaNatural) usuarioExistente.get();
+                } else {
+                    // Si no existe, crear uno nuevo
+                    persona = new PersonaNatural(
+                            datos[0],
+                            datos[1],
+                            correo,
+                            "", // Contraseña vacía por defecto
+                            RolUsuario.EMPLEADO,
+                            TipoDocumento.CEDULACIUDADANIA,
+                            datos[2],
+                            datos[3],
+                            "",
+                            datos[7]
+                    );
+                }
 
                 double salario = Double.parseDouble(datos[8].replace(",", "."));
                 Empleado empleado = new Empleado(persona, datos[5], salario, datos[6]);
                 empleados.add(empleado);
-
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -151,7 +154,7 @@ public class EmpleadoRepository {
                 String encabezado = String.join(
                         "\t",
                         "Nombre", "Apellido", "Documento", "Teléfono",
-                        "Correo", "Cargo", "Departamento", "Ciudad", "Salario Empleado"
+                        "Correo", "Cargo", "Departamento", "Ciudad", "Salario"
                 ) + "\n";
                 Files.writeString(ruta, encabezado, StandardOpenOption.CREATE);
             }
@@ -192,7 +195,7 @@ public class EmpleadoRepository {
             contenido.append(String.join(
                     "\t",
                     "Nombre", "Apellido", "Documento", "Teléfono",
-                    "Correo", "Cargo", "Departamento", "Ciudad", "Salario Empleado"
+                    "Correo", "Cargo", "Departamento", "Ciudad", "Salario"
             )).append("\n");
 
             for(Empleado empleado : empleados){

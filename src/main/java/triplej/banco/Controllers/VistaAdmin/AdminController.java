@@ -13,7 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import triplej.banco.Controllers.SignInController;
+import triplej.banco.Controllers.LoginController;
 import triplej.banco.Models.Banco;
 import triplej.banco.Models.Reportes.ReporteAdmin;
 import triplej.banco.Models.Reportes.ReporteGenerado;
@@ -182,7 +182,7 @@ public class AdminController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/Login-view.fxml"));
             Parent root = loader.load();
 
-            SignInController signInController= loader.getController();
+            LoginController loginController = loader.getController();
 
             Stage stage = new Stage();
             stage.setTitle("Inicio");

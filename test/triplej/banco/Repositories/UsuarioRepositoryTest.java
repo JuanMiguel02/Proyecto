@@ -25,13 +25,7 @@ class UsuarioRepositoryTest {
             if(Files.exists(ruta)) {
                 Files.delete(ruta);
             }
-        PersonaNatural usuarioOriginal = new PersonaNatural(
-                "Paco", "Jones", "paco@gmail", "12345",
-                RolUsuario.EMPLEADO,
-                TipoDocumento.CEDULACIUDADANIA, "123456", "321654", "Colombia", "Bogotá"
-        );
         usuarioRepository = new UsuarioRepository();
-        usuarioRepository.guardar(usuarioOriginal);
     }
 
     @AfterEach
@@ -118,5 +112,22 @@ class UsuarioRepositoryTest {
 
     @Test
     void actualizarUsuario() {
+        PersonaNatural usuario = new PersonaNatural(
+                "Armando", "Casas", "armando@test.com", "1234",
+                RolUsuario.CAJERO, TipoDocumento.CEDULACIUDADANIA, "1021",
+                "2414", "Colombia", "Medellín"
+        );
+        usuarioRepository.guardar(usuario);
+        assertTrue(usuarioRepository.existeUsuarioConCorreo("armando@test.com"));
+        assertEquals(1, usuarioRepository.contarTodos());
+        assertTrue(usuarioRepository.buscarUsuarioPorCorreo("armando@test.com").isPresent());
+
+        usuario.setCorreo("armando@gmail.com");
+        usuario.setCiudad("Cali");
+
+        usuarioRepository.actualizarUsuario(usuario);
+        assertTrue(usuarioRepository.existeUsuarioConCorreo("armando@gmail.com"));
+        assertEquals("Cali", usuario.getCiudad());
+
     }
 }

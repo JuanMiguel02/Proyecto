@@ -12,6 +12,8 @@ import triplej.banco.Repositories.ClienteRepository;
 import triplej.banco.Repositories.UsuarioRepository;
 import triplej.banco.Utils.CuentaFactory;
 
+import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
+
 
 public class Cajero {
     private final UsuarioRepository usuarioRepository;
@@ -24,6 +26,7 @@ public class Cajero {
 
     public Cliente registrarCliente(Usuario usuario, String tipoCuenta) {
         if(usuarioRepository.buscarUsuarioPorCorreo(usuario.getCorreo()).isPresent()) {
+            mostrarAlerta("El correo ya está registrado: " + usuario.getCorreo());
             throw  new IllegalArgumentException(
                     "El correo ya está registrado: " + usuario.getCorreo()
             );
@@ -49,9 +52,28 @@ public class Cajero {
         }
         CuentaBancaria nuevaCuenta = CuentaFactory.crearCuenta(tipoCuenta.toUpperCase(), cliente);
         cliente.agregarCuenta(nuevaCuenta);
-        clienteRepository.guardar(cliente);
+        clienteRepository.actualizarCliente(cliente);
         System.out.println("Cuenta " + nuevaCuenta.getNumeroCuenta() + " agregada ");
 
+        return nuevaCuenta;
+    }
+
+    public CuentaBancaria agregarCuentaACliente(Cliente cliente, String tipoCuenta, double saldoInicial) {
+        if (cliente == null) {
+            throw new IllegalArgumentException("El cliente no puede estar nulo");
+        }
+
+        // Crear cuenta con datos iniciales
+        CuentaBancaria nuevaCuenta = CuentaFactory.crearCuenta(tipoCuenta.toUpperCase(), cliente);
+
+        // Asignar saldo inicial
+        nuevaCuenta.depositar(saldoInicial);
+
+        // Agregar al cliente y guardar
+        cliente.agregarCuenta(nuevaCuenta);
+        clienteRepository.actualizarCliente(cliente);
+
+        System.out.println("Cuenta " + nuevaCuenta.getNumeroCuenta() + " agregada con saldo inicial: " + saldoInicial);
         return nuevaCuenta;
     }
 
