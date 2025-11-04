@@ -1,7 +1,7 @@
 Id	Nombre/RazónSocial	Apellido/Representante	Correo	Contraseña	Rol	TipoDocumento	Documento	Teléfono	País	Ciudad	TipoEmpresa
-ea0f6d32-1fc9-4ff2-a259-85809a08d4e5	Juan	Henao	juancho@gmail	12345	CLIENTE	CEDULACIUDADANIA	1232190	2132141	Colombia	Bogotá	
-f3b8fbc0-46c9-4f4a-98c7-bb2e4833e803	Paco	Jones	pacojones@gmail	123456	CLIENTE	CEDULACIUDADANIA	123345	21341	Colombia	Bogotá	
-c588ad5c-e273-49d0-b694-770e9cc3ed99	Juan	Henao	juan@gmail	1212321	EMPLEADO	CEDULACIUDADANIA	123213	2132141	Colombia	Bogotá	
-f26b9438-ad39-4dfd-b2ae-6fc7828ae5b4	Paco	Jones	paco@gmail	1212321	EMPLEADO	CEDULACIUDADANIA	1238912	21341	Colombia	Bogotá	
-0ca0e1b4-0d25-425f-9f13-736fa6c77676	Sancho	Panza	sancho@uqbank	123456	ADMIN	CEDULACIUDADANIA	312412	313414	Colombia	Armenia	
-8475665c-61d7-4370-81e4-3f069500c813	Empresa X	Pepe	empresax@gmail	1234567	CLIENTE	NIT	12412412	312312412	colombia	armenia	Empresa Privada
+a8702371-8fd2-4a0e-aaa5-f4bd00b34442	Sancho	Panza	sancho@uqbank	123456	ADMIN	CEDULACIUDADANIA	312412	313414	Colombia	Armenia	-
+2678c99e-90d3-4371-9897-58fab66db50f	Juan	Henao	juancho@gmail	12345	CLIENTE	CEDULACIUDADANIA	1232190	2132141	Colombia	Bogotá	-
+a780f27f-0825-4203-9ab7-a7b0561a189d	Paco	Jones	pacojones@gmail	123456	CLIENTE	CEDULACIUDADANIA	123345	21341	Colombia	Bogotá	-
+6780a38a-4501-4966-8904-1b9ab8513cfc	Juan	Henao	juan@gmail	1212321	EMPLEADO	CEDULACIUDADANIA	123213	2132141	Colombia	Bogotá	-
+eca43b37-8c8f-4509-81c5-3cbc20e8036a	Paco	Jones	paco@gmail	123456	CAJERO	CEDULACIUDADANIA	1238912	21341	Colombia	Bogotá	-
+41162efa-8309-4439-a599-75ef9cf830bc	Chiquitas chagosas	Don chango	chango@gmail	123456	CLIENTE	NIT	335331311	233434242	Colombia	Armenia	Trivial

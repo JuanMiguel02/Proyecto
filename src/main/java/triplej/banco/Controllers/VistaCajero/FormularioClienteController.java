@@ -68,6 +68,9 @@ public class FormularioClienteController {
             cmbCuenta.getItems().addAll("Empresarial", "Corriente");
             cmbDocumento.getItems().clear();
             cmbDocumento.getItems().addAll(TipoDocumento.NIT);
+        }else{
+            cmbCuenta.getItems().addAll("Ahorro", "Corriente", "Empresarial");
+
         }
     }
 
@@ -101,7 +104,7 @@ public class FormularioClienteController {
             }
 
             if (clienteRepository.buscarPorCorreo(correo).isPresent()) {
-                mostrarAlerta("Este ocorreo ya está registrado");
+                mostrarAlerta("Este correo ya está registrado");
                 return;
             }
 

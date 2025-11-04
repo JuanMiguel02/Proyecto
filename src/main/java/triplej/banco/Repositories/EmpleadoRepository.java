@@ -48,13 +48,13 @@ public class EmpleadoRepository {
         agregarEmpleado(new Empleado(juan, "Jefe",20000, "IT"));
 
         PersonaNatural paco = new PersonaNatural(
-                "Paco", "Jones", "paco@gmail", "1212321", RolUsuario.EMPLEADO, TipoDocumento.CEDULACIUDADANIA,
+                "Paco", "Jones", "paco@gmail", "123456", RolUsuario.CAJERO, TipoDocumento.CEDULACIUDADANIA,
                 "1238912", "21341", "Colombia", "Bogotá");
-        agregarEmpleado(new Empleado(paco, "Celador", 2000, "Seguridad"));
+        agregarEmpleado(new Empleado(paco, "Cajero", 2000, "Seguridad"));
 
-        PersonaNatural persona = new PersonaNatural("Sancho", "Panza", "sancho@uqbank", "123456", RolUsuario.ADMIN,
+        PersonaNatural admin = new PersonaNatural("Sancho", "Panza", "sancho@uqbank", "123456", RolUsuario.ADMIN,
                 TipoDocumento.CEDULACIUDADANIA, "312412", "313414", "Colombia", "Armenia");
-        agregarEmpleado(new Empleado(persona, "Admin", 1000.0, "Gestión"));
+        agregarEmpleado(new Empleado(admin, "Admin", 2000.0, "Gestión"));
 
     }
 
