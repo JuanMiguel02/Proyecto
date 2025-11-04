@@ -63,12 +63,21 @@ public class ClienteRepository {
         }
     }
 
-    public void actualizarCliente(Cliente cLienteActualizado) {
-        for (int i = 0; i < clientes.size(); i++) {
-            Cliente clienteActual = clientes.get(i);
+    public void actualizarCliente(Cliente clienteActualizado) {
+        for (Cliente clienteActual : clientes) {
             //  Comparar por documento, accediendo desde PersonaNatural
-            if (clienteActual.getUsuarioAsociado().getId().equals(clienteActual.getUsuarioAsociado().getId())) {
-                clientes.set(i, cLienteActualizado);
+            if (clienteActual.getUsuarioAsociado().getId().equals(clienteActualizado.getUsuarioAsociado().getId())) {
+                for (CuentaBancaria cuenta : clienteActualizado.getCuentas()) {
+                    if (cuentaExisteEnArchivo(cuenta.getNumeroCuenta())) {
+                        actualizarSaldoEnArchivo(cuenta);
+                    } else {
+                        guardarCuentaEnArchivo(cuenta);
+                    }
+                }
+
+                // ✅ Reescribir los usuarios para mantener consistencia
+                usuarioRepository.reescribirArchivo();
+                System.out.println("Cliente y cuentas actualizados correctamente en archivo.");
                 break;
             }
         }

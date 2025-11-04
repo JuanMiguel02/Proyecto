@@ -14,7 +14,7 @@ public class Launcher extends Application {
 
         Banco.getInstancia();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(Launcher.class.getResource("/triplej/banco/Views/CajeroViews/Cajero-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Launcher.class.getResource("/triplej/banco/Views/Login-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1200, 900);
         stage.setMaximized(true);
         stage.setTitle("UQ Bank");

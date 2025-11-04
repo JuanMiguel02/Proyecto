@@ -122,7 +122,7 @@ public class ClienteController {
        cajero.realizarDeposito(cuentaDestino.get(), valor, "Deposito realizado");
 
         // 6. Actualizar el repositorio para guardar el cambio
-        ClienteRepository.getInstancia().guardar(cliente);
+        ClienteRepository.getInstancia().actualizarCliente(cliente);
 
         actualizarInterfaz();
 
