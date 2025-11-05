@@ -7,24 +7,27 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import triplej.banco.Controllers.LoginController;
-import triplej.banco.Models.Cajero.Cajero;
+import triplej.banco.Services.CajeroService;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
 import triplej.banco.Models.Reportes.ReporteGenerado;
 import triplej.banco.Models.Usuarios.Cliente;
 import triplej.banco.Models.Usuarios.Empleado;
 import triplej.banco.Models.Usuarios.PersonaJuridica;
+import triplej.banco.Models.Usuarios.PersonaNatural;
 import triplej.banco.Repositories.ClienteRepository;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.Optional;
 
 import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
@@ -34,7 +37,6 @@ public class CajeroController {
 
     @FXML private StackPane contenedorCentro;
     @FXML private AnchorPane vistaInicio;
-    @FXML private VBox panelJuridica;
     @FXML private AnchorPane vistaReporte;
 
     //  Campos de búsqueda y selección
@@ -55,7 +57,11 @@ public class CajeroController {
     @FXML private TextArea  txtReporteGeneral;
     @FXML private ImageView imgFotoCliente;
 
-    @FXML private Label lblNombre;
+    @FXML private Label lblNombreCajero;
+    @FXML private Label lblTipoEmpresa;
+    @FXML private Label lblRepresentanteLegal;
+    @FXML private Label lblRazonSocial;
+    @FXML private Label lblDatoNombre;
 
     // Botones principales
     @FXML private Button btnDepositar;
@@ -64,7 +70,7 @@ public class CajeroController {
     @FXML private Button btnSalir;
 
     private final ClienteRepository repoClientes = ClienteRepository.getInstancia();
-    private final Cajero cajero = new Cajero();
+    private final CajeroService cajeroService = new CajeroService();
     private Cliente clienteActual;
     private CuentaBancaria cuentaSeleccionada;
 
@@ -76,8 +82,8 @@ public class CajeroController {
     }
 
     public void setCajero(Empleado cajero) {
-        if (lblNombre != null && cajero != null) {
-            lblNombre.setText(cajero.getNombreCompleto());
+        if (lblNombreCajero != null && cajero != null) {
+            lblNombreCajero.setText(cajero.getNombreCompleto());
         }
     }
 
@@ -114,30 +120,29 @@ public class CajeroController {
     private void cargarDatosCliente() {
 
         if(clienteActual.getUsuarioAsociado() instanceof PersonaJuridica juridica){
-            panelJuridica.setVisible(true);
-            panelJuridica.setManaged(true);
 
-            txtRazonSocial.setText(juridica.getRazonSocial());
-            txtRepresentanteLegal.setText(juridica.getRepresentanteLegal());
-            txtTipoEmpresa.setText(juridica.getTipoEmpresa());
+           mostrarDatosPersonaJuridica(juridica);
+
+        }else if(clienteActual.getUsuarioAsociado() instanceof PersonaNatural personaNatural){
+            mostrarDatosPersonaNatural(personaNatural);
         }
-        txtNombre.setText(clienteActual.getNombre());
         txtCorreo.setText(clienteActual.getCorreo());
         txtTelefono.setText(clienteActual.getTelefono());
         txtCiudad.setText(clienteActual.getCiudad());
         txtTipoDocumento.setText(clienteActual.getTipoDocumento());
         txtNumeroDocumento.setText(clienteActual.getDocumento());
 
-//        // Si tiene foto
-//        if (clienteActual.getFoto() != null && !clienteActual.getFoto().isBlank()) {
-//            try {
-//                imgFotoCliente.setImage(new Image(clienteActual.getFoto()));
-//            } catch (Exception e) {
-//                imgFotoCliente.setImage(new Image(getClass().getResourceAsStream("/triplej/banco/Images/avatar.png")));
-//            }
-//        } else {
-//            imgFotoCliente.setImage(new Image(getClass().getResourceAsStream("/triplej/banco/Images/avatar.png")));
-//        }
+        // Si tiene foto
+        if (clienteActual.getFoto() != null && !clienteActual.getFoto().isBlank()) {
+            try {
+                Path rutaFoto = Paths.get(clienteActual.getFoto());
+                imgFotoCliente.setImage(new Image(rutaFoto.toUri().toString()));
+            } catch (Exception e) {
+                imgFotoCliente.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/triplej/banco/Images/avatar.png"))));
+            }
+        } else {
+            imgFotoCliente.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/triplej/banco/Images/avatar.png"))));
+        }
 
         // Llenar ComboBox con las cuentas del cliente
         cmbCuentasCliente.getItems().clear();
@@ -185,7 +190,7 @@ public class CajeroController {
         dialog.showAndWait().ifPresent(valor -> {
             try {
                 double monto = Double.parseDouble(valor);
-                cajero.realizarDeposito(cuentaSeleccionada, monto, "Depósito por cajero");
+                cajeroService.realizarDeposito(cuentaSeleccionada, monto, "Depósito por cajero");
                 ClienteRepository.getInstancia().actualizarCliente(clienteActual);
                 mostrarAlerta("Éxito", "Depósito realizado correctamente.", Alert.AlertType.INFORMATION);
             } catch (NumberFormatException e) {
@@ -201,7 +206,7 @@ public class CajeroController {
             return;
         }
 
-        double saldo = cajero.consultarSaldo(cuentaSeleccionada);
+        double saldo = cajeroService.consultarSaldo(cuentaSeleccionada);
 
         Stage ventanaSaldo = new Stage();
         ventanaSaldo.setTitle("Saldo de la cuenta");
@@ -280,7 +285,6 @@ public class CajeroController {
             mostrarAlerta("Error", "Debe buscar y seleccionar un cliente antes de crear una nueva cuenta.", Alert.AlertType.WARNING);
             return;
         }
-
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/CajeroViews/FormularioNuevaCuenta-view.fxml"));
             Parent root = loader.load();
@@ -299,7 +303,6 @@ public class CajeroController {
             stage.show();
 
         } catch (IOException e) {
-            e.printStackTrace();
             mostrarAlerta("Error", "No se pudo abrir el formulario de nueva cuenta.", Alert.AlertType.ERROR);
         }
     }
@@ -311,7 +314,7 @@ public class CajeroController {
             return;
         }
 
-        ReporteGenerado reporte = cajero.generarReporteCliente(cuentaSeleccionada);
+        ReporteGenerado reporte = cajeroService.generarReporteCliente(cuentaSeleccionada);
 
         generarReporte(reporte, txtReporteGeneral, vistaReporte, contenedorCentro);
     }
@@ -352,5 +355,29 @@ public class CajeroController {
         vistaInicio.setVisible(true);
         vistaInicio.setManaged(true);
         contenedorCentro.getChildren().add(vistaInicio);
+    }
+
+    private void mostrarDatosPersonaJuridica(PersonaJuridica personaJuridica){
+        lblRazonSocial.setVisible(true);
+        lblRepresentanteLegal.setVisible(true);
+        lblTipoEmpresa.setVisible(true);
+        lblDatoNombre.setVisible(false);
+
+        txtRazonSocial.setText(personaJuridica.getRazonSocial());
+        txtRepresentanteLegal.setText(personaJuridica.getRepresentanteLegal());
+        txtTipoEmpresa.setText(personaJuridica.getTipoEmpresa());
+        txtRazonSocial.setVisible(true);
+        txtRepresentanteLegal.setVisible(true);
+        txtTipoEmpresa.setVisible(true);
+    }
+
+    private void mostrarDatosPersonaNatural(PersonaNatural personaNatural){
+        txtNombre.setText(clienteActual.getNombre());
+
+        lblRazonSocial.setVisible(false);
+        lblRepresentanteLegal.setVisible(false);
+        lblTipoEmpresa.setVisible(false);
+        lblDatoNombre.setVisible(true);
+
     }
 }

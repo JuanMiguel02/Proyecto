@@ -6,7 +6,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import triplej.banco.Models.Cajero.Cajero;
+import triplej.banco.Services.CajeroService;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
 import triplej.banco.Models.Usuarios.Cliente;
 
@@ -16,12 +16,11 @@ public class FormularioNuevaCuentaController {
 
     @FXML private Label lblNombreCliente;
     @FXML private Label lblDocumentoCliente;
-    @FXML private TextField txtNumeroCuenta;
     @FXML private ComboBox<String> cmbTipoCuenta;
     @FXML private TextField txtSaldoInicial;
 
     private Cliente cliente;
-    private final Cajero cajero = new Cajero();
+    private final CajeroService cajeroService = new CajeroService();
 
     @FXML
     public void initialize(){
@@ -46,10 +45,15 @@ public class FormularioNuevaCuentaController {
             mostrarAlerta("Complete todos los campos");
             return;
         }
-        double saldo = 0.0;
-        if (!txtSaldoInicial.getText().trim().isEmpty()) {
+        double saldo;
+
+        if(txtSaldoInicial.getText().isEmpty()){
+            saldo = 0.0;
+        }
+        else{
             try {
                 saldo = Double.parseDouble(txtSaldoInicial.getText().trim());
+
             } catch (NumberFormatException e) {
                 mostrarAlerta("El saldo debe ser un número válido");
                 txtSaldoInicial.requestFocus();
@@ -57,7 +61,7 @@ public class FormularioNuevaCuentaController {
             }
         }
         try{
-            CuentaBancaria cuentaNueva = cajero.agregarCuentaACliente(cliente, tipoCuenta, saldo);
+            CuentaBancaria cuentaNueva = cajeroService.agregarCuentaACliente(cliente, tipoCuenta, saldo);
             cuentaNueva.setSaldo(saldo);
             mostrarAlerta("Éxito", "Cuenta: " + cuentaNueva.getNumeroCuenta() + " creada exitosamente" + " \n Propietario: " + cliente.getNombre(), Alert.AlertType.INFORMATION);
 

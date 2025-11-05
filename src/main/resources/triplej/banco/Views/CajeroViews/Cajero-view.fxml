@@ -51,7 +51,7 @@
                     </font>
                 </Label>
 
-                <Label fx:id="lblNombre" alignment="CENTER" layoutX="28" layoutY="220" prefHeight="31" prefWidth="190" textAlignment="CENTER">
+                <Label fx:id="lblNombreCajero" alignment="CENTER" layoutX="28" layoutY="220" prefHeight="31" prefWidth="190" textAlignment="CENTER">
                     <font>
                         <Font size="18" />
                     </font>
@@ -120,38 +120,44 @@
                   <AnchorPane fx:id="panelInfoCliente" layoutX="22.0" layoutY="84.0" prefHeight="438.0" prefWidth="1175.0" style="-fx-border-color: gray; -fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: #F5FFF5;">
                       <children>
 
-                          <Label layoutX="274.0" layoutY="126.0" text="Nombre:" />
-                          <TextField fx:id="txtNombre" editable="false" layoutX="354.0" layoutY="121.0" prefWidth="250" />
+                          <Label fx:id="lblDatoNombre" layoutX="311.0" layoutY="90.0" text="Nombre:" />
+                          <TextField fx:id="txtNombre" editable="false" layoutX="378.0" layoutY="86.0" prefWidth="250" />
 
-                          <Label layoutX="279.0" layoutY="183.0" text="Correo:" />
-                          <TextField fx:id="txtCorreo" editable="false" layoutX="355.0" layoutY="182.0" prefWidth="250" />
+                          <Label layoutX="315.0" layoutY="139.0" text="Correo:" />
+                          <TextField fx:id="txtCorreo" editable="false" layoutX="376.0" layoutY="135.0" prefWidth="250" />
 
-                          <Label layoutX="689.0" layoutY="175.0" text="Teléfono:" />
-                          <TextField fx:id="txtTelefono" editable="false" layoutX="790.0" layoutY="179.0" prefHeight="25.0" prefWidth="251.0" />
+                          <Label layoutX="689.0" layoutY="140.0" text="Teléfono:" />
+                          <TextField fx:id="txtTelefono" editable="false" layoutX="796.0" layoutY="136.0" prefHeight="25.0" prefWidth="251.0" />
 
-                          <Label layoutX="695.0" layoutY="118.0" text="Ciudad:" />
-                          <TextField fx:id="txtCiudad" editable="false" layoutX="790.0" layoutY="114.0" prefHeight="25.0" prefWidth="239.0" />
+                          <Label layoutX="689.0" layoutY="89.0" text="Ciudad:" />
+                          <TextField fx:id="txtCiudad" editable="false" layoutX="796.0" layoutY="85.0" prefHeight="25.0" prefWidth="239.0" />
 
-                          <Label layoutX="267.0" layoutY="307.0" text="Cuentas del cliente:" />
-                          <ComboBox fx:id="cmbCuentasCliente" layoutX="392.0" layoutY="303.0" prefWidth="250" promptText="Seleccione una cuenta" />
-                     <Label layoutX="50.0" layoutY="30.0" text="Datos del Cliente">
+                          <Label layoutX="287.0" layoutY="289.0" text="Cuentas del cliente:" />
+                          <ComboBox fx:id="cmbCuentasCliente" layoutX="412.0" layoutY="285.0" prefWidth="250" promptText="Seleccione una cuenta" />
+                     <Label layoutX="38.0" layoutY="14.0" prefHeight="45.0" prefWidth="326.0" text="Datos del Cliente">
                         <font>
                            <Font size="36.0" />
                         </font>
                      </Label>
-                     <Label layoutX="243.0" layoutY="241.0" text="Tipo de Documento:" />
-                     <TextField fx:id="txtTipoDocumento" editable="false" layoutX="354.0" layoutY="237.0" prefHeight="25.0" prefWidth="251.0" />
-                     <Label layoutX="660.0" layoutY="241.0" text="Número Documento" />
-                     <TextField fx:id="txtNumeroDocumento" editable="false" layoutX="790.0" layoutY="237.0" prefHeight="25.0" prefWidth="251.0" />
-                     <ImageView fx:id="imgFotoCliente" fitHeight="218.0" fitWidth="284.0" layoutX="29.0" layoutY="110.0" pickOnBounds="true" preserveRatio="true">
+                     <Label layoutX="253.0" layoutY="186.0" text="Tipo de Documento:" />
+                     <TextField fx:id="txtTipoDocumento" editable="false" layoutX="377.0" layoutY="182.0" prefHeight="25.0" prefWidth="251.0" />
+                     <Label layoutX="666.0" layoutY="186.0" text="Número Documento:" />
+                     <TextField fx:id="txtNumeroDocumento" editable="false" layoutX="796.0" layoutY="182.0" prefHeight="25.0" prefWidth="251.0" />
+                     <ImageView fx:id="imgFotoCliente" fitHeight="218.0" fitWidth="284.0" layoutX="25.0" layoutY="86.0" pickOnBounds="true" preserveRatio="true">
                         <image>
                            <Image url="@../../Images/avatar.png" />
                         </image>
                      </ImageView>
+                     <Label fx:id="lblRazonSocial" layoutX="264.0" layoutY="90.0" text="Razón Social:" visible="false" />
+                     <TextField fx:id="txtRazonSocial" layoutX="377.0" layoutY="85.0" prefHeight="25.0" prefWidth="251.0" visible="false" />
+                     <Label fx:id="lblRepresentanteLegal" layoutX="286.0" layoutY="240.0" text="Representante:" visible="false" />
+                     <TextField fx:id="txtRepresentanteLegal" layoutX="378.0" layoutY="236.0" prefHeight="25.0" prefWidth="248.0" visible="false" />
+                     <Label fx:id="lblTipoEmpresa" layoutX="686.0" layoutY="240.0" text="Tipo Empresa:" visible="false" />
+                     <TextField fx:id="txtTipoEmpresa" layoutX="798.0" layoutY="236.0" prefHeight="25.0" prefWidth="248.0" visible="false" />
                       </children>
                   </AnchorPane>
 
-                  <!-- 🔘 Botones de operaciones -->
+                  <!--  Botones de operaciones -->
                   <HBox alignment="CENTER" layoutX="165.0" layoutY="568.0" prefHeight="159.0" prefWidth="935.0" spacing="40" style="-fx-border-color: black;">
                       <Button fx:id="btnDepositar" onAction="#onDepositar" prefHeight="50" prefWidth="180" text="Depositar" />
                       <Button fx:id="btnRetirar" prefHeight="50" prefWidth="180" text="Retirar" />

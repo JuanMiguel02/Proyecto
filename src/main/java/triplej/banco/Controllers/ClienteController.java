@@ -8,7 +8,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import triplej.banco.Models.Banco;
-import triplej.banco.Models.Cajero.Cajero;
+import triplej.banco.Services.CajeroService;
 import triplej.banco.Models.Cuentas.CuentaAhorro;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
 import triplej.banco.Models.Reportes.ReporteGenerado;
@@ -37,7 +37,7 @@ public class ClienteController {
     @FXML private AnchorPane vistaDeposito;
     @FXML private AnchorPane vistaTransacciones;
     @FXML private StackPane contenedorCentro;
-    private final Cajero cajero = new Cajero();
+    private final CajeroService cajeroService = new CajeroService();
 
     @FXML
     public void initialize() {
@@ -119,7 +119,7 @@ public class ClienteController {
         }
 
         // 5. Realizar el depósito
-       cajero.realizarDeposito(cuentaDestino.get(), valor, "Deposito realizado");
+       cajeroService.realizarDeposito(cuentaDestino.get(), valor, "Deposito realizado");
 
         // 6. Actualizar el repositorio para guardar el cambio
         ClienteRepository.getInstancia().actualizarCliente(cliente);
@@ -146,7 +146,7 @@ public class ClienteController {
             mostrarAlerta("No se encontró la cuenta activa del cliente");
             return;
         }
-        ReporteGenerado reporte = cajero.generarReporteCliente(cliente.getCuentaActiva());
+        ReporteGenerado reporte = cajeroService.generarReporteCliente(cliente.getCuentaActiva());
 
         generarReporte(reporte, txtContenido, vistaTransacciones, contenedorCentro);
     }

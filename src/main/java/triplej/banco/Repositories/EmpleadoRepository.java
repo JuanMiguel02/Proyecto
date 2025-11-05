@@ -17,7 +17,7 @@ public class EmpleadoRepository {
     private final ArrayList<Empleado> empleados;
     private final UsuarioRepository usuarioRepository;
 
-    public EmpleadoRepository() {
+    private EmpleadoRepository() {
         empleados = new ArrayList<>();
         this.usuarioRepository = UsuarioRepository.getInstancia();
 

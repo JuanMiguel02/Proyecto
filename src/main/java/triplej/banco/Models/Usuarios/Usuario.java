@@ -10,7 +10,7 @@ public abstract class Usuario {
     private String contrasenia;
     private LocalDate fechaRegistro;
     private RolUsuario rolUsuario;
-    private Image foto;
+    private String rutaImagen;
     private boolean activo;
     private UUID id;
 
@@ -61,12 +61,12 @@ public abstract class Usuario {
 
     public abstract String getNombreCompleto();
 
-    public Image getFoto() {
-        return foto;
+    public String getFoto() {
+        return this.rutaImagen;
     }
 
-    public void setFoto(Image foto) {
-        this.foto = foto;
+    public void setFoto(String foto) {
+        this.rutaImagen = foto;
     }
 
     public boolean isActivo() {

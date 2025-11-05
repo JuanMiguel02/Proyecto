@@ -18,7 +18,7 @@ public class TransaccionRepository {
     private final List<Transaccion> transacciones;
     private boolean datosCargados = false;
 
-    public TransaccionRepository() {
+    private TransaccionRepository() {
         transacciones  = new ArrayList<>();
         
     }
@@ -82,7 +82,7 @@ public class TransaccionRepository {
             }
 
             if(!Files.exists(ruta)){
-                Files.writeString(ruta,"ID\tTipo\tMonto\tCuentaOrigen\tCuentaDestino\tFecha\tDescripción\tExitosan");
+                Files.writeString(ruta,"ID\tTipo\tMonto\tCuentaOrigen\tCuentaDestino\tFecha\tDescripción\tExitosa%n");
             }
 
             String linea = String.format(

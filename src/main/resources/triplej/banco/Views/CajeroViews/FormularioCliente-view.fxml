@@ -8,10 +8,13 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="620.0" prefWidth="580" spacing="15" style="-fx-background-color: linear-gradient(to bottom right, #f9f9f9, #e9eef5);" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="triplej.banco.Controllers.VistaCajero.FormularioClienteController">
+<VBox prefHeight="644.0" prefWidth="883.0" spacing="15" style="-fx-background-color: linear-gradient(to bottom right, #f9f9f9, #e9eef5);" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="triplej.banco.Controllers.VistaCajero.FormularioClienteController">
 
     <padding>
         <Insets bottom="20" left="30" right="30" top="20" />
@@ -21,31 +24,31 @@
         <Label style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Registrar Nuevo Cliente" />
         <Separator />
 
-        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+        <ScrollPane fitToWidth="true" prefHeight="1225.0" prefWidth="719.0" VBox.vgrow="ALWAYS">
             <content>
-                <VBox spacing="15">
+                <VBox prefWidth="717.0" spacing="15">
                     <!-- Tipo de cliente -->
                     <VBox spacing="5">
                         <Label text="Tipo de Cliente:*" />
                         <ComboBox fx:id="cmbTipoCliente" onAction="#onTipoClienteSeleccionado" promptText="Seleccione tipo de cliente" />
                     </VBox>
-               <VBox fx:id="datosPersonaNatural" prefHeight="37.0" prefWidth="505.0">
-                  <children>
-      
-                                         <!-- Datos personales -->
-                          <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Datos Personales" />
-                           <VBox spacing="5">
-                               <Label text="Nombre:*" />
-                               <TextField fx:id="txtNombre" promptText="Ej: Juan" />
-                           </VBox>
-                           <VBox spacing="5">
-                               <Label text="Apellido:*" />
-                               <TextField fx:id="txtApellido" promptText="Ej: Pérez" />
-                           </VBox>
-                  </children>
-               </VBox>
+                    <VBox fx:id="datosPersonaNatural" prefHeight="37.0" prefWidth="505.0">
+                        <children>
 
-                                   <!-- Campos extra persona jurídica -->
+                            <!-- Datos personales -->
+                            <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Datos Personales" />
+                            <VBox spacing="5">
+                                <Label text="Nombre:*" />
+                                <TextField fx:id="txtNombre" promptText="Ej: Juan" />
+                            </VBox>
+                            <VBox spacing="5">
+                                <Label text="Apellido:*" />
+                                <TextField fx:id="txtApellido" promptText="Ej: Pérez" />
+                            </VBox>
+                        </children>
+                    </VBox>
+
+                    <!-- Campos extra persona jurídica -->
                     <VBox fx:id="boxJuridica" managed="false" spacing="10" style="-fx-background-color: #eef5ff; -fx-padding: 10; -fx-border-color: #b3c7e6; -fx-border-radius: 8; -fx-background-radius: 8;" visible="false">
                         <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Datos Empresa" />
                         <VBox spacing="5">
@@ -61,7 +64,7 @@
                             <TextField fx:id="txtTipoEmpresa" promptText="Ej: Sociedad Anónima" />
                         </VBox>
                     </VBox>
-         
+
                     <HBox spacing="10" />
 
                     <Label text="Tipo de Documento:*" />
@@ -112,10 +115,26 @@
                     <Label text="Tipo de Cuenta:*" />
                     <ComboBox fx:id="cmbCuenta" promptText="Seleccione un tipo de cuenta" />
 
-                    <VBox spacing="5">
+                    <VBox prefHeight="52.0" prefWidth="704.0" spacing="5">
                         <Label text="Saldo Inicial:*" />
                         <TextField fx:id="txtSaldo" promptText="Ej: 2500000" />
                     </VBox>
+                    <Separator />
+                    <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Fotografía Cliente" />
+
+                    <!--  BLOQUE MODIFICADO: Imagen centrada + botón -->
+                    <VBox alignment="CENTER" spacing="15">
+                        <StackPane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black;">
+                            <ImageView fx:id="imgCliente" fitHeight="310.0" fitWidth="198.0" pickOnBounds="true" preserveRatio="true">
+                                <image>
+                                    <Image url="@../../Images/avatar.png" />
+                                </image>
+                            </ImageView>
+                        </StackPane>
+                        <Button mnemonicParsing="false" onAction="#onCargarImagen" text="Cargar Imagen" />
+                    </VBox>
+                    <!-- FIN DEL BLOQUE MODIFICADO -->
+
                 </VBox>
             </content>
         </ScrollPane>

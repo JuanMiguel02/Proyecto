@@ -1,6 +1,5 @@
 package triplej.banco.Repositories;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
@@ -17,7 +16,7 @@ import static org.mockito.Mockito.when;
 
 class ClienteRepositoryTest {
 
-    private ClienteRepository clienteRepository;
+    private final ClienteRepository clienteRepository = ClienteRepository.getInstancia();
 
     @BeforeEach
     void setUp() throws IOException {
@@ -26,12 +25,6 @@ class ClienteRepositoryTest {
         if(Files.exists(ruta)) {
             Files.delete(ruta);
         }
-        clienteRepository = new ClienteRepository();
-    }
-
-    @AfterEach
-    void tearDown() {
-        //Limpiar los datos del repositorio para no cargar los del ejemplo
         clienteRepository.getClientes().clear();
     }
 

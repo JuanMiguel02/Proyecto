@@ -20,7 +20,7 @@ public class ClienteRepository {
     private final UsuarioRepository usuarioRepository;
     private final TransaccionRepository transaccionRepository;
 
-    public ClienteRepository() {
+    private ClienteRepository() {
         this.clientes = new ArrayList<>();
         this.usuarioRepository = UsuarioRepository.getInstancia();
         this.transaccionRepository = TransaccionRepository.getInstance();
@@ -75,7 +75,7 @@ public class ClienteRepository {
                     }
                 }
 
-                // ✅ Reescribir los usuarios para mantener consistencia
+                // Reescribir los usuarios para mantener consistencia
                 usuarioRepository.reescribirArchivo();
                 System.out.println("Cliente y cuentas actualizados correctamente en archivo.");
                 break;
@@ -250,7 +250,7 @@ public class ClienteRepository {
 
             // Conservar el encabezado
             if (!lineas.isEmpty()) {
-                nuevasLineas.add(lineas.get(0));
+                nuevasLineas.add(lineas.getFirst());
             }
 
             // Actualizar la línea de la cuenta específica
