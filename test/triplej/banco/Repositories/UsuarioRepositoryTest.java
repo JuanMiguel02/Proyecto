@@ -1,6 +1,5 @@
 package triplej.banco.Repositories;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import triplej.banco.Models.Usuarios.PersonaNatural;
@@ -16,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class UsuarioRepositoryTest {
 
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository= UsuarioRepository.getInstancia();
 
     @BeforeEach
     void setUp() throws IOException {
@@ -25,12 +24,6 @@ class UsuarioRepositoryTest {
             if(Files.exists(ruta)) {
                 Files.delete(ruta);
             }
-        usuarioRepository = new UsuarioRepository();
-    }
-
-    @AfterEach
-    void tearDown() {
-        //Limpiar los datos del repositorio para no cargar los del ejemplo
         usuarioRepository.getUsuarios().clear();
     }
 
@@ -57,16 +50,16 @@ class UsuarioRepositoryTest {
         );
 
         PersonaNatural usuario2 = new PersonaNatural(
-                "Rosario", "Tijeras", "rosario@test.com", "1234",
-                RolUsuario.CLIENTE, TipoDocumento.REGISTROCIVIL, "1021",
-                "2414", "Colombia", "Medellín"
+                "Profe", "Montoya", "montoya@test.com", "1234",
+                RolUsuario.CLIENTE, TipoDocumento.REGISTROCIVIL, "10421",
+                "21414", "Colombia", "Medellín"
         );
 
         usuarioRepository.guardar(usuario1);
         usuarioRepository.guardar(usuario2);
 
         assertTrue(usuarioRepository.existeUsuarioConCorreo("rosario@test.com"));
-        assertEquals(1, usuarioRepository.contarTodos());
+        assertEquals(2, usuarioRepository.contarTodos());
     }
 
     @Test

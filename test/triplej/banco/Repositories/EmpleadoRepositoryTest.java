@@ -1,6 +1,5 @@
 package triplej.banco.Repositories;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import triplej.banco.Models.Usuarios.Empleado;
@@ -17,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class EmpleadoRepositoryTest {
 
-    private EmpleadoRepository empleadoRepository;
+    private final EmpleadoRepository empleadoRepository = EmpleadoRepository.getInstance();
 
     @BeforeEach
     void setUp() throws IOException {
@@ -26,12 +25,6 @@ class EmpleadoRepositoryTest {
         if(Files.exists(ruta)) {
             Files.delete(ruta);
         }
-        empleadoRepository = new EmpleadoRepository();
-    }
-
-    @AfterEach
-    void tearDown() {
-        //Limpiar los datos del repositorio para no cargar los del ejemplo
         empleadoRepository.getEmpleados().clear();
     }
 

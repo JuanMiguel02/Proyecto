@@ -21,7 +21,7 @@ public class UsuarioRepository {
     // Unica lista para todos los usuarios.
     private final ObservableList<Usuario> usuarios;
 
-    public UsuarioRepository() {
+    private UsuarioRepository() {
         this.usuarios = FXCollections.observableArrayList();
         Path ruta = Paths.get("Banco", "Datos", "Usuarios.txt");
 
@@ -31,7 +31,6 @@ public class UsuarioRepository {
 
         }else{
             System.out.println("Primera ejecución");
-            cargarDatosEjemplo();
         }
 
     }
@@ -114,11 +113,6 @@ public class UsuarioRepository {
         return usuarios.size();
     }
 
-    private void cargarDatosEjemplo(){
-        PersonaNatural admin = new PersonaNatural("Sancho", "Panza", "sancho@uqbank", "123456", RolUsuario.ADMIN,
-                TipoDocumento.CEDULACIUDADANIA, "312412", "313414", "Colombia", "Armenia");
-        guardar(admin);
-    }
 
     public void cargarDesdeArchivo() {
         Path ruta = Paths.get("Banco", "Datos", "Usuarios.txt");
@@ -130,7 +124,7 @@ public class UsuarioRepository {
             String linea;
             while ((linea = lector.readLine()) != null) {
                 String[] datos = linea.split("\t");
-                if (datos.length < 12) continue; // ahora esperamos 12 columnas
+                if (datos.length < 13) continue; //esperamos 13 columnas
 
                 UUID id = UUID.fromString(datos[0]);
                 String nombreRazon = datos[1];
@@ -144,6 +138,7 @@ public class UsuarioRepository {
                 String pais = datos[9];
                 String ciudad = datos[10];
                 String tipoEmpresa = datos[11];
+                String rutaFoto = datos[12].equals("-") ? null : datos[12];
 
                 Usuario usuario;
 
@@ -178,6 +173,7 @@ public class UsuarioRepository {
                 }
 
                 usuario.setId(id);
+                usuario.setFoto(rutaFoto);
                 usuarios.add(usuario);
             }
 
@@ -202,7 +198,7 @@ public class UsuarioRepository {
             if (!Files.exists(ruta)) {
                 String encabezado = String.join("\t",
                         "Id", "Nombre/RazónSocial", "Apellido/Representante", "Correo", "Contraseña", "Rol",
-                        "TipoDocumento", "Documento", "Teléfono", "País", "Ciudad", "TipoEmpresa"
+                        "TipoDocumento", "Documento", "Teléfono", "País", "Ciudad", "TipoEmpresa", "Foto"
                 ) + "\n";
                 Files.writeString(ruta, encabezado, StandardOpenOption.CREATE_NEW);
             }
@@ -211,7 +207,7 @@ public class UsuarioRepository {
 
             if (usuario instanceof PersonaNatural persona) {
                 linea = String.format(
-                        "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s%n",
+                        "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s%n",
                         persona.getId(),
                         persona.getNombre(),
                         persona.getApellido(),
@@ -223,12 +219,13 @@ public class UsuarioRepository {
                         persona.getTelefono(),
                         persona.getPais(),
                         persona.getCiudad(),
-                        "-" //  Consistencia con Persona Natural
+                        "-" ,//  Consistencia con Persona Natural
+                        persona.getFoto() != null ? persona.getFoto() : "-"
                 );
 
             } else if (usuario instanceof PersonaJuridica persona) {
                 linea = String.format(
-                        "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s%n",
+                        "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s%n",
                         persona.getId(),
                         persona.getRazonSocial(),
                         persona.getRepresentanteLegal(),
@@ -240,7 +237,8 @@ public class UsuarioRepository {
                         persona.getTelefono(),
                         persona.getPais(),
                         persona.getCiudad(),
-                        persona.getTipoEmpresa()
+                        persona.getTipoEmpresa(),
+                        persona.getFoto() != null ? persona.getFoto() : "-"
                 );
             }
 
@@ -265,14 +263,14 @@ public class UsuarioRepository {
             contenido.append(String.join(
                     "\t",
                     "Id", "Nombre/RazónSocial", "Apellido/Representante", "Correo", "Contraseña", "Rol",
-                    "TipoDocumento", "Documento", "Teléfono", "País", "Ciudad", "TipoEmpresa"
+                    "TipoDocumento", "Documento", "Teléfono", "País", "Ciudad", "TipoEmpresa", "Foto"
             )).append("\n");
 
             for (Usuario usuario : usuarios) {
 
                 if (usuario instanceof PersonaNatural persona) {
                     contenido.append(String.format(
-                            "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s%n",
+                            "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s%n",
                             persona.getId(),
                             persona.getNombre(),
                             persona.getApellido(),
@@ -284,12 +282,13 @@ public class UsuarioRepository {
                             persona.getTelefono(),
                             persona.getPais(),
                             persona.getCiudad(),
-                            "-" // Misma marca que en guardarEnArchivo
+                            "-" ,// Misma marca que en guardarEnArchivo
+                            persona.getFoto() != null ? persona.getFoto() : "-"
                     ));
 
                 } else if (usuario instanceof PersonaJuridica persona) {
                     contenido.append(String.format(
-                            "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s%n",
+                            "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s%n",
                             persona.getId(),
                             persona.getRazonSocial(),
                             persona.getRepresentanteLegal(),
@@ -301,7 +300,8 @@ public class UsuarioRepository {
                             persona.getTelefono(),
                             persona.getPais(),
                             persona.getCiudad(),
-                            persona.getTipoEmpresa()
+                            persona.getTipoEmpresa(),
+                            persona.getFoto() != null ? persona.getFoto() : "-"
                     ));
                 }
             }

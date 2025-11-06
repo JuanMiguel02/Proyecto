@@ -44,7 +44,7 @@ public class Empleado{
         return this.persona.getApellido();
     }
 
-    public Image getFoto(){
+    public String getFoto(){
         return this.persona.getFoto();
     }
 

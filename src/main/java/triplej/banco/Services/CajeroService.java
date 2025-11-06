@@ -1,4 +1,4 @@
-package triplej.banco.Models.Cajero;
+package triplej.banco.Services;
 
 import triplej.banco.Models.Banco;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
@@ -15,11 +15,11 @@ import triplej.banco.Utils.CuentaFactory;
 import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
 
 
-public class Cajero {
+public class CajeroService {
     private final UsuarioRepository usuarioRepository;
     private final ClienteRepository clienteRepository;
 
-    public Cajero() {
+    public CajeroService() {
         this.usuarioRepository = Banco.getInstancia().getUsuarioRepository();
         this.clienteRepository = Banco.getInstancia().getClienteRepository();
     }
@@ -42,6 +42,28 @@ public class Cajero {
         Cliente cliente = new Cliente((Persona) usuario);
         CuentaBancaria cuenta = CuentaFactory.crearCuenta(tipoCuenta.toUpperCase(), cliente);
         cliente.agregarCuenta(cuenta);
+        clienteRepository.guardar(cliente);
+        return cliente;
+    }
+    public Cliente registrarCliente(Usuario usuario, String tipoCuenta, double saldo) {
+        if(usuarioRepository.buscarUsuarioPorCorreo(usuario.getCorreo()).isPresent()) {
+            mostrarAlerta("El correo ya está registrado: " + usuario.getCorreo());
+            throw  new IllegalArgumentException(
+                    "El correo ya está registrado: " + usuario.getCorreo()
+            );
+        }
+
+        if(usuario.getRolUsuario() != RolUsuario.CLIENTE) {
+            throw  new IllegalArgumentException(
+                    "Las credenciales son erroneas!"
+            );
+        }
+        usuario.setRolUsuario(RolUsuario.CLIENTE);
+
+        Cliente cliente = new Cliente((Persona) usuario);
+        CuentaBancaria cuenta = CuentaFactory.crearCuenta(tipoCuenta.toUpperCase(), cliente);
+        cliente.agregarCuenta(cuenta);
+        cuenta.depositar(saldo);
         clienteRepository.guardar(cliente);
         return cliente;
     }
@@ -105,9 +127,3 @@ public class Cajero {
         return reporte.generarReporte();
     }
 }
-
-
-
-
-
-

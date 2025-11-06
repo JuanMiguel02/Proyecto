@@ -6,12 +6,23 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import triplej.banco.Models.Cajero.Cajero;
+import javafx.stage.FileChooser;
+import triplej.banco.Services.CajeroService;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
 import triplej.banco.Models.Usuarios.*;
 import triplej.banco.Repositories.ClienteRepository;
 
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Objects;
 
 import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
 
@@ -39,7 +50,12 @@ public class FormularioClienteController {
     @FXML private VBox boxJuridica;
     @FXML private VBox datosPersonaNatural;
 
-    private final Cajero cajero = new Cajero();
+    @FXML private ImageView imgCliente;
+
+    private File imagenSeleccionada;
+    private static final String RUTA_IMAGENES = "triplej/banco/Images";
+    private static final String IMAGEN_POR_DEFECTO ="/triplej/banco/Images/avatar.png";
+    private final CajeroService cajeroService = new CajeroService();
     private CajeroController cajeroController;
 
     private final ClienteRepository clienteRepository = ClienteRepository.getInstancia();
@@ -152,12 +168,28 @@ public class FormularioClienteController {
                 }
                 persona = new PersonaNatural(nombre, apellido, correo, contrasenia, RolUsuario.CLIENTE, tipoDocumento, numDocumento, telefono, pais, ciudad);
             }
+            try{
+                Path carpeta = Paths.get(RUTA_IMAGENES);
+                Files.createDirectories(carpeta);
 
-            Cliente nuevoCliente = cajero.registrarCliente(persona, tipoCuenta);
+                String nombreArchivo = persona.getNumeroDocumento() + ".jpg";
+                Path destino = carpeta.resolve(nombreArchivo);
+
+                if(imagenSeleccionada != null){
+                    Files.copy(imagenSeleccionada.toPath(), destino, StandardCopyOption.REPLACE_EXISTING);
+                    persona.setFoto(destino.toString());
+
+                }else{
+                    persona.setFoto(IMAGEN_POR_DEFECTO);
+                }
+            }catch (IOException e) {
+                mostrarAlerta("No se puedo guardar la imagen " + e.getMessage());
+                persona.setFoto(IMAGEN_POR_DEFECTO);
+            }
+            Cliente nuevoCliente = cajeroService.registrarCliente(persona, tipoCuenta, saldo);
 
             CuentaBancaria cuenta = nuevoCliente.getCuentas().getFirst();
             nuevoCliente.setCuentaActiva(cuenta);
-            cuenta.setSaldo(saldo);
 
             mostrarAlerta(
                     "Éxito",
@@ -171,6 +203,21 @@ public class FormularioClienteController {
         }
 
     }
+
+    @FXML
+    private void onCargarImagen(){
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Seleccionar Imagen del Cliente");
+        fc.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg")
+        );
+        File archivo = fc.showOpenDialog(null);
+        if(archivo != null){
+            imagenSeleccionada = archivo;
+            imgCliente.setImage(new Image(archivo.toURI().toString()));
+        }
+    }
+
     private boolean validarCampos() {
 
             if (cmbDocumento.getSelectionModel().isEmpty()) {
@@ -287,6 +334,9 @@ public class FormularioClienteController {
         txtSaldo.clear();
         cmbCuenta.setValue(null);
         cmbDocumento.setValue(null);
+
+        imgCliente.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(IMAGEN_POR_DEFECTO))));
+        imagenSeleccionada = null;
     }
 
     public void setCajeroController(CajeroController cajeroController){

@@ -45,6 +45,8 @@ public class Cliente {
         this.usuarioAsociado = usuarioAsociado;
     }
 
+    public String getFoto(){ return usuarioAsociado.getFoto();}
+
     public ArrayList<CuentaBancaria> getCuentas() {
         return cuentas;
     }

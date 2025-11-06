@@ -1,4 +1,4 @@
-package triplej.banco.Models.Cajero;
+package triplej.banco.Models.Services;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -7,30 +7,31 @@ import triplej.banco.Models.Cuentas.CuentaBancaria;
 import triplej.banco.Models.Usuarios.*;
 import triplej.banco.Repositories.ClienteRepository;
 import triplej.banco.Repositories.UsuarioRepository;
+import triplej.banco.Services.CajeroService;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class CajeroTest {
+class CajeroServiceTest {
     private UsuarioRepository usuarioRepository;
     private ClienteRepository clienteRepository;
-    private Cajero cajero;
+    private CajeroService cajeroService;
 
     @BeforeEach
     void setUp() {
         usuarioRepository = mock(UsuarioRepository.class);
         clienteRepository = mock(ClienteRepository.class);
 
-        cajero = new Cajero(){
+        cajeroService = new CajeroService(){
             {
                 try{
-                    var userRepoField = Cajero.class.getDeclaredField("usuarioRepository");
+                    var userRepoField = CajeroService.class.getDeclaredField("usuarioRepository");
                     userRepoField.setAccessible(true);
                     userRepoField.set(this,usuarioRepository);
 
-                    var clienteRepoField = Cajero.class.getDeclaredField("clienteRepository");
+                    var clienteRepoField = CajeroService.class.getDeclaredField("clienteRepository");
                     clienteRepoField.setAccessible(true);
                     clienteRepoField.set(this,clienteRepository);
 
@@ -48,7 +49,7 @@ class CajeroTest {
         when(usuarioRepository.buscarUsuarioPorCorreo("correo@test.com"))
                 .thenReturn(Optional.of(usuario));
         assertThrows(IllegalArgumentException.class, () ->
-                cajero.registrarCliente(usuario, "AHORROS"));
+                cajeroService.registrarCliente(usuario, "AHORROS"));
     }
 
     @Test
@@ -56,7 +57,7 @@ class CajeroTest {
         Usuario usuario = new PersonaNatural("Juan", "Henao", "correo@test.com",
                 "12345", RolUsuario.CLIENTE, TipoDocumento.CEDULACIUDADANIA, "14124", "13414", "Colombia", "Armenia");
 
-        Cliente cliente = cajero.registrarCliente(usuario, "CORRIENTE");
+        Cliente cliente = cajeroService.registrarCliente(usuario, "CORRIENTE");
         assertNotNull(cliente);
         assertEquals("correo@test.com", cliente.getCorreo());
         verify(clienteRepository).guardar(any(Cliente.class));
@@ -66,15 +67,15 @@ class CajeroTest {
     void agregarCuentaACliente() {
         Usuario usuario = new PersonaNatural("Juan", "Henao", "correo@test.com",
                 "12345", RolUsuario.CLIENTE, TipoDocumento.CEDULACIUDADANIA, "14124", "13414", "Colombia", "Armenia");
-        Cliente cliente = cajero.registrarCliente(usuario, "CORRIENTE");
-        cajero.agregarCuentaACliente(cliente, "AHORRO");
+        Cliente cliente = cajeroService.registrarCliente(usuario, "CORRIENTE");
+        cajeroService.agregarCuentaACliente(cliente, "AHORRO");
         assertEquals(2, cliente.getNumeroCuentas());
     }
 
     @Test
     void realizarDeposito() {
         CuentaBancaria cuenta = mock(CuentaBancaria.class);
-        cajero.realizarDeposito(cuenta, 1000, "déposito inicial");
+        cajeroService.realizarDeposito(cuenta, 1000, "déposito inicial");
 
         verify(cuenta, times(1)).depositar(1000.0);
     }
@@ -85,14 +86,14 @@ class CajeroTest {
                 "12345", RolUsuario.CLIENTE, TipoDocumento.CEDULACIUDADANIA, "14124", "13414", "Colombia", "Armenia");
         Cliente cliente = new Cliente(usuario);
         CuentaBancaria cuenta = new CuentaAhorro(cliente, "12414", 10000);
-        double saldo = cajero.consultarSaldo(cuenta);
+        double saldo = cajeroService.consultarSaldo(cuenta);
         assertEquals(10000, saldo);
     }
 
     @Test
     void consultarSaldoExcepcion() {
         assertThrows(IllegalArgumentException.class, () ->
-                cajero.consultarSaldo(null));
+                cajeroService.consultarSaldo(null));
     }
 
     @Test

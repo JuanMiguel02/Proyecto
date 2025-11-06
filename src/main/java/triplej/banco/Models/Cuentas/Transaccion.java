@@ -27,7 +27,6 @@ public class Transaccion {
         this.exitosa = false;
     }
 
-
     public String getId() {
         return id;
     }
@@ -116,6 +115,5 @@ public class Transaccion {
 
     public static String generarIdTransaccion(){
         return "TXN-" + System.currentTimeMillis() + "-" + ThreadLocalRandom.current().nextInt(1000, 9999);
-
     }
 }

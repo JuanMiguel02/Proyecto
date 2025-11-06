@@ -104,23 +104,25 @@ public abstract class CuentaBancaria {
     public abstract void retirar(Double monto);
 
     public void depositar(Double monto) {
-        if (monto <= 0) throw new IllegalArgumentException("El monto debe ser positivo");
+        if (monto < 0) throw new IllegalArgumentException("El monto debe ser positivo");
         saldo += monto;
 
-        Transaccion trans = new Transaccion(
-              generarIdTransaccion(),
-                "DEPÓSITO",
-                monto,
-                this.numeroCuenta,
-                this.numeroCuenta
-        );
+        if(monto != 0){
+            Transaccion trans = new Transaccion(
+                    generarIdTransaccion(),
+                    "DEPÓSITO",
+                    monto,
+                    this.numeroCuenta,
+                    this.numeroCuenta
+            );
 
-        trans.setDescripcion("Déposito de: " + monto);
-        trans.setExitosa(true);
+            trans.setDescripcion("Déposito de: " + monto);
+            trans.setExitosa(true);
 
-        TransaccionRepository.getInstance().agregar(trans);
+            TransaccionRepository.getInstance().agregar(trans);
 
-        historial.add(trans);
+            historial.add(trans);
+        }
     }
 
     public ArrayList<Transaccion> getHistorial() {
