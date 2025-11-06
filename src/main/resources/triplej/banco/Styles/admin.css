@@ -1,0 +1,151 @@
+
+/*Estilos del admin*/
+
+.admin-root {
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/*  Barra superior  */
+.top-bar {
+    -fx-background-color: linear-gradient(to bottom right,    derive(#00bfff, 40%),   derive(white, -10%)  );
+    -fx-alignment: center;
+    -fx-padding: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0, 64, 128, 0.4), 8, 0, 0, 2);
+
+    -fx-border-color: transparent transparent rgba(255,255,255,0.15) transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.top-title {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 2, 0, 0, 1);
+}
+
+/*  Barra lateral  */
+.sidebar {
+    -fx-background-color: linear-gradient(to bottom,
+        derive(#00bfff, 30%),
+        derive(white, -10%)
+    );
+    -fx-padding: 20 0;
+    -fx-border-color: rgba(255,255,255,0.15);
+    -fx-border-width: 0 1 0 0;
+    -fx-effect: dropshadow(gaussian, rgba(0, 64, 128, 0.2), 6, 0, 2, 0);
+
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 0 0 10 0;
+}
+
+.sidebar-text {
+    -fx-font-size: 15px;
+    -fx-text-fill: #f0f8ff;
+}
+
+/*  Botones del panel  */
+.btn-admin {
+    -fx-background-color: linear-gradient(to bottom right, #1e90ff, #0047ab);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-padding: 8 15;
+    -fx-effect: dropshadow(three-pass-box, rgba(37, 99, 235, 0.2), 5, 0, 0, 1);
+}
+
+.btn-admin:hover {
+    -fx-background-color: linear-gradient(to bottom right, #0057e7, #002fa7);
+}
+
+/*Tarjetas de estadísticas  */
+.card-container {
+    -fx-spacing: 20;
+    -fx-padding: 10;
+}
+
+.stat-card {
+    -fx-background-color: white;
+    -fx-border-color: #d1d5db;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 8, 0, 0, 2);
+    -fx-alignment: center;
+}
+#statCard1{
+    -fx-background-color: linear-gradient(
+           from 0% 0% to 100% 100%,
+           #e6f2ff,  /* azul muy claro */
+           #ffffff   /* blanco */
+       );
+}
+
+#statCard2{
+     -fx-background-color: linear-gradient(
+            from 0% 0% to 100% 100%,
+            #cce6ff,  /* azul claro */
+            #ffffff
+        );
+}
+
+#statCard3{
+   -fx-background-color: linear-gradient(
+           from 0% 0% to 100% 100%,
+           #99ccff,  /* azul medio */
+           #ffffff
+       );
+}
+
+
+
+.stat-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill:#000000;
+}
+
+.stat-value {
+    -fx-font-size: 40px;
+    -fx-font-weight: bold;
+    -fx-text-fill:#000000 ;
+}
+
+/*  Gráficas  */
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.chart-title {
+    -fx-text-fill: #002fa7;
+    -fx-font-weight: bold;
+}
+
+.axis-label {
+    -fx-text-fill: #374151;
+}
+
+/*  Área de reportes  */
+.report-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #002fa7;
+}
+
+.text-area {
+    -fx-font-size: 14px;
+    -fx-border-color: #d1d5db;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+/*  Barra inferior  */
+.bottom-bar {
+    -fx-background-color: linear-gradient(to top right,
+        derive(#00bfff, 40%),
+        derive(white, -10%)
+    );
+    -fx-effect: dropshadow(gaussian, rgba(0, 64, 128, 0.3), 6, 0, 0, -2);
+
+    -fx-border-color: rgba(255,255,255,0.15) transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+}

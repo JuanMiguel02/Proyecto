@@ -20,6 +20,8 @@ import triplej.banco.Models.Reportes.ReporteGenerado;
 import triplej.banco.Models.Usuarios.Empleado;
 import triplej.banco.Repositories.UsuarioRepository;
 import triplej.banco.Utils.GeneracionReporteVista;
+import triplej.banco.Utils.VolverLogin;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -177,25 +179,9 @@ public class AdminController {
     }
 
     @FXML
-    private void volverMenu(){
-        try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/Login-view.fxml"));
-            Parent root = loader.load();
-
-            LoginController loginController = loader.getController();
-
-            Stage stage = new Stage();
-            stage.setTitle("Inicio");
-            stage.setScene(new Scene(root));
-            stage.setMaximized(true);
-            stage.show();
-
-            ((Stage) btnSalir.getScene().getWindow()).close();
-
-        }
-        catch (IOException e){
-            throw new RuntimeException("Error al volver al menú " + e.getMessage(), e);
-        }
+    private void volverMenu() {
+        Stage ventanaActual = (Stage) btnSalir.getScene().getWindow();
+        VolverLogin.volverLogin(ventanaActual);
     }
 
 }

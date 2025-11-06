@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.AreaChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
@@ -13,174 +12,144 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
-<?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="920.0" prefWidth="1480.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="triplej.banco.Controllers.VistaAdmin.AdminController">
-    <center>
-        <StackPane fx:id="contenedorCentro" prefHeight="424.0" prefWidth="429.0" BorderPane.alignment="CENTER">
-         <children>
-            <AnchorPane fx:id="vistaInicio" prefHeight="200.0" prefWidth="200.0">
-               <children>
-                  <AnchorPane layoutX="45.0" layoutY="50.0" prefHeight="280.0" prefWidth="1157.0" style="-fx-border-color: black;">
-                     <children>
-                        <AnchorPane layoutX="57.0" layoutY="29.0" prefHeight="218.0" prefWidth="300.0" style="-fx-border-color: black;">
-                           <children>
-                              <ImageView fitHeight="164.0" fitWidth="132.0" layoutX="14.0" layoutY="43.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../Images/experiencia-del-usuario.png" />
-                                 </image>
-                              </ImageView>
-                              <Label layoutX="150.0" layoutY="165.0" prefHeight="39.0" prefWidth="134.0" text="Total Usuarios">
-                                 <font>
-                                    <Font size="21.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="lblTotalUsuarios" alignment="CENTER_RIGHT" layoutX="158.0" layoutY="14.0" prefHeight="88.0" prefWidth="113.0" text="0">
-                                 <font>
-                                    <Font size="60.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane layoutX="404.0" layoutY="29.0" prefHeight="218.0" prefWidth="317.0" style="-fx-border-color: black;">
-                           <children>
-                              <ImageView fitHeight="162.0" fitWidth="132.0" layoutX="41.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../Images/check.png" />
-                                 </image>
-                              </ImageView>
-                              <Label layoutX="129.0" layoutY="152.0" prefHeight="39.0" prefWidth="164.0" text="Usuarios Activos">
-                                 <font>
-                                    <Font size="21.0" />
-                                 </font>
-                              </Label>
-                              <Label alignment="CENTER_RIGHT" layoutX="184.0" layoutY="18.0" prefHeight="90.0" prefWidth="99.0" text="0">
-                                 <font>
-                                    <Font size="60.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane layoutX="813.0" layoutY="31.0" prefHeight="218.0" prefWidth="305.0" style="-fx-border-color: black;">
-                           <children>
-                              <ImageView fitHeight="117.0" fitWidth="121.0" layoutX="21.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../Images/close.png" />
-                                 </image>
-                              </ImageView>
-                              <Label layoutX="108.0" layoutY="158.0" prefHeight="39.0" prefWidth="184.0" text="Usuarios Inactivos">
-                                 <font>
-                                    <Font size="21.0" />
-                                 </font>
-                              </Label>
-                              <Label alignment="CENTER_RIGHT" layoutX="176.0" layoutY="27.0" prefHeight="90.0" prefWidth="99.0" text="0">
-                                 <font>
-                                    <Font size="60.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </AnchorPane>
-                     </children>
-                  </AnchorPane>
-                  <AreaChart fx:id="graficaUsuarios" layoutX="323.0" layoutY="364.0" prefHeight="343.0" prefWidth="653.0" title="Usuarios">
-                    <xAxis>
-                      <CategoryAxis side="BOTTOM" />
-                    </xAxis>
-                    <yAxis>
-                      <NumberAxis side="LEFT" />
-                    </yAxis>
-                  </AreaChart>
-                  <Button layoutX="543.0" layoutY="726.0" mnemonicParsing="false" onAction="#generarReporte" prefHeight="48.0" prefWidth="237.0" text="Generar Reporte" />
-               </children>
-            </AnchorPane>
-            <AnchorPane fx:id="vistaReporte" prefHeight="806.0" prefWidth="1179.0" visible="false">
-               <children>
-                  <Line endX="373.0" layoutX="123.0" layoutY="87.0" startX="-100.0" />
-                  <Label layoutX="23.0" layoutY="27.0" text="Reporte del Sistema">
-                     <font>
-                        <Font size="48.0" />
-                     </font>
-                  </Label>
-                  <Button layoutX="454.0" layoutY="685.0" mnemonicParsing="false" onAction="#guardarReporte" prefHeight="57.0" prefWidth="191.0" text="Guardar " />
-                  <AnchorPane layoutX="301.0" layoutY="113.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: 0,0,0,0.5;" />
-                  <TextArea fx:id="txtContenido" editable="false" layoutX="177.0" layoutY="97.0" prefHeight="535.0" prefWidth="744.0" />
-               </children>
-            </AnchorPane>
-         </children>
-        </StackPane>
-    </center>
+<BorderPane prefHeight="800" prefWidth="1200" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="triplej.banco.Controllers.VistaAdmin.AdminController">
+
+    <!-- BARRA SUPERIOR -->
     <top>
-        <HBox prefHeight="50.0" prefWidth="100.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
-            <children>
-                <Label style="-fx-text-fill: white;" text="Sistema de Gestión ">
-                    <HBox.margin>
-                        <Insets left="20.0" top="20.0" />
-                    </HBox.margin>
-                    <font>
-                        <Font size="24.0" />
-                    </font>
-                </Label>
-            </children>
+        <HBox styleClass="top-bar" BorderPane.alignment="CENTER">
+            <Label styleClass="top-title" text="Sistema de Gestión" />
         </HBox>
     </top>
+
+    <!-- MENÚ LATERAL -->
     <left>
-        <AnchorPane prefHeight="806.0" prefWidth="269.0" style="-fx-background-color: #C1FFC1;" BorderPane.alignment="CENTER">
+        <AnchorPane prefWidth="260" styleClass="sidebar" BorderPane.alignment="CENTER">
             <children>
-                <ImageView fitHeight="130.0" fitWidth="168.0" layoutX="80.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
+                <!-- Avatar -->
+                <ImageView fitHeight="120" fitWidth="120" layoutX="70" layoutY="20" preserveRatio="true">
                     <image>
                         <Image url="@../../Images/avatar.png" />
-                    </image></ImageView>
-                <Label layoutX="91.0" layoutY="150.0" text="Bienvenido/a,">
-                    <font>
-                        <Font size="18.0" />
-                    </font>
-                </Label>
-                <Line endX="144.0" layoutX="128.0" layoutY="273.0" startX="-100.0" />
-                <Label fx:id="lblNombre" alignment="CENTER" layoutX="48.0" layoutY="179.0" prefHeight="27.0" prefWidth="194.0">
-                    <font>
-                        <Font size="18.0" />
-                    </font>
-                </Label>
-                <Button fx:id="btnEmpleados" layoutX="50.0" layoutY="441.0" mnemonicParsing="false" onAction="#mostrarEmpleados" prefHeight="37.0" prefWidth="167.0" style="-fx-background-color: transparent;" text="Ver Empleados">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font></Button>
-                <Button fx:id="btnAgregarEmpleado" layoutX="69.0" layoutY="504.0" mnemonicParsing="false" onAction="#mostrarFormulario" prefHeight="36.0" prefWidth="164.0" text="Añadir Empleado" />
-                <Label layoutX="110.0" layoutY="219.0" prefHeight="31.0" prefWidth="80.0" text="(admin)">
-                    <font>
-                        <Font size="18.0" />
-                    </font>
-                </Label>
-            <Button fx:id="btnInicio" layoutX="27.0" layoutY="286.0" mnemonicParsing="false" onAction="#mostrarInicio" prefHeight="39.0" prefWidth="260.0" style="-fx-background-color: transparent;" text="Inicio">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font></Button>
-            <Button fx:id="btnInicio1" layoutX="41.0" layoutY="325.0" mnemonicParsing="false" onAction="#mostrarTransacciones" prefHeight="39.0" prefWidth="261.0" style="-fx-background-color: transparent;" text="Monitorear Transacciones">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font></Button>
-            <Button layoutX="68.0" layoutY="385.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="167.0" text="Ver Clientes" />
-            <Button fx:id="btnSalir" layoutX="27.0" layoutY="736.0" mnemonicParsing="false" onAction="#volverMenu" prefHeight="36.0" prefWidth="94.0" text="Salir" />
-            <ImageView fitHeight="25.0" fitWidth="46.0" layoutX="27.0" layoutY="280.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../../../../../../../Downloads/home.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="25.0" fitWidth="46.0" layoutX="26.0" layoutY="332.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../../../../../../../Downloads/search.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="34.0" fitWidth="36.0" layoutX="23.0" layoutY="433.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../../../../../../../Downloads/man.png" />
-               </image>
-            </ImageView>
+                    </image>
+                </ImageView>
+
+                <Label layoutX="95" layoutY="150" styleClass="sidebar-text" text="Bienvenido," />
+                <Label layoutX="75" layoutY="179" styleClass="sidebar-text" text="Pepe" />
+                <Label layoutX="130" layoutY="177" styleClass="sidebar-text" text="(admin)" />
+
+                <Line endX="180" layoutX="40" layoutY="220" startX="0" />
+
+                <!-- Botones del menú -->
+                <VBox alignment="TOP_CENTER" layoutY="250" spacing="15">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <ImageView fitHeight="25" fitWidth="25" preserveRatio="true">
+                                <image>
+                                    <Image url="@../../Images/home.png" />
+                                </image>
+                            </ImageView>
+                            <Button fx:id="btnInicio" onAction="#mostrarInicio" styleClass="btn-admin" text="Inicio" />
+                        </HBox>
+
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <ImageView fitHeight="25" fitWidth="25" preserveRatio="true">
+                                <image>
+                                    <Image url="@../../Images/search.png" />
+                                </image>
+                            </ImageView>
+                            <Button fx:id="btnInicio1" onAction="#mostrarTransacciones" styleClass="btn-admin" text="Monitorear Transacciones" />
+                        </HBox>
+
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <ImageView fitHeight="28" fitWidth="28" preserveRatio="true">
+                                <image>
+                                    <Image url="@../../Images/man.png" />
+                                </image>
+                            </ImageView>
+                            <Button fx:id="btnEmpleados" onAction="#mostrarEmpleados" styleClass="btn-admin" text="Ver Empleados" />
+                        </HBox>
+
+                        <Button fx:id="btnAgregarEmpleado" onAction="#mostrarFormulario" styleClass="btn-admin" text="Añadir Empleado" />
+                    </children>
+                </VBox>
+
+                <Button fx:id="btnSalir" layoutX="75.0" layoutY="602.0" onAction="#volverMenu" styleClass="btn-admin" text="Salir" />
             </children>
         </AnchorPane>
     </left>
+
+    <!-- CONTENIDO CENTRAL -->
+    <center>
+        <StackPane fx:id="contenedorCentro" BorderPane.alignment="CENTER">
+            <children>
+
+                <!-- VISTA INICIO -->
+                <AnchorPane fx:id="vistaInicio" prefHeight="712.0" prefWidth="946.0">
+                    <children>
+                        <HBox alignment="CENTER" layoutX="32.0" layoutY="40" prefHeight="175.0" prefWidth="958.0" spacing="40">
+                            <children>
+                                <!-- Total Usuarios -->
+                                <VBox  fx:id="statCard1" alignment="CENTER" prefWidth="300.0" spacing="20.0" styleClass="stat-card">
+                                    <ImageView fitHeight="100" fitWidth="100" preserveRatio="true">
+                                        <image>
+                                            <Image url="@../../Images/experiencia-del-usuario.png" />
+                                        </image>
+                                    </ImageView>
+                                    <Label fx:id="lblTotalUsuarios" styleClass="stat-value" text="0" />
+                                    <Label styleClass="stat-label" text="Total Usuarios" />
+                                </VBox>
+
+                                <!-- Usuarios Activos -->
+                                <VBox fx:id="statCard2" alignment="CENTER" prefWidth="300.0" spacing="20.0" styleClass="stat-card">
+                                    <ImageView fitHeight="100" fitWidth="100" preserveRatio="true">
+                                        <image>
+                                            <Image url="@../../Images/check.png" />
+                                        </image>
+                                    </ImageView>
+                                    <Label styleClass="stat-value" text="0" />
+                                    <Label styleClass="stat-label" text="Usuarios Activos" />
+                                </VBox>
+
+                                <!-- Usuarios Inactivos -->
+                                <VBox  fx:id="statCard3" alignment="CENTER" prefWidth="300.0" spacing="20.0" styleClass="stat-card">
+                                    <ImageView fitHeight="100" fitWidth="100" preserveRatio="true">
+                                        <image>
+                                            <Image url="@../../Images/close.png" />
+                                        </image>
+                                    </ImageView>
+                                    <Label styleClass="stat-value" text="0" />
+                                    <Label styleClass="stat-label" text="Usuarios Inactivos" />
+                                </VBox>
+                            </children>
+                        </HBox>
+
+                        <AreaChart fx:id="graficaUsuarios" layoutY="350" prefHeight="300" prefWidth="800" title="Usuarios">
+                            <xAxis><CategoryAxis side="BOTTOM" /></xAxis>
+                            <yAxis><NumberAxis side="LEFT" /></yAxis>
+                        </AreaChart>
+
+                        <Button layoutX="400.0" layoutY="660.0" onAction="#generarReporte" styleClass="btn-admin" text="Generar Reporte" />
+                    </children>
+                </AnchorPane>
+
+                <!-- VISTA REPORTE -->
+                <AnchorPane fx:id="vistaReporte" visible="false">
+                    <children>
+                        <Label layoutX="30" layoutY="30" styleClass="report-title" text="Reporte del Sistema" />
+                        <TextArea fx:id="txtContenido" editable="false" layoutX="150" layoutY="80" prefHeight="550" prefWidth="800" />
+                        <Button layoutX="480" layoutY="670" onAction="#guardarReporte" styleClass="btn-admin" text="Guardar" />
+                    </children>
+                </AnchorPane>
+
+            </children>
+        </StackPane>
+    </center>
+
+    <!-- PIE DE PÁGINA -->
     <bottom>
-        <HBox prefHeight="59.0" prefWidth="1416.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER" />
+        <HBox prefHeight="56.0" prefWidth="1250.0" styleClass="bottom-bar" BorderPane.alignment="CENTER" />
     </bottom>
+
 </BorderPane>
