@@ -1,0 +1,189 @@
+/* ===== Estilos globales del Cajero ===== */
+.cajero-root {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-background-color: #f8f9fb;
+}
+
+/* ===== Barra superior ===== */
+.cajero-top-bar {
+    -fx-background-color: linear-gradient(to right, #1e3a8a, #3b82f6);
+    -fx-padding: 10 20;
+    -fx-alignment: center-left;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 6, 0, 0, 2);
+}
+
+.cajero-top-title {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 2, 0, 0, 1);
+}
+
+/* ===== Barra lateral ===== */
+.cajero-sidebar {
+    -fx-background-color: linear-gradient(to bottom, #3b82f6, #1e3a8a);
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 5, 0, 2, 0);
+}
+
+.cajero-avatar {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0, 0, 2);
+    -fx-background-radius: 50%;
+}
+
+.cajero-sidebar-text {
+    -fx-font-size: 18px;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+}
+
+.cajero-line {
+    -fx-stroke: rgba(255,255,255,0.5);
+    -fx-stroke-width: 2;
+}
+
+.cajero-btn-sidebar {
+    -fx-background-color: linear-gradient(to bottom, #60a5fa, #1e40af);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-padding: 8 12;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0, 1);
+}
+
+.cajero-btn-sidebar:hover {
+    -fx-background-color: linear-gradient(to bottom, #3b82f6, #1e3a8a);
+}
+
+/* ===== Panel de reporte ===== */
+.cajero-panel-reporte {
+    -fx-background-color: rgba(255,255,255,0.95);
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #d1d5db;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 0, 3);
+}
+
+.cajero-vbox-reporte {
+    -fx-spacing: 15;
+}
+
+.cajero-label-reporte-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e3a8a;
+}
+
+.cajero-scrollpane {
+    -fx-background-color: transparent;
+    -fx-border-color: #d1d5db;
+    -fx-border-radius: 8;
+}
+
+.cajero-textarea-reporte {
+    -fx-font-size: 14px;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+}
+
+/* Botón guardar reporte */
+.cajero-btn-guardar {
+    -fx-background-color: linear-gradient(to bottom, #10b981, #047857);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.cajero-btn-guardar:hover {
+    -fx-background-color: linear-gradient(to bottom, #047857, #065f46);
+}
+
+/* ===== Vista de inicio / información del cliente ===== */
+.cajero-panel-cliente {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #d1d5db;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 6, 0, 0, 2);
+}
+
+.cajero-label-cliente {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e3a8a;
+}
+
+.cajero-label-cliente-title {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e40af;
+}
+
+.cajero-textfield-cliente {
+    -fx-background-color: #f3f4f6;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: #d1d5db;
+    -fx-padding: 6 10;
+    -fx-font-size: 14px;
+}
+
+.cajero-combobox-cliente {
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: #d1d5db;
+    -fx-font-size: 14px;
+}
+
+.cajero-img-cliente {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 8, 0, 0, 2);
+    -fx-background-radius: 10;
+}
+
+/* ===== HBox búsqueda y operaciones ===== */
+.cajero-hbox-busqueda {
+    -fx-alignment: center-left;
+}
+
+.cajero-textfield-busqueda {
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: #d1d5db;
+    -fx-font-size: 14px;
+    -fx-padding: 6 10;
+}
+
+.cajero-btn-busqueda {
+    -fx-background-color: linear-gradient(to bottom, #3b82f6, #1e40af);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.cajero-hbox-operaciones {
+    -fx-alignment: center;
+}
+
+.cajero-btn-operacion {
+    -fx-background-color: linear-gradient(to bottom, #60a5fa, #1e40af);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.cajero-btn-operacion:hover {
+    -fx-background-color: linear-gradient(to bottom, #1e3a8a, #1e40af);
+}
+
+/* ===== Pie de página ===== */
+.cajero-bottom-bar {
+    -fx-background-color: linear-gradient(to right, #1e3a8a, #3b82f6);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 6, 0, 0, -2);
+}

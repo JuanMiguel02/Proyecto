@@ -3,6 +3,7 @@ module triplej.banco {
     requires javafx.fxml;
     requires javafx.graphics;
     requires javafx.base;
+    requires javafx.media;
     requires java.desktop;
 
     opens triplej.banco to javafx.fxml;

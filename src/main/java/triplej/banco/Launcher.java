@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import triplej.banco.Models.Banco; // Importar Banco
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class Launcher extends Application {
     @Override
@@ -15,7 +16,8 @@ public class Launcher extends Application {
         Banco.getInstancia();
 
         FXMLLoader fxmlLoader = new FXMLLoader(Launcher.class.getResource("/triplej/banco/Views/Login-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1200, 900);
+        Scene scene = new Scene(fxmlLoader.load(), 900, 700);
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/triplej/banco/Styles/login.css")).toExternalForm());
         stage.setMaximized(true);
         stage.setTitle("UQ Bank");
         stage.setScene(scene);

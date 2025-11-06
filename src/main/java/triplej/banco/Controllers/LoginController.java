@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -17,6 +18,7 @@ import triplej.banco.Repositories.EmpleadoRepository;
 import triplej.banco.Repositories.UsuarioRepository;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 
 import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
@@ -25,6 +27,9 @@ public class LoginController {
 
     @FXML private TextField txtCorreo;
     @FXML private PasswordField txtContrasenia;
+    @FXML private TextField txtPasswordSignInMask;
+    @FXML private CheckBox checkViewPassSignIn;
+
 
     private UsuarioRepository usuarioRepo;
     private EmpleadoRepository empleadoRepository;
@@ -35,7 +40,12 @@ public class LoginController {
         usuarioRepo = banco.getUsuarioRepository();
         empleadoRepository = banco.getEmpleadoRepository();
         System.out.println(usuarioRepo.getUsuarios().size());
+        mostrarContrasenia(txtContrasenia,txtPasswordSignInMask,checkViewPassSignIn);
+
     }
+
+
+
 
     @FXML
     private void login(ActionEvent event) {
@@ -67,6 +77,22 @@ public class LoginController {
         stage.close();
     }
 
+    public void mostrarContrasenia(PasswordField pass, TextField text, CheckBox check){
+        text.setVisible(false);
+        text.setManaged(false);
+
+        text.managedProperty().bind(check.selectedProperty());
+        text.visibleProperty().bind(check.selectedProperty());
+
+        text.textProperty().bindBidirectional(pass.textProperty());
+    }
+
+    @FXML
+    private void limpiar (ActionEvent event){
+        txtCorreo.clear();
+        txtContrasenia.clear();
+    }
+
     private void abrirVentanaAdmin(Usuario usuario) {
         try{
 
@@ -84,9 +110,12 @@ public class LoginController {
                 AdminController adminController = loader.getController();
                 adminController.setAdmin(admin);
 
+                Scene scene=new Scene(root);
+                scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/triplej/banco/Styles/admin.css")).toExternalForm());
+
                 Stage stage = new Stage();
                 stage.setTitle("Sistema de Administración UQBANK");
-                stage.setScene(new Scene(root));
+                stage.setScene(scene);
                 stage.setMaximized(true);
                 stage.show();
             }
@@ -116,9 +145,12 @@ public class LoginController {
                 CajeroController cajeroController = loader.getController();
                 cajeroController.setCajero(empleado);
 
+                Scene scene=new Scene(root);
+                scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/triplej/banco/Styles/cajero.css")).toExternalForm());
+
                 Stage stage = new Stage();
-                stage.setTitle("Sistema de Trabajo UQBANK");
-                stage.setScene(new Scene(root));
+                stage.setTitle("Sistema de Cajero UQBANK");
+                stage.setScene(scene);
                 stage.setMaximized(true);
                 stage.show();
             }

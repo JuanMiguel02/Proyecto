@@ -1,0 +1,84 @@
+/*Estilos del login*/
+
+
+.login-root {
+    -fx-background-color: linear-gradient(
+        from 0% 0% to 100% 100%,
+        derive(#00bfff, 50%),  /* azul más claro */
+        derive(white, -10%)    /* blanco un poco más tenue */
+    );
+    -fx-alignment: center;
+    -fx-padding: 40;
+    -fx-spacing: 20;
+}
+
+
+.login-title {
+    -fx-font-size: 40px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e3a8a;
+    -fx-padding: 0 0 20 0;
+}
+
+.login-form {
+    -fx-spacing: 10;
+    -fx-padding: 0 40;
+}
+
+.label-input {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #374151;
+}
+
+.input {
+    -fx-pref-width: 300px;
+    -fx-pref-height: 38px;
+    -fx-padding: 6 10;
+    -fx-background-color: white;
+    -fx-border-color: #d1d5db;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-font-size: 14px;
+    -fx-prompt-text-fill:#add8e6
+}
+
+.input:focused {
+    -fx-border-color: #2563eb;
+    -fx-effect: dropshadow(three-pass-box, rgba(37,99,235,0.2), 8, 0, 0, 2);
+}
+
+.checkbox {
+    -fx-font-size: 14px;
+    -fx-text-fill: #374151;
+    -fx-mark-color:#228b22
+
+}
+
+.btn {
+    -fx-pref-width: 120px;
+    -fx-pref-height: 36px;
+    -fx-background-radius: 8;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+#btnSignIn {
+    -fx-background-color: linear-gradient(to bottom right, #2563eb, #1e40af);
+    -fx-text-fill: white;
+}
+
+#btnSignIn:hover {
+    -fx-background-color: linear-gradient(to bottom right,#00008b,#0000cd);
+}
+
+#btnClean {
+    -fx-background-color: #ffe4e1;
+    -fx-text-fill: #111827;
+    -fx-border-color: #d1d5db;
+    -fx-border-radius: 8;
+}
+
+#btnClean:hover {
+    -fx-background-color: #f5deb3 ;
+}
