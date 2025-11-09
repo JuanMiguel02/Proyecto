@@ -101,12 +101,12 @@ public class FormularioEmpleadoController {
     }
 
     @FXML
-    private void cancelar(){
+    private void onCancelar(){
         adminController.mostrarInicio();
     }
 
     @FXML
-    private void handleGuardar() {
+    private void onGuardar() {
         if (!validarCampos()) {
             return;
         }

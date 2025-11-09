@@ -23,11 +23,11 @@ public class MonitoreoTransaccionesController {
     @FXML private TableColumn<Transaccion, Integer> colMonto;
     @FXML private TableColumn<Transaccion, String> colTipo;
 
-    private TransaccionRepository repoTransacciones;
+    private TransaccionRepository transaccionRepository;
     private ObservableList<Transaccion> listaTransacciones;
 
     public void initialize(){
-        repoTransacciones = TransaccionRepository.getInstance();
+        transaccionRepository = TransaccionRepository.getInstance();
 
         colId.setCellValueFactory(new PropertyValueFactory<>("id")); //
         colFecha.setCellValueFactory(new PropertyValueFactory<>("fechaFormateada")); //
@@ -37,7 +37,7 @@ public class MonitoreoTransaccionesController {
         colTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
 
        cargarTransacciones();
-        System.out.println("Transacciones cargadas: " + repoTransacciones.getTodasTransacciones().size());
+        System.out.println("Transacciones cargadas: " + transaccionRepository.getTodasTransacciones().size());
 
        tablaTransacciones.setRowFactory(tv -> new TableRow<>(){
            @Override
@@ -72,8 +72,7 @@ public class MonitoreoTransaccionesController {
     }
 
     private void cargarTransacciones(){
-        listaTransacciones = FXCollections.observableArrayList(repoTransacciones.getTodasTransacciones());
+        listaTransacciones = FXCollections.observableArrayList(transaccionRepository.getTodasTransacciones());
         tablaTransacciones.setItems(listaTransacciones);
-
     }
 }

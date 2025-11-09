@@ -11,20 +11,15 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.paint.LinearGradient?>
-<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="720.0" prefWidth="1280.0"
-            xmlns="http://javafx.com/javafx/24.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="triplej.banco.Controllers.ClienteController">
+<BorderPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="triplej.banco.Controllers.ClienteController">
 
     <!--  BARRA SUPERIOR -->
     <top>
         <HBox prefHeight="60.0" style="-fx-background-color: linear-gradient(to right, #0f2027, #203a43, #2c5364);" BorderPane.alignment="CENTER">
             <children>
-                <Label text="UQ Bank " style="-fx-text-fill: white;">
+                <Label style="-fx-text-fill: white;" text="UQ Bank ">
                     <HBox.margin>
                         <Insets left="30.0" top="15.0" />
                     </HBox.margin>
@@ -38,48 +33,39 @@
 
     <!--  PANEL LATERAL IZQUIERDO -->
     <left>
-        <AnchorPane prefWidth="270.0"
-                    style="-fx-background-color: linear-gradient(to bottom, #A1FFCE, #FAFFD1);"
-                    BorderPane.alignment="CENTER">
+        <AnchorPane prefWidth="270.0" style="-fx-background-color: linear-gradient(to bottom, #A1FFCE, #FAFFD1);" BorderPane.alignment="CENTER">
             <children>
-                <ImageView fitHeight="130.0" fitWidth="130.0" layoutX="70.0" layoutY="30.0"
-                           preserveRatio="true" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10,0,0,2);">
+                <ImageView fx:id="imgCliente" fitHeight="130.0" fitWidth="130.0" layoutX="70.0" layoutY="30.0" preserveRatio="true" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10,0,0,2);">
                     <image>
                         <Image url="@../Images/avatar.png" />
                     </image>
                 </ImageView>
 
-                <Label layoutX="85.0" layoutY="180.0" text="Bienvenido," style="-fx-text-fill: #333;">
+                <Label layoutX="85.0" layoutY="180.0" style="-fx-text-fill: #333;" text="Bienvenido,">
                     <font>
                         <Font size="18.0" />
                     </font>
                 </Label>
 
-                <Label fx:id="lblNombre" alignment="CENTER" layoutX="35.0" layoutY="210.0"
-                       prefWidth="200.0" textAlignment="CENTER" style="-fx-text-fill: #222;">
+                <Label fx:id="lblNombre" alignment="CENTER" layoutX="35.0" layoutY="210.0" prefWidth="200.0" style="-fx-text-fill: #222;" textAlignment="CENTER">
                     <font>
                         <Font name="System Bold" size="17.0" />
                     </font>
                 </Label>
 
-                <Label layoutX="100.0" layoutY="270.0" text="Cuenta:" style="-fx-text-fill: #333;">
+                <Label layoutX="100.0" layoutY="270.0" style="-fx-text-fill: #333;" text="Cuenta:">
                     <font>
                         <Font size="16.0" />
                     </font>
                 </Label>
 
-                <Label fx:id="lblNumCuenta" alignment="CENTER" layoutX="35.0" layoutY="300.0"
-                       prefWidth="200.0" textAlignment="CENTER" style="-fx-text-fill: #444;">
+                <Label fx:id="lblNumCuenta" alignment="CENTER" layoutX="35.0" layoutY="300.0" prefWidth="200.0" style="-fx-text-fill: #444;" textAlignment="CENTER">
                     <font>
                         <Font size="16.0" />
                     </font>
                 </Label>
 
-                <Button fx:id="btnSalir" layoutX="80.0" layoutY="640.0"
-                        mnemonicParsing="false" onAction="#volverMenu"
-                        prefHeight="36.0" prefWidth="110.0"
-                        text="Salir"
-                        style="-fx-background-color: #FF6B6B; -fx-text-fill: white; -fx-background-radius: 20; -fx-font-size: 15;">
+                <Button fx:id="btnSalir" layoutX="80.0" layoutY="640.0" mnemonicParsing="false" onAction="#volverMenu" prefHeight="36.0" prefWidth="110.0" style="-fx-background-color: #FF6B6B; -fx-text-fill: white; -fx-background-radius: 20; -fx-font-size: 15;" text="Salir">
                     <effect>
                         <DropShadow color="#c44747" radius="8" />
                     </effect>
@@ -90,37 +76,29 @@
 
     <!--  CONTENIDO CENTRAL -->
     <center>
-        <StackPane BorderPane.alignment="CENTER" style="-fx-background-color: linear-gradient(to bottom right, #E8F5E9, #FFFFFF);">
+        <StackPane style="-fx-background-color: linear-gradient(to bottom right, #E8F5E9, #FFFFFF);" BorderPane.alignment="CENTER">
             <children>
                 <AnchorPane prefHeight="500.0" prefWidth="600.0">
                     <children>
                         <!-- Caja del saldo -->
-                        <Label text="Saldo actual:" layoutX="225.0" layoutY="100.0" style="-fx-text-fill: #444;">
+                        <Label layoutX="225.0" layoutY="100.0" style="-fx-text-fill: #444;" text="Saldo actual:">
                             <font>
                                 <Font name="System Bold" size="22.0" />
                             </font>
                         </Label>
 
-                        <Label fx:id="lblDinero" alignment="CENTER" layoutX="150.0" layoutY="150.0"
-                               prefHeight="120.0" prefWidth="300.0"
-                               style="-fx-background-color: white; -fx-border-color: #66BB6A; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10,0,0,3); -fx-text-fill: #2E7D32;">
+                        <Label fx:id="lblDinero" alignment="CENTER" layoutX="150.0" layoutY="150.0" prefHeight="120.0" prefWidth="300.0" style="-fx-background-color: white; -fx-border-color: #66BB6A; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10,0,0,3); -fx-text-fill: #2E7D32;">
                             <font>
                                 <Font name="System Bold" size="48.0" />
                             </font>
                         </Label>
 
                         <!-- ComboBox para elegir cuenta -->
-                        <ComboBox fx:id="cmbCuentas" layoutX="150.0" layoutY="310.0"
-                                  prefWidth="300.0" promptText="Seleccione una cuenta"
-                                  style="-fx-background-radius: 10; -fx-font-size: 15;">
+                        <ComboBox fx:id="cmbCuentas" layoutX="150.0" layoutY="310.0" prefWidth="300.0" promptText="Seleccione una cuenta" style="-fx-background-radius: 10; -fx-font-size: 15;">
                         </ComboBox>
 
                         <!-- Botón transferir -->
-                        <Button fx:id="btnTransferir" layoutX="215.0" layoutY="370.0"
-                                mnemonicParsing="false" onAction="#onTransferir"
-                                prefHeight="55.0" prefWidth="170.0"
-                                text="Transferir"
-                                style="-fx-background-color: #66BB6A; -fx-text-fill: white; -fx-background-radius: 20; -fx-font-size: 17;">
+                        <Button fx:id="btnTransferir" layoutX="215.0" layoutY="370.0" mnemonicParsing="false" onAction="#onTransferir" prefHeight="55.0" prefWidth="170.0" style="-fx-background-color: #66BB6A; -fx-text-fill: white; -fx-background-radius: 20; -fx-font-size: 17;" text="Transferir">
                             <effect>
                                 <DropShadow color="#388E3C" radius="8" />
                             </effect>
@@ -133,6 +111,6 @@
 
     <!-- ⚫ BARRA INFERIOR -->
     <bottom>
-        <HBox prefHeight="50.0" style="-fx-background-color: linear-gradient(to right, #0f2027, #203a43, #2c5364);" BorderPane.alignment="CENTER"/>
+        <HBox prefHeight="50.0" style="-fx-background-color: linear-gradient(to right, #0f2027, #203a43, #2c5364);" BorderPane.alignment="CENTER" />
     </bottom>
 </BorderPane>

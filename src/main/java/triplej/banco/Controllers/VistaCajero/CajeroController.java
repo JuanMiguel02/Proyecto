@@ -13,7 +13,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import triplej.banco.Controllers.LoginController;
+import triplej.banco.Repositories.UsuarioRepository;
 import triplej.banco.Services.CajeroService;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
 import triplej.banco.Models.Reportes.ReporteGenerado;
@@ -22,6 +22,7 @@ import triplej.banco.Models.Usuarios.Empleado;
 import triplej.banco.Models.Usuarios.PersonaJuridica;
 import triplej.banco.Models.Usuarios.PersonaNatural;
 import triplej.banco.Repositories.ClienteRepository;
+import triplej.banco.Utils.VolverLogin;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -35,6 +36,7 @@ import static triplej.banco.Utils.GeneracionReporteVista.generarReporte;
 
 public class CajeroController {
 
+    private Empleado cajero;
     @FXML private StackPane contenedorCentro;
     @FXML private AnchorPane vistaInicio;
     @FXML private AnchorPane vistaReporte;
@@ -55,7 +57,7 @@ public class CajeroController {
     @FXML private TextField txtTipoEmpresa;
     @FXML private TextField txtRepresentanteLegal;
     @FXML private TextArea  txtReporteGeneral;
-    @FXML private ImageView imgFotoCliente;
+    @FXML private ImageView imgCliente;
 
     @FXML private Label lblNombreCajero;
     @FXML private Label lblTipoEmpresa;
@@ -69,7 +71,7 @@ public class CajeroController {
     @FXML private Button btnTransferir;
     @FXML private Button btnSalir;
 
-    private final ClienteRepository repoClientes = ClienteRepository.getInstancia();
+    private final ClienteRepository clienteRepository = ClienteRepository.getInstancia();
     private final CajeroService cajeroService = new CajeroService();
     private Cliente clienteActual;
     private CuentaBancaria cuentaSeleccionada;
@@ -78,10 +80,10 @@ public class CajeroController {
     @FXML
     public void initialize() {
         cmbCuentasCliente.setOnAction(e -> seleccionarCuenta());
-
     }
 
     public void setCajero(Empleado cajero) {
+        this.cajero = cajero;
         if (lblNombreCajero != null && cajero != null) {
             lblNombreCajero.setText(cajero.getNombreCompleto());
         }
@@ -97,10 +99,10 @@ public class CajeroController {
             return;
         }
 
-        Optional<Cliente> clienteOpt = repoClientes.buscarPorDocumento(busqueda);
+        Optional<Cliente> clienteOpt = clienteRepository.buscarPorDocumento(busqueda);
 
         if(clienteOpt.isEmpty()){
-            Optional<Cliente> clienteCuenta = repoClientes.buscarClientePorCuenta(busqueda);
+            Optional<Cliente> clienteCuenta = clienteRepository.buscarClientePorCuenta(busqueda);
             if(clienteCuenta.isPresent()){
                 clienteOpt = clienteCuenta;
             }
@@ -139,19 +141,19 @@ public class CajeroController {
 
                 if (rutaFoto.startsWith("/")) {
                     // Es una imagen en recursos (classpath)
-                    imgFotoCliente.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(rutaFoto))));
+                    imgCliente.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(rutaFoto))));
                 } else {
                     // Es una ruta en el sistema de archivos
                     Path path = Paths.get(rutaFoto);
                     if (Files.exists(path)) {
-                        imgFotoCliente.setImage(new Image(path.toUri().toString()));
+                        imgCliente.setImage(new Image(path.toUri().toString()));
                     }
                 }
             } catch (Exception e) {
-                imgFotoCliente.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/triplej/banco/Images/avatar.png"))));
+                imgCliente.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/triplej/banco/Images/avatar.png"))));
             }
         } else {
-            imgFotoCliente.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/triplej/banco/Images/avatar.png"))));
+            imgCliente.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/triplej/banco/Images/avatar.png"))));
         }
         // Llenar ComboBox con las cuentas del cliente
         cmbCuentasCliente.getItems().clear();
@@ -169,7 +171,7 @@ public class CajeroController {
         txtTelefono.clear();
         txtCiudad.clear();
         cmbCuentasCliente.getItems().clear();
-//        imgFotoCliente.setImage(new Image(getClass().getResourceAsStream("/triplej/banco/Images/avatar.png")));
+//        imgCliente.setImage(new Image(getClass().getResourceAsStream("/triplej/banco/Images/avatar.png")));
         clienteActual = null;
         cuentaSeleccionada = null;
     }
@@ -237,24 +239,11 @@ public class CajeroController {
 
     @FXML
     private void volverMenu(){
-        try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/Login-view.fxml"));
-            Parent root = loader.load();
+        cajero.getPersona().setActivo(false);
+        UsuarioRepository.getInstancia().actualizarUsuario(cajero.getPersona());
 
-            LoginController loginController = loader.getController();
-
-            Stage stage = new Stage();
-            stage.setTitle("Inicio");
-            stage.setScene(new Scene(root));
-            stage.setMaximized(true);
-            stage.show();
-
-            ((Stage) btnSalir.getScene().getWindow()).close();
-
-        }
-        catch (IOException e){
-            throw new RuntimeException("Error al volver al menú " + e.getMessage(), e);
-        }
+        Stage ventanaActual = (Stage) btnSalir.getScene().getWindow();
+        VolverLogin.volverLogin(ventanaActual);
     }
 
     private void cargarVistaEnCentro(String fxmlRuta) {

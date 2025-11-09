@@ -143,7 +143,7 @@
                      <TextField fx:id="txtTipoDocumento" editable="false" layoutX="377.0" layoutY="182.0" prefHeight="25.0" prefWidth="251.0" />
                      <Label layoutX="666.0" layoutY="186.0" text="Número Documento:" />
                      <TextField fx:id="txtNumeroDocumento" editable="false" layoutX="796.0" layoutY="182.0" prefHeight="25.0" prefWidth="251.0" />
-                     <ImageView fx:id="imgFotoCliente" fitHeight="218.0" fitWidth="284.0" layoutX="25.0" layoutY="86.0" pickOnBounds="true" preserveRatio="true">
+                     <ImageView fx:id="imgCliente" fitHeight="218.0" fitWidth="284.0" layoutX="25.0" layoutY="86.0" pickOnBounds="true" preserveRatio="true">
                         <image>
                            <Image url="@../../Images/avatar.png" />
                         </image>

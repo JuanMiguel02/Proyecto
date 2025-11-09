@@ -90,7 +90,7 @@ class ClienteRepositoryTest {
         clienteRepository.guardar(cliente);
         cliente.agregarCuenta(cuenta);
 
-        assertTrue(clienteRepository.buscarCuentaDeClientePorNumero("1234").isPresent());
+        assertTrue(clienteRepository.buscarClientePorCuenta("1234").isPresent());
 
     }
 

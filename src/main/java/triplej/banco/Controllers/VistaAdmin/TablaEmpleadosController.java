@@ -95,8 +95,6 @@ public class TablaEmpleadosController {
             }
         });
 
-
-
         listaEmpleados = FXCollections.observableArrayList(empleadoRepository.getEmpleados());
         FilteredList<Empleado> listaFiltrada = new FilteredList<>(listaEmpleados);
 
@@ -108,6 +106,7 @@ public class TablaEmpleadosController {
             return emp.getNombre().toLowerCase().contains(filtro)
                     || emp.getApellido().toLowerCase().contains(filtro)
                     || emp.getCargo().toLowerCase().contains(filtro);
+
         }));
     }
 
@@ -115,7 +114,6 @@ public class TablaEmpleadosController {
         listaEmpleados = FXCollections.observableArrayList(empleadoRepository.getEmpleados());
         tablaEmpleados.setItems(listaEmpleados);
     }
-
 
     @FXML
     private void eliminarEmpleado() {

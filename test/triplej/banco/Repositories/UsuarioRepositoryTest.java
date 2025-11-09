@@ -38,6 +38,8 @@ class UsuarioRepositoryTest {
         assertTrue(usuarioRepository.existeUsuarioConCorreo("armando@test.com"));
         assertEquals(1, usuarioRepository.contarTodos());
         assertTrue(usuarioRepository.buscarUsuarioPorCorreo("armando@test.com").isPresent());
+        assertTrue(usuarioRepository.buscarUsuarioPorId(usuario.getId()).isPresent());
+
     }
 
 

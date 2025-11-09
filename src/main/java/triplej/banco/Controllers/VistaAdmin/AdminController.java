@@ -34,6 +34,8 @@ import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
 
 public class AdminController {
 
+    private Empleado admin;
+
     @FXML private StackPane contenedorCentro;
     @FXML private AnchorPane vistaInicio;
     @FXML private AnchorPane vistaReporte;
@@ -71,6 +73,7 @@ public class AdminController {
     }
 
     public void setAdmin(Empleado admin) {
+        this.admin = admin;
         if (lblNombre != null && admin != null) {
             lblNombre.setText(admin.getNombreCompleto());
         }
@@ -210,6 +213,9 @@ public class AdminController {
 
     @FXML
     private void volverMenu() {
+        admin.getPersona().setActivo(false);
+        usuarioRepository.actualizarUsuario(admin.getPersona());
+
         Stage ventanaActual = (Stage) btnSalir.getScene().getWindow();
         VolverLogin.volverLogin(ventanaActual);
     }
