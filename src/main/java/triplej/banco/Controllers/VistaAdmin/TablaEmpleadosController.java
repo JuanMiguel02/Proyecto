@@ -15,6 +15,9 @@ import triplej.banco.Repositories.EmpleadoRepository;
 import triplej.banco.Models.Usuarios.Empleado;
 import triplej.banco.Repositories.UsuarioRepository;
 
+import java.io.File;
+import java.util.Objects;
+
 import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
 
 public class TablaEmpleadosController {
@@ -47,13 +50,11 @@ public class TablaEmpleadosController {
     @FXML
     private CheckBox chkMostrarContrasenia;
 
-
     @FXML private TextField txtBuscar;
     @FXML private ImageView imgEmpleado;
+    private static final String IMAGEN_POR_DEFECTO ="/triplej/banco/Images/avatar.png";
 
     private Empleado empleadoSeleccionado;
-
-    private static final Image IMAGEN_POR_DEFECTO = new Image(AdminController.class.getResource("/triplej/banco/Images/avatar.png").toExternalForm());
 
     private EmpleadoRepository empleadoRepository;
     private UsuarioRepository usuarioRepository;
@@ -86,14 +87,14 @@ public class TablaEmpleadosController {
 
         cargarEmpleados();
 
-//        tablaEmpleados.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-//            if(newValue != null){
-//                Image foto = newValue.getPersona().getFoto() != null ? newValue.getPersona().getFoto() : IMAGEN_POR_DEFECTO;
-//                imgEmpleado.setImage(foto);
-//            }else{
-//                imgEmpleado.setImage(null);
-//            }
-//        });
+        tablaEmpleados.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
+            if (newValue != null) {
+                mostrarImagenEmpleado(newValue);
+            } else {
+                imgEmpleado.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(IMAGEN_POR_DEFECTO))));
+            }
+        });
+
 
 
         listaEmpleados = FXCollections.observableArrayList(empleadoRepository.getEmpleados());
@@ -118,7 +119,7 @@ public class TablaEmpleadosController {
 
     @FXML
     private void eliminarEmpleado() {
-        Empleado empleadoSeleccionado = tablaEmpleados.getSelectionModel().getSelectedItem();
+        empleadoSeleccionado = tablaEmpleados.getSelectionModel().getSelectedItem();
 
         if (empleadoSeleccionado == null) {
             mostrarAlerta("Por favor seleccione un empleado para eliminar");
@@ -238,6 +239,40 @@ public class TablaEmpleadosController {
             cancelarEdicion();
         } else {
             mostrarAlerta("No hay empleado seleccionado para editar");
+        }
+    }
+
+    private void mostrarImagenEmpleado(Empleado empleado) {
+        try {
+            String rutaFoto = empleado.getPersona().getFoto();
+
+            if (rutaFoto == null || rutaFoto.isBlank()) {
+                imgEmpleado.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(IMAGEN_POR_DEFECTO))));
+                return;
+            }
+
+            Image imagen;
+
+            // Si es imagen dentro del classpath
+            if (rutaFoto.startsWith("/")) {
+                imagen = new Image(Objects.requireNonNull(
+                        getClass().getResourceAsStream(rutaFoto)
+                ));
+            } else {
+                // Imagen del sistema de archivos
+                File archivo = new File(rutaFoto);
+                if (archivo.exists()) {
+                    imagen = new Image(archivo.toURI().toString());
+                } else {
+                    imagen = new Image(Objects.requireNonNull(getClass().getResourceAsStream(IMAGEN_POR_DEFECTO)));
+                }
+            }
+
+            imgEmpleado.setImage(imagen);
+
+        } catch (Exception e) {
+            System.err.println(" No se pudo cargar la imagen del empleado: " + e.getMessage());
+            imgEmpleado.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(IMAGEN_POR_DEFECTO))));
         }
     }
 

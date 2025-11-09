@@ -80,7 +80,6 @@ public abstract class CuentaBancaria {
         );
     }
 
-
     public String getNumeroCuenta() {
         return numeroCuenta;
     }
@@ -104,10 +103,9 @@ public abstract class CuentaBancaria {
     public abstract void retirar(Double monto);
 
     public void depositar(Double monto) {
-        if (monto < 0) throw new IllegalArgumentException("El monto debe ser positivo");
+        if (monto <= 0) throw new IllegalArgumentException("El monto debe ser positivo");
         saldo += monto;
 
-        if(monto != 0){
             Transaccion trans = new Transaccion(
                     generarIdTransaccion(),
                     "DEPÓSITO",
@@ -122,7 +120,6 @@ public abstract class CuentaBancaria {
             TransaccionRepository.getInstance().agregar(trans);
 
             historial.add(trans);
-        }
     }
 
     public ArrayList<Transaccion> getHistorial() {

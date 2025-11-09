@@ -114,17 +114,17 @@ public class UsuarioRepository {
     }
 
 
-    public void cargarDesdeArchivo() {
+    private void cargarDesdeArchivo() {
         Path ruta = Paths.get("Banco", "Datos", "Usuarios.txt");
         if (!Files.exists(ruta)) return;
 
         try (BufferedReader lector = Files.newBufferedReader(ruta)) {
             lector.readLine(); // Saltar encabezado
-
             String linea;
+
             while ((linea = lector.readLine()) != null) {
                 String[] datos = linea.split("\t");
-                if (datos.length < 13) continue; //esperamos 13 columnas
+                if (datos.length < 14) continue; // ahora esperamos 14 columnas
 
                 UUID id = UUID.fromString(datos[0]);
                 String nombreRazon = datos[1];
@@ -139,41 +139,25 @@ public class UsuarioRepository {
                 String ciudad = datos[10];
                 String tipoEmpresa = datos[11];
                 String rutaFoto = datos[12].equals("-") ? null : datos[12];
+                boolean activo = Boolean.parseBoolean(datos[13]); //  Nuevo campo
 
                 Usuario usuario;
 
-                // Si tiene tipoEmpresa vacío o "-", es persona natural
                 if (tipoEmpresa.equals("-") || tipoEmpresa.isBlank()) {
                     usuario = new PersonaNatural(
-                            nombreRazon,
-                            apellidoRepresentante,
-                            correo,
-                            contrasenia,
-                            rol,
-                            tipoDoc,
-                            documento,
-                            telefono,
-                            pais,
-                            ciudad
+                            nombreRazon, apellidoRepresentante, correo, contrasenia, rol,
+                            tipoDoc, documento, telefono, pais, ciudad
                     );
                 } else {
                     usuario = new PersonaJuridica(
-                            nombreRazon,
-                            apellidoRepresentante,
-                            tipoEmpresa,
-                            correo,
-                            contrasenia,
-                            rol,
-                            tipoDoc,
-                            documento,
-                            telefono,
-                            pais,
-                            ciudad
+                            nombreRazon, apellidoRepresentante, tipoEmpresa, correo, contrasenia,
+                            rol, tipoDoc, documento, telefono, pais, ciudad
                     );
                 }
 
                 usuario.setId(id);
                 usuario.setFoto(rutaFoto);
+                usuario.setActivo(activo); //  Guardamos el estado
                 usuarios.add(usuario);
             }
 
@@ -183,69 +167,22 @@ public class UsuarioRepository {
         }
     }
 
-
-
     private void guardarEnArchivo(Usuario usuario) {
         try {
             Path ruta = Paths.get("Banco", "Datos", "Usuarios.txt");
 
-            // Crear carpeta si no existe
-            if (ruta.getParent() != null) {
-                Files.createDirectories(ruta.getParent());
-            }
+            if (ruta.getParent() != null) Files.createDirectories(ruta.getParent());
 
-            // Si el archivo no existe, creamos encabezado
             if (!Files.exists(ruta)) {
                 String encabezado = String.join("\t",
                         "Id", "Nombre/RazónSocial", "Apellido/Representante", "Correo", "Contraseña", "Rol",
-                        "TipoDocumento", "Documento", "Teléfono", "País", "Ciudad", "TipoEmpresa", "Foto"
+                        "TipoDocumento", "Documento", "Teléfono", "País", "Ciudad", "TipoEmpresa", "Foto", "Activo"
                 ) + "\n";
                 Files.writeString(ruta, encabezado, StandardOpenOption.CREATE_NEW);
             }
 
-            String linea = "";
-
-            if (usuario instanceof PersonaNatural persona) {
-                linea = String.format(
-                        "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s%n",
-                        persona.getId(),
-                        persona.getNombre(),
-                        persona.getApellido(),
-                        persona.getCorreo(),
-                        persona.getContrasenia(),
-                        persona.getRolUsuario(),
-                        persona.getTipoDocumento(),
-                        persona.getNumeroDocumento(),
-                        persona.getTelefono(),
-                        persona.getPais(),
-                        persona.getCiudad(),
-                        "-" ,//  Consistencia con Persona Natural
-                        persona.getFoto() != null ? persona.getFoto() : "-"
-                );
-
-            } else if (usuario instanceof PersonaJuridica persona) {
-                linea = String.format(
-                        "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s%n",
-                        persona.getId(),
-                        persona.getRazonSocial(),
-                        persona.getRepresentanteLegal(),
-                        persona.getCorreo(),
-                        persona.getContrasenia(),
-                        persona.getRolUsuario(),
-                        persona.getTipoDocumento(),
-                        persona.getNumeroDocumento(),
-                        persona.getTelefono(),
-                        persona.getPais(),
-                        persona.getCiudad(),
-                        persona.getTipoEmpresa(),
-                        persona.getFoto() != null ? persona.getFoto() : "-"
-                );
-            }
-
-            if (!linea.isEmpty()) {
-                Files.writeString(ruta, linea,  StandardOpenOption.CREATE,
-                        StandardOpenOption.APPEND);
-            }
+            String linea = formatearLinea(usuario);
+            Files.writeString(ruta, linea, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
 
         } catch (IOException e) {
             throw new RuntimeException("Error al guardar en archivo: " + e.getMessage(), e);
@@ -255,64 +192,65 @@ public class UsuarioRepository {
     public void reescribirArchivo() {
         try {
             Path ruta = Paths.get("Banco", "Datos", "Usuarios.txt");
-            if (ruta.getParent() != null) {
-                Files.createDirectories(ruta.getParent());
-            }
+            if (ruta.getParent() != null) Files.createDirectories(ruta.getParent());
 
             StringBuilder contenido = new StringBuilder();
-            contenido.append(String.join(
-                    "\t",
+            contenido.append(String.join("\t",
                     "Id", "Nombre/RazónSocial", "Apellido/Representante", "Correo", "Contraseña", "Rol",
-                    "TipoDocumento", "Documento", "Teléfono", "País", "Ciudad", "TipoEmpresa", "Foto"
+                    "TipoDocumento", "Documento", "Teléfono", "País", "Ciudad", "TipoEmpresa", "Foto", "Activo"
             )).append("\n");
 
             for (Usuario usuario : usuarios) {
-
-                if (usuario instanceof PersonaNatural persona) {
-                    contenido.append(String.format(
-                            "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s%n",
-                            persona.getId(),
-                            persona.getNombre(),
-                            persona.getApellido(),
-                            persona.getCorreo(),
-                            persona.getContrasenia(),
-                            persona.getRolUsuario(),
-                            persona.getTipoDocumento(),
-                            persona.getNumeroDocumento(),
-                            persona.getTelefono(),
-                            persona.getPais(),
-                            persona.getCiudad(),
-                            "-" ,// Misma marca que en guardarEnArchivo
-                            persona.getFoto() != null ? persona.getFoto() : "-"
-                    ));
-
-                } else if (usuario instanceof PersonaJuridica persona) {
-                    contenido.append(String.format(
-                            "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s%n",
-                            persona.getId(),
-                            persona.getRazonSocial(),
-                            persona.getRepresentanteLegal(),
-                            persona.getCorreo(),
-                            persona.getContrasenia(),
-                            persona.getRolUsuario(),
-                            persona.getTipoDocumento(),
-                            persona.getNumeroDocumento(),
-                            persona.getTelefono(),
-                            persona.getPais(),
-                            persona.getCiudad(),
-                            persona.getTipoEmpresa(),
-                            persona.getFoto() != null ? persona.getFoto() : "-"
-                    ));
-                }
+                contenido.append(formatearLinea(usuario));
             }
 
             Files.writeString(ruta, contenido.toString(),
-                    StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING
-            );
+                    StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
         } catch (IOException e) {
             throw new RuntimeException("Error al reescribir archivo: " + e.getMessage(), e);
         }
+    }
+
+    private String formatearLinea(Usuario usuario) {
+        String base = "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s%n";
+
+        if (usuario instanceof PersonaNatural persona) {
+            return String.format(base,
+                    persona.getId(),
+                    persona.getNombre(),
+                    persona.getApellido(),
+                    persona.getCorreo(),
+                    persona.getContrasenia(),
+                    persona.getRolUsuario(),
+                    persona.getTipoDocumento(),
+                    persona.getNumeroDocumento(),
+                    persona.getTelefono(),
+                    persona.getPais(),
+                    persona.getCiudad(),
+                    "-", // Persona natural no tiene empresa
+                    persona.getFoto() != null ? persona.getFoto() : "-",
+                    persona.isActivo() // nuevo campo
+            );
+        } else if (usuario instanceof PersonaJuridica persona) {
+            return String.format(base,
+                    persona.getId(),
+                    persona.getRazonSocial(),
+                    persona.getRepresentanteLegal(),
+                    persona.getCorreo(),
+                    persona.getContrasenia(),
+                    persona.getRolUsuario(),
+                    persona.getTipoDocumento(),
+                    persona.getNumeroDocumento(),
+                    persona.getTelefono(),
+                    persona.getPais(),
+                    persona.getCiudad(),
+                    persona.getTipoEmpresa(),
+                    persona.getFoto() != null ? persona.getFoto() : "-",
+                    persona.isActivo()
+            );
+        }
+        return "";
     }
 
 }

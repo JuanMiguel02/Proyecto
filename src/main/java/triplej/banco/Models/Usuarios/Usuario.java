@@ -19,7 +19,7 @@ public abstract class Usuario {
         this.contrasenia = contrasenia;
         this.rolUsuario = rolUsuario;
         this.fechaRegistro = LocalDate.now();
-        this.activo = true;
+        this.activo = false;
         this.id = UUID.randomUUID();
     }
 

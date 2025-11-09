@@ -1,6 +1,8 @@
 package triplej.banco.Controllers.VistaAdmin;
 
 import javafx.beans.binding.Bindings;
+import javafx.collections.ObservableArray;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 
@@ -18,6 +20,7 @@ import triplej.banco.Models.Banco;
 import triplej.banco.Models.Reportes.ReporteAdmin;
 import triplej.banco.Models.Reportes.ReporteGenerado;
 import triplej.banco.Models.Usuarios.Empleado;
+import triplej.banco.Models.Usuarios.Usuario;
 import triplej.banco.Repositories.UsuarioRepository;
 import triplej.banco.Utils.GeneracionReporteVista;
 import triplej.banco.Utils.VolverLogin;
@@ -33,12 +36,14 @@ public class AdminController {
 
     @FXML private StackPane contenedorCentro;
     @FXML private AnchorPane vistaInicio;
-    @FXML private Label lblTotalUsuarios;
     @FXML private AnchorPane vistaReporte;
     @FXML private TextArea txtContenido;
     @FXML private Button btnSalir;
 
+    @FXML private Label lblTotalUsuarios;
     @FXML private Label lblNombre;
+    @FXML private Label lblUsuariosActivos;
+    @FXML private Label lblUsuariosInactivos;
 
     @FXML
     private AreaChart<String, Number> graficaUsuarios;
@@ -55,6 +60,9 @@ public class AdminController {
         lblTotalUsuarios.textProperty().bind(
               Bindings.size(usuarioRepository.getUsuarios()).asString()
         );
+
+        mostrarUsuariosActivos();
+        mostrarUsuariosInactivos();
 
         inicializarGraficoUsuarios();
 
@@ -176,6 +184,28 @@ public class AdminController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void mostrarUsuariosActivos(){
+        FilteredList<Usuario> usuariosActivos = new FilteredList<>(
+                usuarioRepository.getUsuarios(),
+                Usuario::isActivo
+        );
+
+        lblUsuariosActivos.textProperty().bind(
+                Bindings.size(usuariosActivos).asString()
+        );
+    }
+
+    private void mostrarUsuariosInactivos(){
+        FilteredList<Usuario> usuariosActivos = new FilteredList<>(
+                usuarioRepository.getUsuarios(),
+               usuario -> !usuario.isActivo()
+        );
+
+        lblUsuariosInactivos.textProperty().bind(
+                Bindings.size(usuariosActivos).asString()
+        );
     }
 
     @FXML

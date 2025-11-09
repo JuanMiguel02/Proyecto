@@ -39,7 +39,7 @@ public class ClienteRepository {
     }
 
 
-    public static synchronized ClienteRepository getInstancia() {
+    public static ClienteRepository getInstancia() {
         if (instancia == null) {
             instancia = new ClienteRepository();
         }
@@ -114,11 +114,10 @@ public class ClienteRepository {
                 .findFirst();
     }
 
-    public Optional<CuentaBancaria> buscarCuentaDeClientePorNumero(String numeroCuenta) {
-        return clientes.stream()
-                .flatMap(cliente -> cliente.getCuentas().stream())
-                .filter(cuenta -> cuenta.getNumeroCuenta().equals(numeroCuenta))
-                .findFirst();
+    public List<CuentaBancaria> buscarCuentasDeCliente(Cliente cliente) {
+        if (cliente == null) return List.of(); // Evita null pointer
+
+        return cliente.getCuentas(); // devuelve la lista directamente
     }
 
     public Optional<Cliente> buscarClientePorCuenta(String numeroCuenta) {

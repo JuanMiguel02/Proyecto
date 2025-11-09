@@ -1,4 +1,6 @@
 package triplej.banco.Controllers;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -29,20 +31,29 @@ public class ClienteController {
     @FXML private Label lblDinero;
     @FXML private Label lblNumCuenta;
     @FXML private Button btnSalir;
-    @FXML private TextField txtNumCuenta;
-    @FXML private TextField txtConfirmacion;
-    @FXML private TextField txtValorDeposito;
-    @FXML private TextArea txtContenido;
-    @FXML private AnchorPane vistaInicio;
-    @FXML private AnchorPane vistaDeposito;
-    @FXML private AnchorPane vistaTransacciones;
-    @FXML private StackPane contenedorCentro;
+    @FXML private ComboBox<CuentaBancaria> cmbCuentas;
+    private ObservableList<CuentaBancaria> cuentasCliente = FXCollections.observableArrayList();
+
     private final CajeroService cajeroService = new CajeroService();
 
     @FXML
     public void initialize() {
         Banco banco = Banco.getInstancia();
         UsuarioRepository usuarioRepository = banco.getUsuarioRepository();
+
+        // Mostrar saldo y número de cuenta al seleccionar una
+        cmbCuentas.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, nuevaCuenta) -> {
+            if (nuevaCuenta != null) {
+                lblDinero.setText(String.format("$%,.2f", nuevaCuenta.getSaldo()));
+                lblNumCuenta.setText(String.valueOf(nuevaCuenta.getNumeroCuenta()));
+            }
+        });
+
+        // Seleccionar la primera por defecto
+        if (!cuentasCliente.isEmpty()) {
+            cmbCuentas.getSelectionModel().selectFirst();
+        }
+
     }
 
     public void setCliente(Cliente cliente) {
@@ -77,6 +88,14 @@ public class ClienteController {
         lblNombre.setText(this.cliente.getNombre());
         lblDinero.setText(String.format("%.2f", this.cliente.getCuentaActiva().getSaldo()));
         lblNumCuenta.setText(this.cliente.getCuentaActiva().getNumeroCuenta());
+
+        cuentasCliente.setAll(ClienteRepository.getInstancia().buscarCuentasDeCliente(this.cliente));
+        cmbCuentas.setItems(cuentasCliente);
+
+        // Seleccionar la primera cuenta
+        if (!cuentasCliente.isEmpty()) {
+            cmbCuentas.getSelectionModel().selectFirst();
+        }
     }
 
     public Cliente getCliente(){
@@ -85,80 +104,29 @@ public class ClienteController {
 
 
     @FXML
-    private void onDepositar(){
-        vistaDeposito.setVisible(true);
-        vistaDeposito.setManaged(true);
-
-        contenedorCentro.getChildren().clear();
-        contenedorCentro.getChildren().add(vistaDeposito);
-    }
-
-    @FXML
-    private void confirmarDeposito(){
-        String numCuenta = txtNumCuenta.getText();
-        String confirmacion = txtConfirmacion.getText();
-        double valor = Double.parseDouble(txtValorDeposito.getText());
-
-        if(numCuenta.trim().isEmpty() || confirmacion.trim().isEmpty() || String.valueOf(valor).trim().isEmpty()){
-            mostrarAlerta("Por favor rellene todos los campos");
-            return;
-        }
-        if(!numCuenta.equals(confirmacion)) {
-            mostrarAlerta("Los números de cuenta no coinciden");
-            return;
-        }
-        if(txtValorDeposito.getText().isEmpty() || valor < 0){
-            mostrarAlerta("Ingrese un valor válido");
-            return;
-        }
-
-        Optional<CuentaBancaria> cuentaDestino = ClienteRepository.getInstancia().buscarCuentaDeClientePorNumero(numCuenta);
-        if(cuentaDestino.isEmpty()) {
-            mostrarAlerta("Error", "El número de cuenta no existe", Alert.AlertType.ERROR);
-            return;
-        }
-
-        // 5. Realizar el depósito
-       cajeroService.realizarDeposito(cuentaDestino.get(), valor, "Deposito realizado");
-
-        // 6. Actualizar el repositorio para guardar el cambio
-        ClienteRepository.getInstancia().actualizarCliente(cliente);
-
-        actualizarInterfaz();
-
-        mostrarAlerta("Éxito", "Depósito de: " + valor + " realizado exitosamente", Alert.AlertType.INFORMATION);
-    }
-
-
-    @FXML
-    private void onRetirar(){
-
-    }
-
-    @FXML
     private void onTransferir(){
 
     }
 
-    @FXML
-    private void verTransacciones(){
-        if(cliente == null || cliente.getCuentaActiva() == null){
-            mostrarAlerta("No se encontró la cuenta activa del cliente");
-            return;
-        }
-        ReporteGenerado reporte = cajeroService.generarReporteCliente(cliente.getCuentaActiva());
-
-        generarReporte(reporte, txtContenido, vistaTransacciones, contenedorCentro);
-    }
-
-
-    @FXML
-    private void mostrarInicio() {
-        contenedorCentro.getChildren().clear();
-        vistaInicio.setVisible(true);
-        vistaInicio.setManaged(true);
-        contenedorCentro.getChildren().add(vistaInicio);
-    }
+//    @FXML
+//    private void verTransacciones(){
+//        if(cliente == null || cliente.getCuentaActiva() == null){
+//            mostrarAlerta("No se encontró la cuenta activa del cliente");
+//            return;
+//        }
+//        ReporteGenerado reporte = cajeroService.generarReporteCliente(cliente.getCuentaActiva());
+//
+//        generarReporte(reporte, txtContenido, vistaTransacciones, contenedorCentro);
+//    }
+//
+//
+//    @FXML
+//    private void mostrarInicio() {
+//        contenedorCentro.getChildren().clear();
+//        vistaInicio.setVisible(true);
+//        vistaInicio.setManaged(true);
+//        contenedorCentro.getChildren().add(vistaInicio);
+//    }
 
 
     @FXML

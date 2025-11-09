@@ -91,7 +91,7 @@
                         <HBox alignment="CENTER" layoutX="32.0" layoutY="40" prefHeight="175.0" prefWidth="958.0" spacing="40">
                             <children>
                                 <!-- Total Usuarios -->
-                                <VBox  fx:id="statCard1" alignment="CENTER" prefWidth="300.0" spacing="20.0" styleClass="stat-card">
+                                <VBox fx:id="statCard1" alignment="CENTER" prefWidth="300.0" spacing="20.0" styleClass="stat-card">
                                     <ImageView fitHeight="100" fitWidth="100" preserveRatio="true">
                                         <image>
                                             <Image url="@../../Images/experiencia-del-usuario.png" />
@@ -108,18 +108,18 @@
                                             <Image url="@../../Images/check.png" />
                                         </image>
                                     </ImageView>
-                                    <Label styleClass="stat-value" text="0" />
+                                    <Label fx:id="lblUsuariosActivos" styleClass="stat-value" text="0" />
                                     <Label styleClass="stat-label" text="Usuarios Activos" />
                                 </VBox>
 
                                 <!-- Usuarios Inactivos -->
-                                <VBox  fx:id="statCard3" alignment="CENTER" prefWidth="300.0" spacing="20.0" styleClass="stat-card">
+                                <VBox fx:id="statCard3" alignment="CENTER" prefWidth="300.0" spacing="20.0" styleClass="stat-card">
                                     <ImageView fitHeight="100" fitWidth="100" preserveRatio="true">
                                         <image>
                                             <Image url="@../../Images/close.png" />
                                         </image>
                                     </ImageView>
-                                    <Label styleClass="stat-value" text="0" />
+                                    <Label fx:id="lblUsuariosInactivos" styleClass="stat-value" text="0" />
                                     <Label styleClass="stat-label" text="Usuarios Inactivos" />
                                 </VBox>
                             </children>

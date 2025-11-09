@@ -45,6 +45,7 @@ public class CajeroService {
         clienteRepository.guardar(cliente);
         return cliente;
     }
+
     public Cliente registrarCliente(Usuario usuario, String tipoCuenta, double saldo) {
         if(usuarioRepository.buscarUsuarioPorCorreo(usuario.getCorreo()).isPresent()) {
             mostrarAlerta("El correo ya está registrado: " + usuario.getCorreo());
@@ -63,7 +64,7 @@ public class CajeroService {
         Cliente cliente = new Cliente((Persona) usuario);
         CuentaBancaria cuenta = CuentaFactory.crearCuenta(tipoCuenta.toUpperCase(), cliente);
         cliente.agregarCuenta(cuenta);
-        cuenta.depositar(saldo);
+        cuenta.setSaldo(saldo);
         clienteRepository.guardar(cliente);
         return cliente;
     }

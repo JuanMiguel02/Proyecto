@@ -3,9 +3,19 @@ package triplej.banco.Controllers.VistaAdmin;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 import triplej.banco.Models.Usuarios.*;
 import triplej.banco.Repositories.EmpleadoRepository;
 import triplej.banco.Repositories.UsuarioRepository;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
 
@@ -25,6 +35,13 @@ public class FormularioEmpleadoController {
     @FXML private TextField txtCargo;
     @FXML private TextField txtSalario;
     @FXML private ComboBox<String> cmbDepartamento;
+
+    @FXML private ImageView imgEmpleado;
+
+    private File imagenSeleccionada;
+    private static final String RUTA_IMAGENES =
+            System.getProperty("user.home") + File.separator + "UQBank" + File.separator + "imagenes";
+    private static final String IMAGEN_POR_DEFECTO ="/triplej/banco/Images/avatar.png";
 
     private AdminController adminController;
     private EmpleadoRepository empleadoRepository;
@@ -106,30 +123,26 @@ public class FormularioEmpleadoController {
                 return;
             }
 
-            String cargo = txtCargo.getText().trim().toUpperCase();
+            PersonaNatural persona = getPersonaNatural();
 
-            RolUsuario rol;
-            if (cargo.contains("ADMIN")) {
-                rol = RolUsuario.ADMIN;
-            } else if (cargo.contains("CAJERO")) {
-                rol = RolUsuario.CAJERO;
-            } else {
-                rol = RolUsuario.EMPLEADO;
+            try{
+                Path carpeta = Paths.get(RUTA_IMAGENES);
+                Files.createDirectories(carpeta);
+
+                String nombreArchivo = persona.getNumeroDocumento() + ".jpg";
+                Path destino = carpeta.resolve(nombreArchivo);
+
+                if(imagenSeleccionada != null){
+                    Files.copy(imagenSeleccionada.toPath(), destino, StandardCopyOption.REPLACE_EXISTING);
+                    persona.setFoto(destino.toString());
+
+                }else{
+                    persona.setFoto(IMAGEN_POR_DEFECTO);
+                }
+            }catch (IOException e) {
+                mostrarAlerta("No se puedo guardar la imagen " + e.getMessage());
+                persona.setFoto(IMAGEN_POR_DEFECTO);
             }
-
-            // Crear PersonaNatural
-            PersonaNatural persona = new PersonaNatural(
-                    txtNombre.getText().trim(),
-                    txtApellido.getText().trim(),
-                    txtCorreo.getText().trim().toLowerCase(),
-                    txtPassword.getText(),
-                    rol,
-                    TipoDocumento.CEDULACIUDADANIA,
-                    txtCedula.getText().trim(),
-                    txtTelefono.getText().trim(),
-                    txtPais.getText().trim(),
-                    txtCiudad.getText().trim()
-            );
 
             // Registrar empleado
             double salario = Double.parseDouble(txtSalario.getText().trim());
@@ -159,6 +172,34 @@ public class FormularioEmpleadoController {
         }
     }
 
+    private PersonaNatural getPersonaNatural() {
+        String cargo = txtCargo.getText().trim().toUpperCase();
+
+        RolUsuario rol;
+        if (cargo.contains("ADMIN")) {
+            rol = RolUsuario.ADMIN;
+        } else if (cargo.contains("CAJERO")) {
+            rol = RolUsuario.CAJERO;
+        } else {
+            rol = RolUsuario.EMPLEADO;
+        }
+
+        // Crear PersonaNatural
+        PersonaNatural persona = new PersonaNatural(
+                txtNombre.getText().trim(),
+                txtApellido.getText().trim(),
+                txtCorreo.getText().trim().toLowerCase(),
+                txtPassword.getText(),
+                rol,
+                TipoDocumento.CEDULACIUDADANIA,
+                txtCedula.getText().trim(),
+                txtTelefono.getText().trim(),
+                txtPais.getText().trim(),
+                txtCiudad.getText().trim()
+        );
+        return persona;
+    }
+
     public void setAdminController(AdminController adminController){
         this.adminController = adminController;
     }
@@ -173,6 +214,20 @@ public class FormularioEmpleadoController {
         boolean existeEnUsuarios = usuarioRepository.existeUsuarioConCorreo(emailNormalizado);
 
         return existeEnEmpleados || existeEnUsuarios;
+    }
+
+    @FXML
+    private void onCargarImagen(){
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Seleccionar Imagen del Cliente");
+        fc.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg")
+        );
+        File archivo = fc.showOpenDialog(null);
+        if(archivo != null){
+            imagenSeleccionada = archivo;
+            imgEmpleado.setImage(new Image(archivo.toURI().toString()));
+        }
     }
 
     private boolean validarCampos() {

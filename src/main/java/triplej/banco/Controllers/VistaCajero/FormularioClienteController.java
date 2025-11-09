@@ -53,7 +53,8 @@ public class FormularioClienteController {
     @FXML private ImageView imgCliente;
 
     private File imagenSeleccionada;
-    private static final String RUTA_IMAGENES = "triplej/banco/Images";
+    private static final String RUTA_IMAGENES =
+            System.getProperty("user.home") + File.separator + "UQBank" + File.separator + "imagenes";
     private static final String IMAGEN_POR_DEFECTO ="/triplej/banco/Images/avatar.png";
     private final CajeroService cajeroService = new CajeroService();
     private CajeroController cajeroController;
@@ -86,7 +87,6 @@ public class FormularioClienteController {
             cmbDocumento.getItems().addAll(TipoDocumento.NIT);
         }else{
             cmbCuenta.getItems().addAll("Ahorro", "Corriente", "Empresarial");
-
         }
     }
 

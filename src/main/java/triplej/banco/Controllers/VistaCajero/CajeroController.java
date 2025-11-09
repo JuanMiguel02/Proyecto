@@ -133,17 +133,26 @@ public class CajeroController {
         txtNumeroDocumento.setText(clienteActual.getDocumento());
 
         // Si tiene foto
-        if (clienteActual.getFoto() != null && !clienteActual.getFoto().isBlank()) {
+        if(clienteActual.getFoto() != null && !clienteActual.getFoto().isBlank()) {
             try {
-                Path rutaFoto = Paths.get(clienteActual.getFoto());
-                imgFotoCliente.setImage(new Image(rutaFoto.toUri().toString()));
+                String rutaFoto = clienteActual.getFoto();
+
+                if (rutaFoto.startsWith("/")) {
+                    // Es una imagen en recursos (classpath)
+                    imgFotoCliente.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(rutaFoto))));
+                } else {
+                    // Es una ruta en el sistema de archivos
+                    Path path = Paths.get(rutaFoto);
+                    if (Files.exists(path)) {
+                        imgFotoCliente.setImage(new Image(path.toUri().toString()));
+                    }
+                }
             } catch (Exception e) {
                 imgFotoCliente.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/triplej/banco/Images/avatar.png"))));
             }
         } else {
             imgFotoCliente.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/triplej/banco/Images/avatar.png"))));
         }
-
         // Llenar ComboBox con las cuentas del cliente
         cmbCuentasCliente.getItems().clear();
         cmbCuentasCliente.getItems().addAll(clienteActual.getCuentas());
@@ -378,6 +387,5 @@ public class CajeroController {
         lblRepresentanteLegal.setVisible(false);
         lblTipoEmpresa.setVisible(false);
         lblDatoNombre.setVisible(true);
-
     }
 }

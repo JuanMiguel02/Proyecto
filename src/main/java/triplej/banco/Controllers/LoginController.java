@@ -31,28 +31,25 @@ public class LoginController {
     @FXML private CheckBox checkViewPassSignIn;
 
 
-    private UsuarioRepository usuarioRepo;
+    private UsuarioRepository usuarioRepository;
     private EmpleadoRepository empleadoRepository;
 
     @FXML
     public  void initialize(){
         Banco banco = Banco.getInstancia();
-        usuarioRepo = banco.getUsuarioRepository();
+        usuarioRepository = banco.getUsuarioRepository();
         empleadoRepository = banco.getEmpleadoRepository();
-        System.out.println(usuarioRepo.getUsuarios().size());
+        System.out.println(usuarioRepository.getUsuarios().size());
         mostrarContrasenia(txtContrasenia,txtPasswordSignInMask,checkViewPassSignIn);
 
     }
-
-
-
 
     @FXML
     private void login(ActionEvent event) {
         String correo = txtCorreo.getText();
         String contrasenia = txtContrasenia.getText();
 
-        Optional<Usuario> usuarioOpt = usuarioRepo.buscarUsuarioPorCorreo(correo);
+        Optional<Usuario> usuarioOpt = usuarioRepository.buscarUsuarioPorCorreo(correo);
 
         if (usuarioOpt.isEmpty()) {
             mostrarAlerta("Usuario no encontrado");
@@ -64,6 +61,9 @@ public class LoginController {
             mostrarAlerta("Contraseña incorrecta");
             return;
         }
+
+        usuario.setActivo(true);
+        usuarioRepository.actualizarUsuario(usuario);
 
         // Login exitoso: abrir ventana según rol
         switch (usuario.getRolUsuario()) {
