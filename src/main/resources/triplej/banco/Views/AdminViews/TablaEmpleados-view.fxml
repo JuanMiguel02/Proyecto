@@ -8,7 +8,6 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
@@ -19,6 +18,7 @@
               <TableView fx:id="tablaEmpleados" layoutX="27.0" layoutY="59.0" prefHeight="470.0" prefWidth="1101.0">
                   <columns>
                       <TableColumn fx:id="colNombre" text="Nombre" />
+                      <TableColumn fx:id="colApellido" text="Apellido" />
                   <TableColumn fx:id="colDocumento" text="Documento" />
                   <TableColumn fx:id="colTelefono" text="Telefono" />
                   <TableColumn fx:id="colCorreo" text="Correo" />
@@ -26,7 +26,6 @@
                   <TableColumn fx:id="colDepartamento" text="Departamento" />
                   <TableColumn fx:id="colCiudad" text="Ciudad" />
                   <TableColumn fx:id="colSalario" text="Salario" />
-                      <TableColumn fx:id="colApellido" text="Apellido" />
                   </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -35,13 +34,9 @@
               <TextField fx:id="txtBuscar" layoutX="29.0" layoutY="14.0" prefHeight="31.0" prefWidth="481.0" promptText="Buscar..." />
             <Button layoutX="66.0" layoutY="562.0" mnemonicParsing="false" onAction="#editarEmpleado" prefHeight="42.0" prefWidth="196.0" text="Editar" />
             <Button layoutX="66.0" layoutY="633.0" mnemonicParsing="false" onAction="#eliminarEmpleado" prefHeight="42.0" prefWidth="196.0" text="Eliminar" />
-            <AnchorPane layoutX="789.0" layoutY="540.0" prefHeight="180.0" prefWidth="173.0" style="-fx-border-color: black;">
+            <AnchorPane layoutX="777.0" layoutY="550.0" prefHeight="166.0" prefWidth="200.0" style="-fx-border-color: black;">
                <children>
-                  <ImageView fx:id="imgEmpleado" fitHeight="178.0" fitWidth="202.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../Images/avatar.png" />
-                     </image>
-                  </ImageView>
+                  <ImageView fx:id="imgEmpleado" fitHeight="150.0" fitWidth="200.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true" />
                </children>
             </AnchorPane>
          </children>
@@ -51,9 +46,9 @@
             <AnchorPane layoutX="314.0" layoutY="30.0" prefHeight="643.0" prefWidth="442.0" style="-fx-border-radius: 10px; -fx-border-color: black; -fx-background-color: white;">
                <children>
                   <Label layoutX="80.0" layoutY="56.0" text="Nombre:*" />
-                  <TextField fx:id="txtNombre" editable="false" layoutX="167.0" layoutY="52.0" />
+                  <TextField fx:id="txtNombre" layoutX="167.0" layoutY="52.0" />
                   <Label layoutX="80.0" layoutY="98.0" text="Apellido:*" />
-                  <TextField fx:id="txtApellido" editable="false" layoutX="167.0" layoutY="94.0" />
+                  <TextField fx:id="txtApellido" layoutX="167.0" layoutY="94.0" />
                   <Label layoutX="84.0" layoutY="178.0" text="Cédula:*" />
                   <TextField fx:id="txtCedula" editable="false" layoutX="167.0" layoutY="174.0" prefHeight="17.0" prefWidth="149.0" />
                   <Label layoutX="79.0" layoutY="258.0" text="Teléfono:*" />

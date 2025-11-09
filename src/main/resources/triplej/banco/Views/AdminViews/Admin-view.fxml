@@ -36,7 +36,7 @@
                 </ImageView>
 
                 <Label layoutX="95" layoutY="150" styleClass="sidebar-text" text="Bienvenido," />
-                <Label layoutX="75" layoutY="179" styleClass="sidebar-text" text="Pepe" />
+                <Label fx:id="lblNombre" layoutX="75" layoutY="179" styleClass="sidebar-text" text="Pepe" />
                 <Label layoutX="130" layoutY="177" styleClass="sidebar-text" text="(admin)" />
 
                 <Line endX="180" layoutX="40" layoutY="220" startX="0" />
@@ -131,6 +131,7 @@
                         </AreaChart>
 
                         <Button layoutX="400.0" layoutY="660.0" onAction="#generarReporte" styleClass="btn-admin" text="Generar Reporte" />
+                  <Button layoutX="285.0" layoutY="660.0" mnemonicParsing="false" onAction="#enviarNotificacion" text="Button" />
                     </children>
                 </AnchorPane>
 

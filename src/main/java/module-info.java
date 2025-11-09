@@ -19,4 +19,5 @@ module triplej.banco {
     opens triplej.banco.Controllers.VistaAdmin to javafx.fxml;
     exports triplej.banco.Controllers.VistaCajero;
     opens triplej.banco.Controllers.VistaCajero to javafx.fxml;
+    opens triplej.banco.Services to javafx.fxml;
 }

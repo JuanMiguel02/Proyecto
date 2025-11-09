@@ -1,4 +1,5 @@
 package triplej.banco.Controllers;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -6,44 +7,46 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import triplej.banco.Models.Banco;
-import triplej.banco.Services.CajeroService;
-import triplej.banco.Models.Cuentas.CuentaAhorro;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
-import triplej.banco.Models.Reportes.ReporteGenerado;
-
 import triplej.banco.Models.Usuarios.Cliente;
 import triplej.banco.Repositories.ClienteRepository;
 import triplej.banco.Repositories.UsuarioRepository;
 import triplej.banco.Utils.VolverLogin;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
-import java.util.Optional;
 
 import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
-import static triplej.banco.Utils.GeneracionReporteVista.generarReporte;
 
+/**
+ * Controlador que gestiona la vista del cliente una vez inicia sesión.
+ * Se encarga de mostrar los datos personales, las cuentas asociadas y el saldo.
+ */
 public class ClienteController {
+
+    //Cliente cargado en la vista
     private Cliente cliente;
 
+    //Datos del cliente
     @FXML private ImageView imgCliente;
-
     @FXML private Label lblNombre;
     @FXML private Label lblDinero;
     @FXML private Label lblNumCuenta;
     @FXML private Button btnSalir;
     @FXML private ComboBox<CuentaBancaria> cmbCuentas;
+
     private final ObservableList<CuentaBancaria> cuentasCliente = FXCollections.observableArrayList();
+    private final ClienteRepository clienteRepository = ClienteRepository.getInstancia();
 
-    private final CajeroService cajeroService = new CajeroService();
-
+    /**
+     * Inicializa la vista del cliente.
+     * Configura el comportamiento del ComboBox para actualizar el saldo y número de cuenta.
+     */
     @FXML
     public void initialize() {
-        // Configurar listener de selección de cuenta
+        // Cuando el usuario selecciona una cuenta, se actualizan los datos mostrados.
         cmbCuentas.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, nuevaCuenta) -> {
             if (nuevaCuenta != null) {
                 lblDinero.setText(String.format("$%,.2f", nuevaCuenta.getSaldo()));
@@ -51,70 +54,70 @@ public class ClienteController {
             }
         });
 
-        // Si el cliente ya está seteado antes de initialize(), lo cargamos
+        // Si el cliente ya fue seteado antes de initialize(), lo cargamos.
         if (cliente != null) {
             cargarCliente();
         }
     }
 
+    /**
+     * Recibe el cliente desde el controlador de login y carga sus datos.
+     * @param cliente cliente autenticado.
+     */
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
-        // Si el FXML ya está cargado, cargamos datos
+
+        // Si los elementos FXML ya están cargados, se puede mostrar la información de inmediato.
         if (imgCliente != null) {
             cargarCliente();
         }
     }
 
+    /**
+     * Carga los datos del cliente en la interfaz: nombre, cuentas, saldo e imagen.
+     */
     private void cargarCliente() {
-        ClienteRepository repo = ClienteRepository.getInstancia();
+        // Obtener la versión actual del cliente desde el repositorio
 
-        // Buscar cliente existente
-        Optional<Cliente> clienteExistente = repo.buscarPorCorreo(cliente.getUsuarioAsociado().getCorreo());
+        this.cliente = clienteRepository.buscarPorCorreo(cliente.getUsuarioAsociado().getCorreo())
+                .orElse(cliente);
 
-        if (clienteExistente.isPresent()) {
-            this.cliente = clienteExistente.get();
-            System.out.println(" Cliente encontrado en archivo, usando datos persistentes.");
-        } else {
-            this.cliente = cliente;
-            System.out.println(" Cliente nuevo, creando cuenta...");
-            CuentaBancaria cuentaActiva = new CuentaAhorro(cliente);
-            cliente.agregarCuenta(cuentaActiva);
-            cliente.setCuentaActiva(cuentaActiva);
-            repo.guardar(cliente);
-        }
-
-        if (this.cliente.getCuentaActiva() == null) {
-            CuentaBancaria cuentaActiva = new CuentaAhorro(this.cliente);
-            this.cliente.agregarCuenta(cuentaActiva);
-            this.cliente.setCuentaActiva(cuentaActiva);
-            repo.guardar(this.cliente);
-        }
-
-        //  Mostrar imagen del cliente
+        // Mostrar imagen
         mostrarImagenCliente();
 
-        //  Mostrar datos básicos
-        lblNombre.setText(this.cliente.getNombre());
-        lblDinero.setText(String.format("$%,.2f", this.cliente.getCuentaActiva().getSaldo()));
-        lblNumCuenta.setText(this.cliente.getCuentaActiva().getNumeroCuenta());
+        // Mostrar información general
+        lblNombre.setText(cliente.getNombre());
+        if (cliente.getCuentaActiva() != null) {
+            lblDinero.setText(String.format("$%,.2f", cliente.getCuentaActiva().getSaldo()));
+            lblNumCuenta.setText(cliente.getCuentaActiva().getNumeroCuenta());
+        } else {
+            lblDinero.setText("$0.00");
+            lblNumCuenta.setText("Sin cuenta activa");
+        }
 
-        //  Cargar cuentas
-        cuentasCliente.setAll(ClienteRepository.getInstancia().buscarCuentasDeCliente(this.cliente));
+        // Cargar las cuentas asociadas al cliente
+        cuentasCliente.setAll(clienteRepository.buscarCuentasDeCliente(cliente));
         cmbCuentas.setItems(cuentasCliente);
 
+        // Seleccionar automáticamente la primera cuenta si existe
         if (!cuentasCliente.isEmpty()) {
             cmbCuentas.getSelectionModel().selectFirst();
         }
     }
 
+    /**
+     * Muestra la imagen del cliente, cargándola desde la ruta guardada o una imagen por defecto.
+     */
     private void mostrarImagenCliente() {
         try {
             String rutaFoto = cliente.getFoto();
 
             if (rutaFoto != null && !rutaFoto.isBlank()) {
                 if (rutaFoto.startsWith("/")) {
+                    // Imagen guardada en los recursos del proyecto
                     imgCliente.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(rutaFoto))));
                 } else {
+                    // Imagen guardada en el sistema de archivos del usuario
                     Path path = Paths.get(rutaFoto);
                     if (Files.exists(path)) {
                         imgCliente.setImage(new Image(path.toUri().toString()));
@@ -123,46 +126,20 @@ public class ClienteController {
                 }
             }
         } catch (Exception e) {
-            System.err.println("No se pudo cargar la imagen: " + e.getMessage());
+            System.err.println("No se pudo cargar la imagen del cliente: " + e.getMessage());
         }
 
-        // Imagen por defecto
-        imgCliente.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/triplej/banco/Images/avatar.png"))));
+        // Imagen por defecto si no hay ninguna guardada
+        imgCliente.setImage(new Image(Objects.requireNonNull(
+                getClass().getResourceAsStream("/triplej/banco/Images/avatar.png"))));
     }
 
-    public Cliente getCliente(){
-        return cliente;
-    }
-
-
+    /**
+     * Permite cerrar la sesión del cliente y volver al login.
+     * Se actualiza el estado del usuario como inactivo antes de salir.
+     */
     @FXML
-    private void onTransferir(){
-
-    }
-
-//    @FXML
-//    private void verTransacciones(){
-//        if(cliente == null || cliente.getCuentaActiva() == null){
-//            mostrarAlerta("No se encontró la cuenta activa del cliente");
-//            return;
-//        }
-//        ReporteGenerado reporte = cajeroService.generarReporteCliente(cliente.getCuentaActiva());
-//
-//        generarReporte(reporte, txtContenido, vistaTransacciones, contenedorCentro);
-//    }
-//
-//
-//    @FXML
-//    private void mostrarInicio() {
-//        contenedorCentro.getChildren().clear();
-//        vistaInicio.setVisible(true);
-//        vistaInicio.setManaged(true);
-//        contenedorCentro.getChildren().add(vistaInicio);
-//    }
-
-
-    @FXML
-    private void volverMenu(){
+    private void volverMenu() {
         cliente.getUsuarioAsociado().setActivo(false);
         UsuarioRepository.getInstancia().actualizarUsuario(cliente.getUsuarioAsociado());
 
@@ -170,11 +147,23 @@ public class ClienteController {
         VolverLogin.volverLogin(ventanaActual);
     }
 
+    /**
+     * Actualiza el saldo mostrado en pantalla, por ejemplo, tras una transacción.
+     */
     private void actualizarInterfaz() {
-        // Actualizar desde la cuenta activa para asegurar datos frescos
-        double saldoActual = cliente.getCuentaActiva().getSaldo();
-        lblDinero.setText(String.format("$%,.2f", saldoActual));
+        if (cliente.getCuentaActiva() != null) {
+            double saldoActual = cliente.getCuentaActiva().getSaldo();
+            lblDinero.setText(String.format("$%,.2f", saldoActual));
+            System.out.println("Interfaz actualizada - Saldo: " + saldoActual);
+        }
+    }
 
-        System.out.println(" Interfaz actualizada - Saldo: " + saldoActual);
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    @FXML
+    private void onTransferir() {
+        mostrarAlerta("Funcionalidad en desarrollo: transferencias");
     }
 }

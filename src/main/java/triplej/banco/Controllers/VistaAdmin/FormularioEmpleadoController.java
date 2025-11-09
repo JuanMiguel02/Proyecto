@@ -9,44 +9,67 @@ import javafx.stage.FileChooser;
 import triplej.banco.Models.Usuarios.*;
 import triplej.banco.Repositories.EmpleadoRepository;
 import triplej.banco.Repositories.UsuarioRepository;
+import triplej.banco.Services.AdminService;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+
 
 import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
 
-
+/**
+ * Controlador encargado del formulario de registro de empleados.
+ *
+ * Permite a un administrador ingresar los datos de un nuevo empleado, validar la información,
+ * cargar una imagen opcional y registrar el empleado en el sistema.
+ *
+ * Además, implementa verificaciones para evitar correos duplicados y errores de formato.
+ */
 public class FormularioEmpleadoController {
 
     // Campos del formulario
-    @FXML private TextField txtNombre;
-    @FXML private TextField txtApellido;
-    @FXML private TextField txtCedula;
-    @FXML private TextField txtTelefono;
-    @FXML private TextField txtCiudad;
-    @FXML private TextField txtPais;
-    @FXML private TextField txtCorreo;
-    @FXML private PasswordField txtPassword;
-    @FXML private PasswordField txtConfirmarPassword;
-    @FXML private TextField txtCargo;
-    @FXML private TextField txtSalario;
-    @FXML private ComboBox<String> cmbDepartamento;
+    @FXML
+    private TextField txtNombre;
+    @FXML
+    private TextField txtApellido;
+    @FXML
+    private TextField txtCedula;
+    @FXML
+    private TextField txtTelefono;
+    @FXML
+    private TextField txtCiudad;
+    @FXML
+    private TextField txtPais;
+    @FXML
+    private TextField txtCorreo;
+    @FXML
+    private PasswordField txtPassword;
+    @FXML
+    private PasswordField txtConfirmarPassword;
+    @FXML
+    private TextField txtCargo;
+    @FXML
+    private TextField txtSalario;
+    @FXML
+    private ComboBox<String> cmbDepartamento;
+    @FXML
+    private ImageView imgEmpleado;
 
-    @FXML private ImageView imgEmpleado;
-
+    // Imagen seleccionada por el usuario (opcional)
     private File imagenSeleccionada;
-    private static final String RUTA_IMAGENES =
-            System.getProperty("user.home") + File.separator + "UQBank" + File.separator + "imagenes";
-    private static final String IMAGEN_POR_DEFECTO ="/triplej/banco/Images/avatar.png";
 
+    // Referencias a otros controladores y repositorios
     private AdminController adminController;
     private EmpleadoRepository empleadoRepository;
     private UsuarioRepository usuarioRepository;
 
+    // Servicio que gestiona la lógica de negocio del administrador
+    private final AdminService adminService = new AdminService();
+
+    /**
+     * Método que se ejecuta automáticamente al cargar la vista.
+     * Inicializa los repositorios, llena el ComboBox de departamentos
+     * y configura las validaciones de los campos.
+     */
     @FXML
     public void initialize() {
 
@@ -68,110 +91,62 @@ public class FormularioEmpleadoController {
         configurarValidaciones();
     }
 
-    private void configurarValidaciones() {
-        // Solo números en cédula
-        txtCedula.textProperty().addListener((obs, oldVal, newVal) -> {
-            if (!newVal.matches("\\d*")) {
-                txtCedula.setText(oldVal);
-            }
-        });
-
-        // Solo números en teléfono
-        txtTelefono.textProperty().addListener((obs, oldVal, newVal) -> {
-            if (!newVal.matches("\\d*")) {
-                txtTelefono.setText(oldVal);
-            }
-        });
-
-        // Solo números y punto decimal en salario
-        txtSalario.textProperty().addListener((obs, oldVal, newVal) -> {
-            if (!newVal.matches("\\d*\\.?\\d*")) {
-                txtSalario.setText(oldVal);
-            }
-        });
-
-        // Validación de email en tiempo real
-        txtCorreo.textProperty().addListener((obs, oldVal, newVal) -> {
-            if (!newVal.matches("^[A-Za-z0-9+_.-]*@?[A-Za-z0-9.-]*$") && !newVal.isEmpty()) {
-                txtCorreo.setStyle("-fx-border-color: red;");
-            } else {
-                txtCorreo.setStyle("");
-            }
-        });
-    }
-
+    /**
+     * Vuelve a la vista principal del administrador sin guardar los cambios.
+     */
     @FXML
-    private void onCancelar(){
+    private void onCancelar() {
         adminController.mostrarInicio();
     }
 
+    /**
+     * Maneja el evento del botón "Guardar".
+     * Valida los campos del formulario, crea la persona y el empleado,
+     * y lo registra mediante el servicio de administración.
+     */
     @FXML
     private void onGuardar() {
-        if (!validarCampos()) {
-            return;
-        }
+        if (!validarCampos()) return;   // Verifica que los datos sean correctos
 
         try {
-            // Validar contraseñas
+            // Verifica que ambas contraseñas coincidan
             if (!txtPassword.getText().equals(txtConfirmarPassword.getText())) {
                 mostrarAlerta("Las contraseñas no coinciden");
                 return;
             }
+            // Construye el objeto PersonaNatural a partir de los datos del formulario
+            PersonaNatural persona = getPersonaNatural();
 
-            if(correoYaExiste(txtCorreo.getText())){
+            // Evita correos duplicados
+            if (adminService.correoYaExiste(persona.getCorreo())) {
                 mostrarAlerta("Este correo ya está registrado");
                 return;
             }
 
-            PersonaNatural persona = getPersonaNatural();
-
-            try{
-                Path carpeta = Paths.get(RUTA_IMAGENES);
-                Files.createDirectories(carpeta);
-
-                String nombreArchivo = persona.getNumeroDocumento() + ".jpg";
-                Path destino = carpeta.resolve(nombreArchivo);
-
-                if(imagenSeleccionada != null){
-                    Files.copy(imagenSeleccionada.toPath(), destino, StandardCopyOption.REPLACE_EXISTING);
-                    persona.setFoto(destino.toString());
-
-                }else{
-                    persona.setFoto(IMAGEN_POR_DEFECTO);
-                }
-            }catch (IOException e) {
-                mostrarAlerta("No se puedo guardar la imagen " + e.getMessage());
-                persona.setFoto(IMAGEN_POR_DEFECTO);
-            }
-
-            // Registrar empleado
-            double salario = Double.parseDouble(txtSalario.getText().trim());
-            Empleado nuevoEmpleado = new Empleado(
+            // Convierte el salario a número y crea el nuevo empleado
+            double salario = Double.parseDouble(txtSalario.getText());
+            Empleado nuevoEmpleado = adminService.registrarEmpleado(
                     persona,
-                    txtCargo.getText().trim(),
+                    txtCargo.getText(),
                     salario,
-                    cmbDepartamento.getValue()
-            );
-            EmpleadoRepository.getInstance().agregarEmpleado(nuevoEmpleado);
-
-
-            mostrarAlerta(
-                    "Éxito",
-                    "Empleado registrado exitosamente\n\n" +
-                            "Cargo de empleado: " + nuevoEmpleado.getCargo() + "\n" +
-                            "Nombre: " + nuevoEmpleado.getPersona().getNombreCompleto()
-                    , Alert.AlertType.INFORMATION
+                    cmbDepartamento.getValue(),
+                    imagenSeleccionada
             );
 
+            mostrarAlerta("Éxito", "Empleado registrado correctamente: " + nuevoEmpleado.getPersona().getNombreCompleto(), Alert.AlertType.INFORMATION);
+            // Limpia los campos después del registro exitoso
             limpiarFormulario();
 
-        } catch (IllegalArgumentException e) {
-            mostrarAlerta(e.getMessage());
         } catch (Exception e) {
-            mostrarAlerta("El salario debe ser un número válido");
+            mostrarAlerta("Error: " + e.getMessage());
         }
     }
 
+    /**
+     * Crea y devuelve un objeto PersonaNatural con la información del formulario.
+     * <p>
+     * Determina automáticamente el rol del usuario según su cargo (ADMIN, CAJERO o EMPLEADO).
+     */
     private PersonaNatural getPersonaNatural() {
         String cargo = txtCargo.getText().trim().toUpperCase();
 
@@ -200,36 +175,42 @@ public class FormularioEmpleadoController {
         return persona;
     }
 
-    public void setAdminController(AdminController adminController){
+
+    /**
+     * Asigna el controlador principal del administrador,
+     * necesario para volver a la vista principal tras registrar o cancelar.
+     */
+    public void setAdminController(AdminController adminController) {
         this.adminController = adminController;
     }
 
-    private boolean correoYaExiste(String email) {
-        String emailNormalizado = email.trim().toLowerCase();
-
-        // Verificar en empleados
-        boolean existeEnEmpleados = empleadoRepository.existeEmpleadoConCorreo(emailNormalizado);
-
-        // Verificar en usuarios generales
-        boolean existeEnUsuarios = usuarioRepository.existeUsuarioConCorreo(emailNormalizado);
-
-        return existeEnEmpleados || existeEnUsuarios;
-    }
-
+    /**
+     * Permite al administrador seleccionar una imagen desde el sistema de archivos.
+     * <p>
+     * Si se selecciona correctamente, se muestra la imagen en la vista.
+     */
     @FXML
-    private void onCargarImagen(){
+    private void onCargarImagen() {
         FileChooser fc = new FileChooser();
-        fc.setTitle("Seleccionar Imagen del Cliente");
+        fc.setTitle("Seleccionar Imagen del Empleado");
         fc.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg")
         );
         File archivo = fc.showOpenDialog(null);
-        if(archivo != null){
+        if (archivo != null) {
             imagenSeleccionada = archivo;
             imgEmpleado.setImage(new Image(archivo.toURI().toString()));
         }
     }
 
+    /**
+     * Verifica que los campos del formulario sean válidos antes de guardar.
+     * <p>
+     * Realiza comprobaciones de formato, vacíos, longitud mínima de contraseñas
+     * y formato de correo electrónico.
+     *
+     * @return true si todos los campos son válidos, false en caso contrario.
+     */
     private boolean validarCampos() {
         if (txtNombre.getText().trim().isEmpty()) {
             mostrarAlerta("El nombre es obligatorio");
@@ -312,7 +293,7 @@ public class FormularioEmpleadoController {
         try {
             double salario = Double.parseDouble(txtSalario.getText().trim());
             if (salario <= 0) {
-                mostrarAlerta( "El salario debe ser mayor a 0");
+                mostrarAlerta("El salario debe ser mayor a 0");
                 txtSalario.requestFocus();
                 return false;
             }
@@ -325,6 +306,9 @@ public class FormularioEmpleadoController {
         return true;
     }
 
+    /**
+     * Limpia todos los campos del formulario y restablece los valores por defecto.
+     */
     private void limpiarFormulario() {
         txtNombre.clear();
         txtApellido.clear();
@@ -342,4 +326,41 @@ public class FormularioEmpleadoController {
         txtNombre.requestFocus();
     }
 
+    /**
+     * Configura las validaciones automáticas de los campos:
+     * - Cédula y teléfono solo aceptan números.
+     * - Salario permite números y punto decimal.
+     * - El correo valida su formato en tiempo real.
+     */
+    private void configurarValidaciones() {
+        // Solo números en cédula
+        txtCedula.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.matches("\\d*")) {
+                txtCedula.setText(oldVal);
+            }
+        });
+
+        // Solo números en teléfono
+        txtTelefono.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.matches("\\d*")) {
+                txtTelefono.setText(oldVal);
+            }
+        });
+
+        // Solo números y punto decimal en salario
+        txtSalario.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.matches("\\d*\\.?\\d*")) {
+                txtSalario.setText(oldVal);
+            }
+        });
+
+        // Validación de email en tiempo real
+        txtCorreo.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.matches("^[A-Za-z0-9+_.-]*@?[A-Za-z0-9.-]*$") && !newVal.isEmpty()) {
+                txtCorreo.setStyle("-fx-border-color: red;");
+            } else {
+                txtCorreo.setStyle("");
+            }
+        });
+    }
 }

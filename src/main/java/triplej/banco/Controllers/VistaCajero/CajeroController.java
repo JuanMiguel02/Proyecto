@@ -34,11 +34,27 @@ import java.util.Optional;
 import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
 import static triplej.banco.Utils.GeneracionReporteVista.generarReporte;
 
+/**
+ * Controlador principal para la vista del Cajero en el sistema bancario.
+ * Se encarga de gestionar las operaciones que un cajero puede realizar,
+ * como buscar clientes, consultar sus cuentas, hacer depósitos, generar reportes
+ * y registrar nuevas cuentas.
+ *
+ * Esta clase conecta la interfaz de usuario (FXML) con la lógica de negocio
+ * que reside en los servicios y repositorios del modelo.
+ */
 public class CajeroController {
 
+    /** Empleado actual que ha iniciado sesión como cajero */
     private Empleado cajero;
+
+    /** Contenedor principal donde se cargan las vistas internas */
     @FXML private StackPane contenedorCentro;
+
+    /** Contenedor principal donde se cargan las vistas internas */
     @FXML private AnchorPane vistaInicio;
+
+    /** Vista donde se muestra el contenido del reporte */
     @FXML private AnchorPane vistaReporte;
 
     //  Campos de búsqueda y selección
@@ -59,6 +75,7 @@ public class CajeroController {
     @FXML private TextArea  txtReporteGeneral;
     @FXML private ImageView imgCliente;
 
+    // --- Etiquetas para mostrar nombres dinámicos ---
     @FXML private Label lblNombreCajero;
     @FXML private Label lblTipoEmpresa;
     @FXML private Label lblRepresentanteLegal;
@@ -71,17 +88,31 @@ public class CajeroController {
     @FXML private Button btnTransferir;
     @FXML private Button btnSalir;
 
+    /** Repositorio de clientes para acceder a los datos */
     private final ClienteRepository clienteRepository = ClienteRepository.getInstancia();
+
+    /** Servicio del cajero que contiene la lógica de operaciones bancarias */
     private final CajeroService cajeroService = new CajeroService();
+
+    /** Cliente actualmente seleccionado por el cajero */
     private Cliente clienteActual;
+
+    /** Cuenta bancaria seleccionada del cliente */
     private CuentaBancaria cuentaSeleccionada;
 
-    //  Inicialización
+    /**
+     * Inicializa el controlador. Configura los eventos del ComboBox de cuentas.
+     * Se ejecuta automáticamente al cargar la vista FXML.
+     */
     @FXML
     public void initialize() {
         cmbCuentasCliente.setOnAction(e -> seleccionarCuenta());
     }
 
+    /**
+     * Asigna el cajero actual y muestra su nombre en la interfaz.
+     * @param cajero empleado que ha iniciado sesión como cajero
+     */
     public void setCajero(Empleado cajero) {
         this.cajero = cajero;
         if (lblNombreCajero != null && cajero != null) {
@@ -89,7 +120,10 @@ public class CajeroController {
         }
     }
 
-    //  Buscar cliente por documento
+    /**
+     * Busca un cliente en el repositorio usando su número de documento o número de cuenta.
+     * Si no se encuentra, se muestra una alerta.
+     */
     @FXML
     private void buscarCliente() {
         String busqueda = txtBusquedaCliente.getText().trim();
@@ -101,6 +135,7 @@ public class CajeroController {
 
         Optional<Cliente> clienteOpt = clienteRepository.buscarPorDocumento(busqueda);
 
+        // Si no se encontró por documento, intenta buscar por número de cuenta
         if(clienteOpt.isEmpty()){
             Optional<Cliente> clienteCuenta = clienteRepository.buscarClientePorCuenta(busqueda);
             if(clienteCuenta.isPresent()){
@@ -118,23 +153,27 @@ public class CajeroController {
         cargarDatosCliente();
     }
 
-    //  Cargar información del cliente encontrado
+    /**
+     * Carga los datos del cliente encontrado en los campos de texto,
+     * incluyendo información personal, tipo de usuario y cuentas asociadas.
+     */
     private void cargarDatosCliente() {
 
+        // Diferenciar entre persona natural y jurídica
         if(clienteActual.getUsuarioAsociado() instanceof PersonaJuridica juridica){
-
            mostrarDatosPersonaJuridica(juridica);
-
-        }else if(clienteActual.getUsuarioAsociado() instanceof PersonaNatural personaNatural){
+        }
+        else if(clienteActual.getUsuarioAsociado() instanceof PersonaNatural personaNatural){
             mostrarDatosPersonaNatural(personaNatural);
         }
+        // Campos comunes
         txtCorreo.setText(clienteActual.getCorreo());
         txtTelefono.setText(clienteActual.getTelefono());
         txtCiudad.setText(clienteActual.getCiudad());
         txtTipoDocumento.setText(clienteActual.getTipoDocumento());
         txtNumeroDocumento.setText(clienteActual.getDocumento());
 
-        // Si tiene foto
+        // Carga de foto del cliente (si existe)
         if(clienteActual.getFoto() != null && !clienteActual.getFoto().isBlank()) {
             try {
                 String rutaFoto = clienteActual.getFoto();
@@ -155,6 +194,7 @@ public class CajeroController {
         } else {
             imgCliente.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/triplej/banco/Images/avatar.png"))));
         }
+
         // Llenar ComboBox con las cuentas del cliente
         cmbCuentasCliente.getItems().clear();
         cmbCuentasCliente.getItems().addAll(clienteActual.getCuentas());
@@ -164,19 +204,22 @@ public class CajeroController {
         }
     }
 
-    //  Limpiar campos
+    /**
+     * Limpia los campos de información y reinicia la selección del cliente.
+     */
     private void limpiarCampos() {
         txtNombre.clear();
         txtCorreo.clear();
         txtTelefono.clear();
         txtCiudad.clear();
         cmbCuentasCliente.getItems().clear();
-//        imgCliente.setImage(new Image(getClass().getResourceAsStream("/triplej/banco/Images/avatar.png")));
         clienteActual = null;
         cuentaSeleccionada = null;
     }
 
-    // Seleccionar cuenta activa
+    /**
+     * Actualiza la cuenta actualmente seleccionada en el ComboBox.
+     */
     private void seleccionarCuenta() {
         cuentaSeleccionada = cmbCuentasCliente.getValue();
         if (cuentaSeleccionada != null) {
@@ -185,7 +228,10 @@ public class CajeroController {
         }
     }
 
-    //  Depositar
+    /**
+     * Permite al cajero depositar dinero en la cuenta seleccionada.
+     * Se pide el monto mediante un cuadro de diálogo.
+     */
     @FXML
     private void onDepositar() {
         if (cuentaSeleccionada == null) {
@@ -210,6 +256,9 @@ public class CajeroController {
         });
     }
 
+    /**
+     * Muestra una ventana emergente con el saldo actual de la cuenta seleccionada.
+     */
     @FXML
     private void onConsultarSaldo(){
         if (cuentaSeleccionada == null) {
@@ -236,7 +285,9 @@ public class CajeroController {
         ventanaSaldo.show();
     }
 
-
+    /**
+     * Cierra la sesión del cajero y regresa al menú de inicio de sesión.
+     */
     @FXML
     private void volverMenu(){
         cajero.getPersona().setActivo(false);
@@ -246,6 +297,10 @@ public class CajeroController {
         VolverLogin.volverLogin(ventanaActual);
     }
 
+    /**
+     * Carga dinámicamente una vista FXML dentro del contenedor central del cajero.
+     * También intenta pasar una referencia al controlador principal.
+     */
     private void cargarVistaEnCentro(String fxmlRuta) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlRuta));
@@ -277,6 +332,9 @@ public class CajeroController {
         }
     }
 
+    /**
+     * Abre el formulario para registrar una nueva cuenta bancaria asociada al cliente actual.
+     */
     @FXML
     private void abrirFormularioNuevaCuenta(){
         if (clienteActual == null) {
@@ -305,6 +363,10 @@ public class CajeroController {
         }
     }
 
+    /**
+     * Genera un reporte de movimientos de la cuenta activa del cliente.
+     * El reporte se muestra en un área de texto en la vista.
+     */
     @FXML
     private void onGenerarReporte(){
         if(clienteActual == null || clienteActual.getCuentaActiva() == null){
@@ -317,6 +379,9 @@ public class CajeroController {
         generarReporte(reporte, txtReporteGeneral, vistaReporte, contenedorCentro);
     }
 
+    /**
+     * Guarda el contenido del reporte actual en un archivo de texto.
+     */
     @FXML
     private void onGuardarReporte(){
         String contenido = txtReporteGeneral.getText();
@@ -327,6 +392,9 @@ public class CajeroController {
         exportarReporteTxt(contenido);
     }
 
+    /**
+     * Exporta el texto del reporte a un archivo en la carpeta "Reportes Clientes".
+     */
     private void exportarReporteTxt(String contenido){
         try{
             Path ruta = Paths.get("Reportes Clientes", "ReporteCliente.txt");
@@ -342,11 +410,17 @@ public class CajeroController {
         }
     }
 
+    /**
+     * Carga el formulario de registro de un nuevo cliente dentro del contenedor central.
+     */
     @FXML
     private void mostrarFormulario() {
         cargarVistaEnCentro("/triplej/banco/Views/CajeroViews/FormularioCliente-view.fxml");
     }
 
+    /**
+     * Muestra nuevamente la vista de inicio del cajero.
+     */
     @FXML
     public void mostrarInicio() {
         contenedorCentro.getChildren().clear();
@@ -355,6 +429,10 @@ public class CajeroController {
         contenedorCentro.getChildren().add(vistaInicio);
     }
 
+    /**
+     * Muestra los datos específicos de una persona jurídica (empresa).
+     * @param personaJuridica instancia de PersonaJuridica con los datos a mostrar
+     */
     private void mostrarDatosPersonaJuridica(PersonaJuridica personaJuridica){
         lblRazonSocial.setVisible(true);
         lblRepresentanteLegal.setVisible(true);
@@ -369,6 +447,10 @@ public class CajeroController {
         txtTipoEmpresa.setVisible(true);
     }
 
+    /**
+     * Muestra los datos de una persona natural, ocultando los campos propios de empresa.
+     * @param personaNatural instancia de PersonaNatural
+     */
     private void mostrarDatosPersonaNatural(PersonaNatural personaNatural){
         txtNombre.setText(clienteActual.getNombre());
 

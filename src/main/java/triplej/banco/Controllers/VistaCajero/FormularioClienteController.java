@@ -26,6 +26,14 @@ import java.util.Objects;
 
 import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
 
+/**
+ * Controlador para el formulario de registro de clientes en la vista del cajero.
+ * Permite registrar tanto personas naturales como jurídicas, validar los datos ingresados,
+ * guardar una imagen opcional y crear automáticamente una cuenta bancaria asociada al cliente.
+ *
+ * Se comunica con el servicio {@link CajeroService} y el repositorio {@link ClienteRepository}
+ * para realizar las operaciones de negocio y persistencia.
+ */
 public class FormularioClienteController {
 
     // Campos del formulario
@@ -47,39 +55,51 @@ public class FormularioClienteController {
     @FXML private ComboBox<String> cmbCuenta;
     @FXML private ComboBox<String> cmbTipoCliente;
 
-    @FXML private VBox boxJuridica;
-    @FXML private VBox datosPersonaNatural;
+    @FXML private VBox datosPersonaJuridica;    // Sección visible solo para personas jurídicas
+    @FXML private VBox datosPersonaNatural;     // Sección visible solo para personas naturales
 
-    @FXML private ImageView imgCliente;
+    @FXML private ImageView imgCliente;     // Imagen del cliente
 
     private File imagenSeleccionada;
-    private static final String RUTA_IMAGENES =
-            System.getProperty("user.home") + File.separator + "UQBank" + File.separator + "imagenes";
     private static final String IMAGEN_POR_DEFECTO ="/triplej/banco/Images/avatar.png";
     private final CajeroService cajeroService = new CajeroService();
     private CajeroController cajeroController;
 
     private final ClienteRepository clienteRepository = ClienteRepository.getInstancia();
 
+    /**
+     * Inicializa el formulario configurando las listas desplegables
+     * y los comportamientos dinámicos según el tipo de cliente seleccionado.
+     */
     @FXML
     public void initialize() {
+
         cmbTipoCliente.getItems().addAll("Persona Natural", "Persona Jurídica");
         cmbDocumento.setItems(FXCollections.observableArrayList(TipoDocumento.values()));
-        cmbTipoCliente.setOnAction(e -> onTipoClienteSeleccionado());
         cmbCuenta.getItems().addAll("Ahorro", "Corriente", "Empresarial");
+
+        // Detecta cuando se cambia el tipo de cliente y actualiza la interfaz
+        cmbTipoCliente.setOnAction(e -> onTipoClienteSeleccionado());
+
     }
 
+
+    /**
+     * Cambia la visibilidad de las secciones del formulario dependiendo
+     * del tipo de cliente (natural o jurídica).
+     */
     @FXML
     private void onTipoClienteSeleccionado(){
         String tipo = cmbTipoCliente.getValue();
         boolean esJuridica = "Persona Jurídica".equalsIgnoreCase(tipo);
 
+        // Mostrar solo la sección correspondiente
         datosPersonaNatural.setVisible(!esJuridica);
         datosPersonaNatural.setManaged(!esJuridica);
+        datosPersonaJuridica.setVisible(esJuridica);
+        datosPersonaJuridica.setManaged(esJuridica);
 
-        boxJuridica.setVisible(esJuridica);
-        boxJuridica.setManaged(esJuridica);
-
+        // Configurar opciones válidas de cuenta y documento
         cmbCuenta.getItems().clear();
         if(esJuridica){
             cmbCuenta.getItems().addAll("Empresarial", "Corriente");
@@ -90,120 +110,47 @@ public class FormularioClienteController {
         }
     }
 
+    /**
+     * Valida los campos ingresados y, si son válidos, registra el cliente.
+     * Llama al servicio correspondiente dependiendo del tipo de cliente.
+     */
     @FXML
     private void onRegistrar() {
         if (!validarCampos()) return;
 
         try {
-            if (!txtPassword.getText().equals(txtConfirmarPassword.getText())) {
-                mostrarAlerta("Las contraseñas no coinciden");
-                return;
-            }
-
-            String telefono = txtTelefono.getText().trim();
-            String ciudad = txtCiudad.getText().trim();
-            String pais = txtPais.getText().trim();
-            String correo = txtCorreo.getText().trim();
-            String contrasenia = txtPassword.getText().trim();
-            String numDocumento = txtNumDocumento.getText().trim();
-            String tipoCuenta = cmbCuenta.getValue();
-
-            double saldo = 0.0;
-            if (!txtSaldo.getText().trim().isEmpty()) {
-                try {
-                    saldo = Double.parseDouble(txtSaldo.getText().trim());
-                } catch (NumberFormatException e) {
-                    mostrarAlerta("El saldo debe ser un número válido");
-                    txtSaldo.requestFocus();
-                    return;
-                }
-            }
-
-            if (clienteRepository.buscarPorCorreo(correo).isPresent()) {
-                mostrarAlerta("Este correo ya está registrado");
-                return;
-            }
-
-            //----CREAR PERSONA SEGÚN EL TIPO DE CLIENTE----
+            double saldo = Double.parseDouble(txtSaldo.getText().trim());
             String tipoCliente = cmbTipoCliente.getValue();
-            Persona persona;
 
-            if("Persona Jurídica".equalsIgnoreCase(tipoCliente)){
-                //----CREAR PERSONA JURÍDICA-----
-                String razonSocial = txtRazonSocial.getText().trim();
-                String representante = txtRepresentante.getText().trim();
-                String tipoEmpresa = txtTipoEmpresa.getText().trim();
-                TipoDocumento nit = this.cmbDocumento.getValue();
-
-                if(razonSocial.isEmpty() || representante.isEmpty() || tipoEmpresa.isEmpty()){
-                    mostrarAlerta("Debe completar todos los campos");
-                    return;
-                }
-                if(clienteRepository.buscarPorDocumento(nit.toString()).isPresent()){
-                    mostrarAlerta("Ya existe una empresa registrada con este NIT");
-                    return;
-                }
-                persona = new PersonaJuridica(
-                        razonSocial,
-                        representante,
-                        tipoEmpresa,
-                        correo,
-                        contrasenia,
-                        RolUsuario.CLIENTE,
-                        nit,
-                        numDocumento,
-                        telefono,
-                        pais,
-                        ciudad
+            if ("Persona Jurídica".equalsIgnoreCase(tipoCliente)) {
+                cajeroService.registrarPersonaJuridica(
+                        txtRazonSocial.getText(), txtRepresentante.getText(), txtTipoEmpresa.getText(),
+                        txtCorreo.getText(), txtPassword.getText(), cmbDocumento.getValue(),
+                        txtNumDocumento.getText(), txtTelefono.getText(), txtPais.getText(), txtCiudad.getText(),
+                        cmbCuenta.getValue(), saldo, imagenSeleccionada
                 );
-            }else{
-                //---- PERSONA NATURAL----//
-                String nombre = txtNombre.getText().trim();
-                String apellido = txtApellido.getText().trim();
-                TipoDocumento tipoDocumento = cmbDocumento.getSelectionModel().getSelectedItem();
-
-                if(nombre.isEmpty() || apellido.isEmpty()){
-                    mostrarAlerta("Debe completar todos los campos");
-                    return;
-                }
-                persona = new PersonaNatural(nombre, apellido, correo, contrasenia, RolUsuario.CLIENTE, tipoDocumento, numDocumento, telefono, pais, ciudad);
+            } else {
+                cajeroService.registrarPersonaNatural(
+                        txtNombre.getText(), txtApellido.getText(), txtCorreo.getText(),
+                        txtPassword.getText(), cmbDocumento.getValue(),
+                        txtNumDocumento.getText(), txtTelefono.getText(),
+                        txtPais.getText(), txtCiudad.getText(), cmbCuenta.getValue(),
+                        saldo, imagenSeleccionada
+                );
             }
-            try{
-                Path carpeta = Paths.get(RUTA_IMAGENES);
-                Files.createDirectories(carpeta);
 
-                String nombreArchivo = persona.getNumeroDocumento() + ".jpg";
-                Path destino = carpeta.resolve(nombreArchivo);
-
-                if(imagenSeleccionada != null){
-                    Files.copy(imagenSeleccionada.toPath(), destino, StandardCopyOption.REPLACE_EXISTING);
-                    persona.setFoto(destino.toString());
-
-                }else{
-                    persona.setFoto(IMAGEN_POR_DEFECTO);
-                }
-            }catch (IOException e) {
-                mostrarAlerta("No se puedo guardar la imagen " + e.getMessage());
-                persona.setFoto(IMAGEN_POR_DEFECTO);
-            }
-            Cliente nuevoCliente = cajeroService.registrarCliente(persona, tipoCuenta, saldo);
-
-            CuentaBancaria cuenta = nuevoCliente.getCuentas().getFirst();
-            nuevoCliente.setCuentaActiva(cuenta);
-
-            mostrarAlerta(
-                    "Éxito",
-                    "Cliente y cuenta creados correctamente.\nNúmero de cuenta: " + cuenta.getNumeroCuenta(),
-                    Alert.AlertType.INFORMATION
-            );
-
+            mostrarAlerta("Cliente registrado correctamente", Alert.AlertType.INFORMATION);
             limpiarCampos();
-        }catch (RuntimeException e){
-            mostrarAlerta(e.getMessage());
-        }
 
+        } catch (Exception e) {
+            mostrarAlerta("Error: " + e.getMessage());
+        }
     }
 
+    /**
+     * Abre un cuadro de diálogo para seleccionar una imagen desde el sistema
+     * de archivos y la muestra en el formulario.
+     */
     @FXML
     private void onCargarImagen(){
         FileChooser fc = new FileChooser();
@@ -218,6 +165,12 @@ public class FormularioClienteController {
         }
     }
 
+    /**
+     * Realiza la validación de los campos del formulario.
+     *
+     * @return {@code true} si todos los campos son válidos, {@code false} en caso contrario.
+     * Muestra alertas específicas si se detectan errores.
+     */
     private boolean validarCampos() {
 
             if (cmbDocumento.getSelectionModel().isEmpty()) {
@@ -318,9 +271,11 @@ public class FormularioClienteController {
             }
 
             return true;
-
     }
 
+    /**
+     * Limpia todos los campos del formulario y restaura la imagen por defecto.
+     */
     private void limpiarCampos(){
         txtNombre.clear();
         txtApellido.clear();
@@ -339,10 +294,19 @@ public class FormularioClienteController {
         imagenSeleccionada = null;
     }
 
+    /**
+     * Asocia este formulario con el controlador principal del cajero
+     * para permitir la navegación entre vistas.
+     *
+     * @param cajeroController instancia del controlador principal del cajero
+     */
     public void setCajeroController(CajeroController cajeroController){
         this.cajeroController = cajeroController;
     }
 
+    /**
+     * Cancela el registro actual y regresa a la pantalla principal del cajero.
+     */
     @FXML
     private void cancelar(){
         cajeroController.mostrarInicio();
