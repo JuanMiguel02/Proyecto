@@ -11,10 +11,10 @@
             fx:controller="triplej.banco.Controllers.VistaCajero.DepositoController"
             prefHeight="400.0" prefWidth="600.0">
     <VBox spacing="10" alignment="CENTER" style="-fx-padding: 20;">
-        <Label text="Retiro de dinero" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+        <Label text="Déposito de dinero" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
         <Label fx:id="lblCuenta" text="Cuenta: "/>
         <TextField fx:id="txtMonto" promptText="Ingrese monto a retirar"/>
-        <Button text="Confirmar Retiro" onAction="#onConfirmarDeposito"/>
+        <Button text="Confirmar Déposito" onAction="#onConfirmarDeposito"/>
         <Button text="Cancelar" onAction="#onCancelar"/>
     </VBox>
 </AnchorPane>

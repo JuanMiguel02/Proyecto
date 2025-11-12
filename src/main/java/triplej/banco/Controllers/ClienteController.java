@@ -87,9 +87,9 @@ public class ClienteController {
 
         // Mostrar información general
         lblNombre.setText(cliente.getNombre());
-        if (cliente.getCuentaActiva() != null) {
-            lblDinero.setText(String.format("$%,.2f", cliente.getCuentaActiva().getSaldo()));
-            lblNumCuenta.setText(cliente.getCuentaActiva().getNumeroCuenta());
+        if (cliente.getCuentaPorNumero() != null) {
+            lblDinero.setText(String.format("$%,.2f", cliente.getCuentaPorNumero().getSaldo()));
+            lblNumCuenta.setText(cliente.getCuentaPorNumero().getNumeroCuenta());
         } else {
             lblDinero.setText("$0.00");
             lblNumCuenta.setText("Sin cuenta activa");
@@ -151,8 +151,8 @@ public class ClienteController {
      * Actualiza el saldo mostrado en pantalla, por ejemplo, tras una transacción.
      */
     private void actualizarInterfaz() {
-        if (cliente.getCuentaActiva() != null) {
-            double saldoActual = cliente.getCuentaActiva().getSaldo();
+        if (cliente.getCuentaPorNumero() != null) {
+            double saldoActual = cliente.getCuentaPorNumero().getSaldo();
             lblDinero.setText(String.format("$%,.2f", saldoActual));
             System.out.println("Interfaz actualizada - Saldo: " + saldoActual);
         }

@@ -3,7 +3,6 @@ package triplej.banco.Models.Usuarios;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
 
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Cliente {
@@ -63,8 +62,17 @@ public class Cliente {
         return usuarioAsociado.getNumeroDocumento();
     }
 
-    public CuentaBancaria getCuentaActiva() {
+    public CuentaBancaria getCuentaPorNumero() {
         return cuentaActiva;
+    }
+
+    public CuentaBancaria getCuentaPorNumero(String numeroCuenta) {
+        for(CuentaBancaria cuenta : cuentas){
+            if(cuenta.getNumeroCuenta().equalsIgnoreCase(numeroCuenta)){
+                return cuenta;
+            }
+        }
+        return null;
     }
 
     public void setCuentaActiva(CuentaBancaria cuentaActiva) {

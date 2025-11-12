@@ -1,7 +1,6 @@
 package triplej.banco.Models.Cuentas;
 
 import triplej.banco.Models.Usuarios.Cliente;
-import triplej.banco.Repositories.TransaccionRepository;
 
 public class CuentaCorriente extends CuentaBancaria {
     private double limiteSobregiro;
@@ -46,18 +45,6 @@ public class CuentaCorriente extends CuentaBancaria {
         }
 
         setSaldo(nuevoSaldo);
-
-        Transaccion trans = new Transaccion(
-                Transaccion.generarIdTransaccion(),
-                "retiro",
-                monto,
-                getNumeroCuenta(),
-                getNumeroCuenta()
-        );
-        trans.setDescripcion("Retiro cuenta corriente. Sobregirada: " + sobregirada);
-        trans.setExitosa(true);
-        TransaccionRepository.getInstance().agregar(trans);
-        getHistorial().add(trans);
     }
 
     // Getters y setters

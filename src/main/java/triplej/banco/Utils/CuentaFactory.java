@@ -17,6 +17,21 @@ public class CuentaFactory {
         };
     }
 
+    public static CuentaBancaria crearCuenta(String tipoCuenta, Cliente propietario, Double sobregiro) {
+        return switch (tipoCuenta.toUpperCase()) {
+            case "AHORRO" -> new CuentaAhorro(propietario);
+            case "CORRIENTE" -> {
+                CuentaCorriente cta = new CuentaCorriente(propietario);
+                if (sobregiro != null && sobregiro > 0) {
+                    cta.setLimiteSobregiro(sobregiro);
+                }
+                yield cta;
+            }
+            case "EMPRESARIAL" -> new CuentaEmpresarial(propietario);
+            default -> throw new IllegalArgumentException("Tipo de cuenta no válido: " + tipoCuenta);
+        };
+    }
+
     public static CuentaBancaria crearCuentaConDatos(String tipo, Cliente cliente, String numeroCuenta, double saldo) {
         return switch (tipo.toUpperCase()) {
             case "1" -> new CuentaAhorro(cliente, numeroCuenta, saldo);

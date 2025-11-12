@@ -1,17 +1,15 @@
 package triplej.banco.Models.Cuentas;
 
 import triplej.banco.Models.Usuarios.Cliente;
-import triplej.banco.Repositories.TransaccionRepository;
 
 public class CuentaEmpresarial extends CuentaBancaria {
     private double saldoMinimo;         // Saldo mínimo requerido
     private double comisionTransaccion; // Comisión fija por transacción
     private double topeTransferencia;   // Límite máximo por retiro o transferencia
 
-
     public CuentaEmpresarial(Cliente propietario){
         super(propietario);
-        this.saldoMinimo = 10000;
+        this.saldoMinimo = 100000;
         this.comisionTransaccion = 10000;
         this.topeTransferencia = 20000000; // 20 millones
     }
@@ -41,17 +39,6 @@ public class CuentaEmpresarial extends CuentaBancaria {
 
         setSaldo(getSaldo() - total);
 
-        Transaccion trans = new Transaccion(
-                Transaccion.generarIdTransaccion(),
-                "retiro",
-                monto,
-                getNumeroCuenta(),
-                getNumeroCuenta()
-        );
-        trans.setDescripcion("Retiro cuenta empresarial (Comisión: " + comisionTransaccion + ")");
-        trans.setExitosa(true);
-        TransaccionRepository.getInstance().agregar(trans);
-        getHistorial().add(trans);
     }
 
     // Getters y setters

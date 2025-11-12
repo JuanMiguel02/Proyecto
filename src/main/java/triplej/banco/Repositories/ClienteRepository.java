@@ -205,7 +205,7 @@ public class ClienteRepository {
                 CuentaBancaria cuenta = CuentaFactory.crearCuentaConDatos(tipo, cliente, numeroCuenta, saldo);
 
                 cliente.agregarCuenta(cuenta);
-                if (cliente.getCuentaActiva() == null) {
+                if (cliente.getCuentaPorNumero() == null) {
                     cliente.setCuentaActiva(cuenta);
 
                 }

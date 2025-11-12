@@ -40,10 +40,10 @@ public class AdminService {
         }
     }
 
-    public boolean correoYaExiste(String email) {
-        String normalizado = email.trim().toLowerCase();
-        return empleadoRepository.existeEmpleadoConCorreo(normalizado)
-                || usuarioRepository.existeUsuarioConCorreo(normalizado);
+    public boolean correoYaExiste(String correo) {
+        String correoNormalizado = correo.trim().toLowerCase();
+        return empleadoRepository.existeEmpleadoConCorreo(correoNormalizado)
+                || usuarioRepository.existeUsuarioConCorreo(correoNormalizado);
     }
 
     // ---------------------------------------

@@ -27,6 +27,15 @@ public class Transaccion {
         this.exitosa = false;
     }
 
+    public Transaccion(String id, String tipo, double monto, String cuentaOrigen){
+        this.id = id;
+        this.cuentaOrigen = cuentaOrigen;
+        this.fecha = LocalDateTime.now();
+        this.tipo = tipo;
+        this.monto = monto;
+        this.exitosa = false;
+    }
+
     public String getId() {
         return id;
     }

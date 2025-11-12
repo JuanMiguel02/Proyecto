@@ -1,6 +1,9 @@
 Id	Nombre/RazónSocial	Apellido/Representante	Correo	Contraseña	Rol	TipoDocumento	Documento	Teléfono	País	Ciudad	TipoEmpresa	Foto	Activo
-60d90dc7-fd4a-46bf-8aad-24a1af88e8f4	Juan	Henao	juancho@gmail	12345	CLIENTE	CEDULACIUDADANIA	1232190	2132141	Colombia	Bogotá	-	-	false
-e14f0ed3-6ec9-4598-a90b-4d5bc83bb229	Paco	Jones	pacojones@gmail	123456	CLIENTE	CEDULACIUDADANIA	123345	21341	Colombia	Bogotá	-	-	false
-6c312201-e4ac-40ed-a7fc-a8dce5132d8b	Juan	Henao	juan@gmail	1212321	EMPLEADO	CEDULACIUDADANIA	123213	2132141	Colombia	Bogotá	-	-	true
-c8c91a77-bbfe-40a6-ae2c-df76740a2803	Paco	Jones	paco@gmail	123456	CAJERO	CEDULACIUDADANIA	1238912	21341	Colombia	Bogotá	-	-	false
-d446c636-ad26-4735-98c9-5421b335b1db	Sancho	Panza	sancho@uqbank	123456	ADMIN	CEDULACIUDADANIA	312412	313414	Colombia	Armenia	-	-	true
+1211e68b-a67e-402b-9482-2bbd88d63205	Juan	Henao	juancho@gmail	12345	CLIENTE	CEDULACIUDADANIA	1232190	2132141	Colombia	Bogotá	-	-	false
+ff7ae683-9897-4973-aac5-c89d713c24ca	Paco	Jones	pacojones@gmail	123456	CLIENTE	CEDULACIUDADANIA	123345	21341	Colombia	Bogotá	-	-	false
+eb8b25c2-280f-4448-b7d1-ce3469c1dea6	Juan	Henao	juan@gmail	1212321	EMPLEADO	CEDULACIUDADANIA	123213	2132141	Colombia	Bogotá	-	-	true
+c1df5d8c-c33b-4cdc-845c-f10f8f01ea04	Paco	Jones	paco@gmail	123456	CAJERO	CEDULACIUDADANIA	1238912	21341	Colombia	Bogotá	-	-	true
+066d4e6c-c7ed-43bf-a947-3b48b0bc9d6f	Sancho	Panza	sancho@uqbank	123456	ADMIN	CEDULACIUDADANIA	312412	313414	Colombia	Armenia	-	-	true
+07095516-856d-496d-9720-07b06aedbc7d	Cristiano	Penaldo	elbicho@gmail	123456	CLIENTE	CEDULACIUDADANIA	12312312	301231231	Colombia	Armenia	-	C:\Users\Juan Miguel\UQBank\imagenes\12312312.jpg	false
+737d6287-6b47-46f8-90df-7545910f0c7e	Lionel	Pessi	pessi@gmail	123456	CLIENTE	CEDULACIUDADANIA	123413213	30123123123	Colombia	Cali	-	C:\Users\Juan Miguel\UQBank\imagenes\123413213.jpg	false
+6d3453df-3d3b-4587-9f3a-7d2fc964664a	Carlos	Lopez	carlos@gmail	123456	CAJERO	CEDULACIUDADANIA	23131	31241231	Colombia	Armenia	-	C:\Users\Juan Miguel\UQBank\imagenes\23131.jpg	false

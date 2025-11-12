@@ -2,10 +2,12 @@ package triplej.banco.Services;
 
 import triplej.banco.Models.Banco;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
+import triplej.banco.Models.Cuentas.Transaccion;
 import triplej.banco.Models.Reportes.ReporteCliente;
 import triplej.banco.Models.Reportes.Reporte;
 import triplej.banco.Models.Usuarios.*;
 import triplej.banco.Repositories.ClienteRepository;
+import triplej.banco.Repositories.TransaccionRepository;
 import triplej.banco.Repositories.UsuarioRepository;
 import triplej.banco.Utils.CuentaFactory;
 
@@ -27,6 +29,8 @@ import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
 public class CajeroService {
     private final UsuarioRepository usuarioRepository;
     private final ClienteRepository clienteRepository;
+    private final TransaccionRepository transaccionRepository;
+
     private static final String RUTA_IMAGENES =
             System.getProperty("user.home") + File.separator + "UQBank" + File.separator + "imagenes";
     private static final String IMAGEN_POR_DEFECTO = "/triplej/banco/Images/avatar.png";
@@ -34,6 +38,7 @@ public class CajeroService {
     public CajeroService() {
         this.usuarioRepository = Banco.getInstancia().getUsuarioRepository();
         this.clienteRepository = Banco.getInstancia().getClienteRepository();
+        this.transaccionRepository = Banco.getInstancia().getTransaccionRepository();
     }
 
     /**
@@ -42,7 +47,7 @@ public class CajeroService {
     public void registrarPersonaNatural(
             String nombre, String apellido, String correo, String contrasenia,
             TipoDocumento tipoDocumento, String numDocumento, String telefono,
-            String pais, String ciudad, String tipoCuenta, double saldo, File imagenSeleccionada
+            String pais, String ciudad, String tipoCuenta, double saldo, Double sobregiro, File imagenSeleccionada
     ) {
         PersonaNatural persona = new PersonaNatural(
                 nombre, apellido, correo, contrasenia, RolUsuario.CLIENTE,
@@ -52,7 +57,7 @@ public class CajeroService {
         String rutaFoto = guardarImagenCliente(imagenSeleccionada, numDocumento);
         persona.setFoto(rutaFoto);
 
-        registrarCliente(persona, tipoCuenta, saldo);
+        registrarCliente(persona, tipoCuenta, saldo, sobregiro);
     }
 
     /**
@@ -62,7 +67,7 @@ public class CajeroService {
             String razonSocial, String representante, String tipoEmpresa,
             String correo, String contrasenia, TipoDocumento tipoDocumento,
             String numDocumento, String telefono, String pais, String ciudad,
-            String tipoCuenta, double saldo, File imagenSeleccionada
+            String tipoCuenta, double saldo, Double sobregiro, File imagenSeleccionada
     ) {
         PersonaJuridica persona = new PersonaJuridica(
                 razonSocial, representante, tipoEmpresa, correo, contrasenia,
@@ -72,22 +77,22 @@ public class CajeroService {
         String rutaFoto = guardarImagenCliente(imagenSeleccionada, numDocumento);
         persona.setFoto(rutaFoto);
 
-        registrarCliente(persona, tipoCuenta, saldo);
+        registrarCliente(persona, tipoCuenta, saldo, sobregiro);
     }
 
     /**
      * Registra un nuevo cliente y crea su cuenta bancaria correspondiente.
      */
     public Cliente registrarCliente(Usuario usuario, String tipoCuenta) {
-        if(usuarioRepository.buscarUsuarioPorCorreo(usuario.getCorreo()).isPresent()) {
+        if (usuarioRepository.buscarUsuarioPorCorreo(usuario.getCorreo()).isPresent()) {
             mostrarAlerta("El correo ya está registrado: " + usuario.getCorreo());
-            throw  new IllegalArgumentException(
+            throw new IllegalArgumentException(
                     "El correo ya está registrado: " + usuario.getCorreo()
             );
         }
 
-        if(usuario.getRolUsuario() != RolUsuario.CLIENTE) {
-            throw  new IllegalArgumentException(
+        if (usuario.getRolUsuario() != RolUsuario.CLIENTE) {
+            throw new IllegalArgumentException(
                     "Las credenciales son erroneas!"
             );
         }
@@ -100,23 +105,27 @@ public class CajeroService {
         return cliente;
     }
 
-    public void registrarCliente(Usuario usuario, String tipoCuenta, double saldo) {
-        if(usuarioRepository.buscarUsuarioPorCorreo(usuario.getCorreo()).isPresent()) {
+    public void registrarCliente(Usuario usuario, String tipoCuenta, double saldo, double sobregiro) {
+        if (usuarioRepository.buscarUsuarioPorCorreo(usuario.getCorreo()).isPresent()) {
             mostrarAlerta("El correo ya está registrado: " + usuario.getCorreo());
-            throw  new IllegalArgumentException(
+            throw new IllegalArgumentException(
                     "El correo ya está registrado: " + usuario.getCorreo()
             );
         }
 
-        if(usuario.getRolUsuario() != RolUsuario.CLIENTE) {
-            throw  new IllegalArgumentException(
+        if (usuario.getRolUsuario() != RolUsuario.CLIENTE) {
+            throw new IllegalArgumentException(
                     "Las credenciales son erroneas!"
             );
         }
         usuario.setRolUsuario(RolUsuario.CLIENTE);
 
         Cliente cliente = new Cliente((Persona) usuario);
-        CuentaBancaria cuenta = CuentaFactory.crearCuenta(tipoCuenta.toUpperCase(), cliente);
+
+        CuentaBancaria cuenta = "CORRIENTE".equalsIgnoreCase(tipoCuenta)
+                ? CuentaFactory.crearCuenta(tipoCuenta, cliente, sobregiro)
+                : CuentaFactory.crearCuenta(tipoCuenta, cliente);
+
         cliente.agregarCuenta(cuenta);
         cuenta.setSaldo(saldo);
         clienteRepository.guardar(cliente);
@@ -142,8 +151,8 @@ public class CajeroService {
         return IMAGEN_POR_DEFECTO;
     }
 
-    public CuentaBancaria agregarCuentaACliente(Cliente cliente, String tipoCuenta){
-        if(cliente == null){
+    public CuentaBancaria agregarCuentaACliente(Cliente cliente, String tipoCuenta) {
+        if (cliente == null) {
             throw new IllegalArgumentException("El cliente no puede estar nulo");
         }
         CuentaBancaria nuevaCuenta = CuentaFactory.crearCuenta(tipoCuenta.toUpperCase(), cliente);
@@ -177,15 +186,22 @@ public class CajeroService {
      * Realiza un depósito en la cuenta especificada.
      */
     public void realizarDeposito(CuentaBancaria cuenta, double monto) {
-        if( cuenta == null){
+        if (cuenta == null) {
             System.out.println("No se encontró");
             return;
         }
-        try{
+        try {
             cuenta.depositar(monto);
+            registrarTransaccion(
+                    "DÉPOSITO",
+                    monto,
+                    cuenta.getNumeroCuenta(),
+                    cuenta.getNumeroCuenta(),
+                    "Retiro realizado correctamente"
+            );
             clienteRepository.actualizarCliente(cuenta.getPropietario());
             System.out.println("Deposito de " + monto + " realizado");
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
     }
@@ -194,15 +210,22 @@ public class CajeroService {
      * Realiza un retiro en la cuenta especificada.
      */
     public void realizarRetiro(CuentaBancaria cuenta, double monto) {
-        if( cuenta == null){
+        if (cuenta == null) {
             System.out.println("No se encontró");
             return;
         }
-        try{
+        try {
             cuenta.retirar(monto);
+            registrarTransaccion(
+                    "RETIRO",
+                    monto,
+                    cuenta.getNumeroCuenta(),
+                    cuenta.getNumeroCuenta(),
+                    "Retiro realizado correctamente"
+            );
             clienteRepository.actualizarCliente(cuenta.getPropietario());
             System.out.println("Retiro de " + monto + " realizado");
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
     }
@@ -221,21 +244,31 @@ public class CajeroService {
         }
 
         try {
-            // Retirar del origen
-            realizarDeposito(destino,monto);
+            origen.retirar(monto);
+            destino.depositar(monto);
 
-            realizarRetiro(origen,monto);
+            registrarTransaccion(
+                    "TRANSFERENCIA",
+                    monto,
+                    origen.getNumeroCuenta(),
+                    destino.getNumeroCuenta(),
+                    "Transferencia realizada correctamente"
+            );
 
-        } catch (IllegalArgumentException e){
+            clienteRepository.actualizarCliente(origen.getPropietario());
+            clienteRepository.actualizarCliente(destino.getPropietario());
+
+        } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
     }
+
     /**
      * Consulta el saldo actual de una cuenta.
      */
-    public double consultarSaldo(CuentaBancaria cuenta){
-        if(cuenta == null){
-            throw  new IllegalArgumentException("La cuenta no puede ser nula");
+    public double consultarSaldo(CuentaBancaria cuenta) {
+        if (cuenta == null) {
+            throw new IllegalArgumentException("La cuenta no puede ser nula");
         }
         return cuenta.getSaldo();
     }
@@ -243,8 +276,39 @@ public class CajeroService {
     /**
      * Genera un reporte PDF con la información del cliente y sus transacciones.
      */
-    public Reporte generarReporteCliente(CuentaBancaria cuenta){
+    public Reporte generarReporteCliente(CuentaBancaria cuenta) {
         ReporteCliente reporte = new ReporteCliente(cuenta);
         return reporte.generarReporte();
+    }
+
+    private void registrarTransaccion(String tipo, double monto, String origen, String destino,
+                                      String descripcion) {
+        Transaccion trans = new Transaccion(
+                Transaccion.generarIdTransaccion(),
+                tipo,
+                monto,
+                origen,
+                destino
+        );
+        trans.setDescripcion(descripcion);
+        trans.setExitosa(true);
+
+        transaccionRepository.agregar(trans);
+
+        clienteRepository.buscarClientePorCuenta(origen).ifPresent(c -> {
+            CuentaBancaria cuentaOrigen = c.getCuentaPorNumero(origen);
+            if (cuentaOrigen != null) {
+                cuentaOrigen.getHistorial().add(trans);
+            }
+        });
+
+        if (!origen.equals(destino)) {
+            clienteRepository.buscarClientePorCuenta(destino).ifPresent(c -> {
+                CuentaBancaria cuentaDestino = c.getCuentaPorNumero(destino);
+                if (cuentaDestino != null) {
+                    cuentaDestino.getHistorial().add(trans);
+                }
+            });
+        }
     }
 }

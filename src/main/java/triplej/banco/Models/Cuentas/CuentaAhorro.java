@@ -1,14 +1,12 @@
 package triplej.banco.Models.Cuentas;
 
 import triplej.banco.Models.Usuarios.Cliente;
-import triplej.banco.Repositories.TransaccionRepository;
 
 public class CuentaAhorro extends CuentaBancaria {
 
     private double tasaInteres;
     private int retirosMensuales;
     private int limiteRetirosMensuales;
-
 
     public CuentaAhorro(Cliente propietario){
         super(propietario);
@@ -47,17 +45,6 @@ public class CuentaAhorro extends CuentaBancaria {
 
         setSaldo(getSaldo() - total);
 
-        Transaccion trans = new Transaccion(
-                Transaccion.generarIdTransaccion(),
-                "retiro",
-                monto,
-                getNumeroCuenta(),
-                getNumeroCuenta()
-        );
-        trans.setDescripcion("Retiro cuenta de ahorro. Comisión: " + comision);
-        trans.setExitosa(true);
-        TransaccionRepository.getInstance().agregar(trans);
-        getHistorial().add(trans);
     }
 
     /**

@@ -1,3 +1,5 @@
 NumeroCuenta	Saldo	TipoCuenta	CorreoCliente
-6661062276	5000,00	1	juancho@gmail
-6661090626	5000,00	1	pacojones@gmail
+6661061398	30000,00	1	juancho@gmail
+6661099849	171000,00	1	pacojones@gmail
+6662004363	-6110000,00	2	elbicho@gmail
+6662033556	-510000,00	2	pessi@gmail

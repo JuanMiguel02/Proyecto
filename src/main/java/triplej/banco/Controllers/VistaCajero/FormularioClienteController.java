@@ -50,6 +50,7 @@ public class FormularioClienteController {
     @FXML private PasswordField txtPassword;
     @FXML private PasswordField txtConfirmarPassword;
     @FXML private TextField txtSaldo;
+    @FXML private TextField txtSobregiro;
 
     @FXML private ComboBox<TipoDocumento> cmbDocumento;
     @FXML private ComboBox<String> cmbCuenta;
@@ -57,6 +58,7 @@ public class FormularioClienteController {
 
     @FXML private VBox datosPersonaJuridica;    // Sección visible solo para personas jurídicas
     @FXML private VBox datosPersonaNatural;     // Sección visible solo para personas naturales
+    @FXML private VBox campoSobregiro;
 
     @FXML private ImageView imgCliente;     // Imagen del cliente
 
@@ -82,7 +84,6 @@ public class FormularioClienteController {
         cmbTipoCliente.setOnAction(e -> onTipoClienteSeleccionado());
 
     }
-
 
     /**
      * Cambia la visibilidad de las secciones del formulario dependiendo
@@ -110,6 +111,19 @@ public class FormularioClienteController {
         }
     }
 
+    @FXML
+    private void onTipoCuentaSeleccionado() {
+        String tipoSeleccionado = cmbCuenta.getValue();
+
+        if ("Corriente".equalsIgnoreCase(tipoSeleccionado)) {
+            campoSobregiro.setVisible(true);
+            campoSobregiro.setManaged(true);
+        } else {
+            campoSobregiro.setVisible(false);
+            campoSobregiro.setManaged(false);
+        }
+    }
+
     /**
      * Valida los campos ingresados y, si son válidos, registra el cliente.
      * Llama al servicio correspondiente dependiendo del tipo de cliente.
@@ -121,13 +135,18 @@ public class FormularioClienteController {
         try {
             double saldo = Double.parseDouble(txtSaldo.getText().trim());
             String tipoCliente = cmbTipoCliente.getValue();
+            Double sobregiro = null;
 
-            if ("Persona Jurídica".equalsIgnoreCase(tipoCliente)) {
+            if ("Corriente".equalsIgnoreCase(cmbCuenta.getValue()) && !txtSobregiro.getText().isBlank()) {
+                sobregiro = Double.parseDouble(txtSobregiro.getText().trim());
+            }
+
+           if ("Persona Jurídica".equalsIgnoreCase(tipoCliente)) {
                 cajeroService.registrarPersonaJuridica(
                         txtRazonSocial.getText(), txtRepresentante.getText(), txtTipoEmpresa.getText(),
                         txtCorreo.getText(), txtPassword.getText(), cmbDocumento.getValue(),
                         txtNumDocumento.getText(), txtTelefono.getText(), txtPais.getText(), txtCiudad.getText(),
-                        cmbCuenta.getValue(), saldo, imagenSeleccionada
+                        cmbCuenta.getValue(), saldo, sobregiro, imagenSeleccionada
                 );
             } else {
                 cajeroService.registrarPersonaNatural(
@@ -135,7 +154,7 @@ public class FormularioClienteController {
                         txtPassword.getText(), cmbDocumento.getValue(),
                         txtNumDocumento.getText(), txtTelefono.getText(),
                         txtPais.getText(), txtCiudad.getText(), cmbCuenta.getValue(),
-                        saldo, imagenSeleccionada
+                        saldo, sobregiro, imagenSeleccionada
                 );
             }
 

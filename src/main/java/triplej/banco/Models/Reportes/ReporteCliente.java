@@ -4,6 +4,7 @@ import triplej.banco.Models.Cuentas.CuentaBancaria;
 import triplej.banco.Models.Cuentas.Transaccion;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,10 +19,10 @@ public class ReporteCliente implements ReporteGenerado {
     public Reporte generarReporte() {
         List<String> contenido = new ArrayList<>();
 
-        contenido.add("Reporte de movimientos de la cuenta: " + cuentaBancaria.getNumeroCuenta());
+        contenido.add("Reporte de movimientos de la cuenta: " + cuentaBancaria.getNumeroCuenta() + " ( " + cuentaBancaria.getNombreTipoCuenta() + " )");
         contenido.add("Titular: " + cuentaBancaria.getPropietario().getNombre());
         contenido.add("Saldo actual: $" + String.format("%.2f", cuentaBancaria.getSaldo()));
-        contenido.add("Fecha de generación: " + LocalDateTime.now());
+        contenido.add("Fecha de generación: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
         contenido.add("-----------------------------------------------------");
 
         for (Transaccion t : cuentaBancaria.getHistorial()) {

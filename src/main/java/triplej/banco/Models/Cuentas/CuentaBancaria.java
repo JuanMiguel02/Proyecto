@@ -105,21 +105,15 @@ public abstract class CuentaBancaria {
     public void depositar(Double monto) {
         if (monto <= 0) throw new IllegalArgumentException("El monto debe ser positivo");
         saldo += monto;
+    }
 
-            Transaccion trans = new Transaccion(
-                    generarIdTransaccion(),
-                    "DEPÓSITO",
-                    monto,
-                    this.numeroCuenta,
-                    this.numeroCuenta
-            );
-
-            trans.setDescripcion("Déposito de: " + monto);
-            trans.setExitosa(true);
-
-            TransaccionRepository.getInstance().agregar(trans);
-
-            historial.add(trans);
+    public String getNombreTipoCuenta() {
+        return switch (getCodigoTipoCuenta()) {
+            case "1" -> "Cuenta de Ahorro";
+            case "2" -> "Cuenta Corriente";
+            case "3" -> "Cuenta Empresarial";
+            default -> "Tipo desconocido";
+        };
     }
 
     public ArrayList<Transaccion> getHistorial() {
