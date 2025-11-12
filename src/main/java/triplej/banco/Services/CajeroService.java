@@ -183,12 +183,53 @@ public class CajeroService {
         }
         try{
             cuenta.depositar(monto);
+            clienteRepository.actualizarCliente(cuenta.getPropietario());
             System.out.println("Deposito de " + monto + " realizado");
         }catch (IllegalArgumentException e){
             throw new IllegalArgumentException(e.getMessage());
         }
     }
 
+    /**
+     * Realiza un retiro en la cuenta especificada.
+     */
+    public void realizarRetiro(CuentaBancaria cuenta, double monto) {
+        if( cuenta == null){
+            System.out.println("No se encontró");
+            return;
+        }
+        try{
+            cuenta.retirar(monto);
+            clienteRepository.actualizarCliente(cuenta.getPropietario());
+            System.out.println("Retiro de " + monto + " realizado");
+        }catch (IllegalArgumentException e){
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    public void realizarTransferencia(CuentaBancaria origen, CuentaBancaria destino, double monto) {
+        if (origen == null || destino == null) {
+            throw new IllegalArgumentException("Debe seleccionar ambas cuentas.");
+        }
+
+        if (origen.equals(destino)) {
+            throw new IllegalArgumentException("No puede transferir a la misma cuenta.");
+        }
+
+        if (monto <= 0) {
+            throw new IllegalArgumentException("El monto debe ser positivo.");
+        }
+
+        try {
+            // Retirar del origen
+            realizarDeposito(destino,monto);
+
+            realizarRetiro(origen,monto);
+
+        } catch (IllegalArgumentException e){
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
     /**
      * Consulta el saldo actual de una cuenta.
      */

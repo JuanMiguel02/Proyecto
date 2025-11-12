@@ -1,0 +1,3 @@
+NumeroCuenta	Saldo	TipoCuenta	CorreoCliente
+6661062276	5000,00	1	juancho@gmail
+6661090626	5000,00	1	pacojones@gmail

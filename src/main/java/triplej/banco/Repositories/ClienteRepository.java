@@ -128,6 +128,13 @@ public class ClienteRepository {
                 .findFirst();
     }
 
+    public Optional<CuentaBancaria> buscarCuentaPorNumero (String numeroCuenta) {
+        return clientes.stream()
+                .flatMap(c -> c.getCuentas().stream())
+                .filter(cuenta -> cuenta.getNumeroCuenta().equalsIgnoreCase(numeroCuenta))
+                .findFirst();
+    }
+
     private void cargarDatosEjemplo() {
         PersonaNatural juan = new PersonaNatural(
                 "Juan", "Henao", "juancho@gmail", "12345", RolUsuario.CLIENTE,

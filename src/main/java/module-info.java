@@ -11,7 +11,6 @@ module triplej.banco {
     opens triplej.banco.Models.Usuarios to javafx.base;
     opens triplej.banco.Models.Cuentas to javafx.base;
 
-
     exports triplej.banco;
     exports triplej.banco.Controllers;
     exports triplej.banco.Controllers.VistaAdmin;

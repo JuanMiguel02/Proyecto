@@ -239,22 +239,74 @@ public class CajeroController {
             return;
         }
 
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Depósito");
-        dialog.setHeaderText("Depositar dinero en la cuenta " + cuentaSeleccionada.getNumeroCuenta());
-        dialog.setContentText("Ingrese el monto a depositar:");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/CajeroViews/Deposito-view.fxml"));
+            Parent root = loader.load();
 
-        dialog.showAndWait().ifPresent(valor -> {
-            try {
-                double monto = Double.parseDouble(valor);
-                cajeroService.realizarDeposito(cuentaSeleccionada, monto);
-                ClienteRepository.getInstancia().actualizarCliente(clienteActual);
-                mostrarAlerta("Éxito", "Depósito realizado correctamente.", Alert.AlertType.INFORMATION);
-            } catch (NumberFormatException e) {
-                mostrarAlerta("Error", "Monto inválido.", Alert.AlertType.ERROR);
-            }
-        });
+            DepositoController controller = loader.getController();
+            controller.setDatosOperacion(clienteActual, cuentaSeleccionada);
+
+            Stage stage = new Stage();
+            stage.setTitle("Déposito de dinero");
+            stage.setScene(new Scene(root));
+            stage.initOwner(btnRetirar.getScene().getWindow());
+            stage.show();
+
+        } catch (IOException e) {
+            mostrarAlerta("Error", "No se pudo abrir la ventana de déposito.", Alert.AlertType.ERROR);
+        }
     }
+
+    @FXML
+    private void onRetirar() {
+        if (cuentaSeleccionada == null) {
+            mostrarAlerta("Error", "Seleccione una cuenta para operar.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/CajeroViews/Retiro-view.fxml"));
+            Parent root = loader.load();
+
+            RetiroController controller = loader.getController();
+            controller.setDatosOperacion(clienteActual, cuentaSeleccionada);
+
+            Stage stage = new Stage();
+            stage.setTitle("Retiro de dinero");
+            stage.setScene(new Scene(root));
+            stage.initOwner(btnRetirar.getScene().getWindow());
+            stage.show();
+
+        } catch (IOException e) {
+            mostrarAlerta("Error", "No se pudo abrir la ventana de retiro.", Alert.AlertType.ERROR);
+        }
+    }
+
+    @FXML
+    private void onTransferir() {
+        if (cuentaSeleccionada == null) {
+            mostrarAlerta("Error", "Seleccione una cuenta para operar.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/CajeroViews/Transferencia-view.fxml"));
+            Parent root = loader.load();
+
+            TransferenciaController controller = loader.getController();
+            controller.setDatosOperacion(clienteActual, cuentaSeleccionada);
+
+            Stage stage = new Stage();
+            stage.setTitle("Déposito de dinero");
+            stage.setScene(new Scene(root));
+            stage.initOwner(btnRetirar.getScene().getWindow());
+            stage.show();
+
+        } catch (IOException e) {
+            mostrarAlerta("Error", "No se pudo abrir la ventana de déposito.", Alert.AlertType.ERROR);
+        }
+    }
+
 
     /**
      * Muestra una ventana emergente con el saldo actual de la cuenta seleccionada.

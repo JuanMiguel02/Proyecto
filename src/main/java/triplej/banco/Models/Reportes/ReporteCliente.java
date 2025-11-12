@@ -24,32 +24,45 @@ public class ReporteCliente implements ReporteGenerado {
         contenido.add("Fecha de generación: " + LocalDateTime.now());
         contenido.add("-----------------------------------------------------");
 
-        for(Transaccion t : cuentaBancaria.getHistorial()){
+        for (Transaccion t : cuentaBancaria.getHistorial()) {
             String tipoMovimiento;
+            String detalle;
 
-            if(cuentaBancaria.getNumeroCuenta().equals(t.getCuentaOrigen())){
-                tipoMovimiento = "Enviada a: " + t.getCuentaDestino();
+            // Caso 1: Transferencias (origen y destino distintos)
+            if (!t.getCuentaOrigen().equals(t.getCuentaDestino())) {
+                if (cuentaBancaria.getNumeroCuenta().equals(t.getCuentaOrigen())) {
+                    tipoMovimiento = "Transferencia enviada";
+                    detalle = "A cuenta: " + t.getCuentaDestino();
+                } else if (cuentaBancaria.getNumeroCuenta().equals(t.getCuentaDestino())) {
+                    tipoMovimiento = "Transferencia recibida";
+                    detalle = "Desde cuenta: " + t.getCuentaOrigen();
+                } else {
+                    tipoMovimiento = "Movimiento externo";
+                    detalle = "N/A";
+                }
             }
-            else if(cuentaBancaria.getNumeroCuenta().equals(t.getCuentaDestino())){
-                tipoMovimiento = "Recibida de : " + t.getCuentaOrigen();
+            // Caso 2: Depósitos o retiros (origen == destino)
+            else {
+                tipoMovimiento = t.getTipo().toUpperCase();
+                detalle = "";
             }
-            else{
-                tipoMovimiento = t.getTipo();
-            }
+
             String linea = String.format(
-                    "ID: %s | %s | %s | Monto: $%.2f | %s | %s%n",
+                    "ID: %s | %s | %-22s | Monto: $%.2f | %s %s | %s%n",
                     t.getId(),
                     t.getFecha(),
                     tipoMovimiento,
                     t.getMonto(),
-                    t.getDescripcion(),
+                    detalle,
+                    t.getDescripcion() != null ? "| " + t.getDescripcion() : "",
                     t.isExitosa() ? "Exitosa" : "Fallida"
             );
+
             contenido.add(linea);
         }
 
-        if(contenido.size() == 5){
-            contenido.add("No se encontraron transacciones registradas");
+        if (contenido.size() == 5) {
+            contenido.add("No se encontraron transacciones registradas.");
         }
 
         return new Reporte(
