@@ -3,7 +3,7 @@ package triplej.banco.Services;
 import triplej.banco.Models.Banco;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
 import triplej.banco.Models.Reportes.ReporteCliente;
-import triplej.banco.Models.Reportes.ReporteGenerado;
+import triplej.banco.Models.Reportes.Reporte;
 import triplej.banco.Models.Usuarios.*;
 import triplej.banco.Repositories.ClienteRepository;
 import triplej.banco.Repositories.UsuarioRepository;
@@ -176,13 +176,10 @@ public class CajeroService {
     /**
      * Realiza un depósito en la cuenta especificada.
      */
-    public void realizarDeposito(CuentaBancaria cuenta, double monto, String descripcion) {
+    public void realizarDeposito(CuentaBancaria cuenta, double monto) {
         if( cuenta == null){
             System.out.println("No se encontró");
             return;
-        }
-        if(descripcion == null || descripcion.isBlank()){
-            descripcion = "Deposito realizado";
         }
         try{
             cuenta.depositar(monto);
@@ -205,7 +202,7 @@ public class CajeroService {
     /**
      * Genera un reporte PDF con la información del cliente y sus transacciones.
      */
-    public ReporteGenerado generarReporteCliente(CuentaBancaria cuenta){
+    public Reporte generarReporteCliente(CuentaBancaria cuenta){
         ReporteCliente reporte = new ReporteCliente(cuenta);
         return reporte.generarReporte();
     }

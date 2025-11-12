@@ -1,5 +1,6 @@
 package triplej.banco.Repositories;
 
+import triplej.banco.Models.Cuentas.CuentaAhorro;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
 import triplej.banco.Models.Usuarios.*;
 import triplej.banco.Utils.CuentaFactory;
@@ -138,6 +139,12 @@ public class ClienteRepository {
 
         Cliente cliente1 = new Cliente(juan);
         Cliente cliente2 = new Cliente(paco);
+
+        CuentaBancaria cuenta1 = new CuentaAhorro(cliente1);
+        CuentaBancaria cuenta2 = new CuentaAhorro(cliente2);
+
+        cliente1.agregarCuenta(cuenta1);
+        cliente2.agregarCuenta(cuenta2);
 
         clientes.add(cliente1);
         clientes.add(cliente2);

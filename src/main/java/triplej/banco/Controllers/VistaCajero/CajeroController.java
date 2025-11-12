@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 import triplej.banco.Repositories.UsuarioRepository;
 import triplej.banco.Services.CajeroService;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
-import triplej.banco.Models.Reportes.ReporteGenerado;
+import triplej.banco.Models.Reportes.Reporte;
 import triplej.banco.Models.Usuarios.Cliente;
 import triplej.banco.Models.Usuarios.Empleado;
 import triplej.banco.Models.Usuarios.PersonaJuridica;
@@ -247,7 +247,7 @@ public class CajeroController {
         dialog.showAndWait().ifPresent(valor -> {
             try {
                 double monto = Double.parseDouble(valor);
-                cajeroService.realizarDeposito(cuentaSeleccionada, monto, "Depósito por cajero");
+                cajeroService.realizarDeposito(cuentaSeleccionada, monto);
                 ClienteRepository.getInstancia().actualizarCliente(clienteActual);
                 mostrarAlerta("Éxito", "Depósito realizado correctamente.", Alert.AlertType.INFORMATION);
             } catch (NumberFormatException e) {
@@ -374,7 +374,7 @@ public class CajeroController {
             return;
         }
 
-        ReporteGenerado reporte = cajeroService.generarReporteCliente(cuentaSeleccionada);
+        Reporte reporte = cajeroService.generarReporteCliente(cuentaSeleccionada);
 
         generarReporte(reporte, txtReporteGeneral, vistaReporte, contenedorCentro);
     }

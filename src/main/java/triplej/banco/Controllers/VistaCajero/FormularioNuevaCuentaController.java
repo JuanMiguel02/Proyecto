@@ -6,6 +6,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import triplej.banco.Models.Usuarios.PersonaJuridica;
+import triplej.banco.Models.Usuarios.TipoDocumento;
 import triplej.banco.Services.CajeroService;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
 import triplej.banco.Models.Usuarios.Cliente;
@@ -60,6 +62,14 @@ public class FormularioNuevaCuentaController {
         this.cliente = cliente;
         lblNombreCliente.setText(cliente.getUsuarioAsociado().getNombreCompleto());
         lblDocumentoCliente.setText(cliente.getDocumento());
+
+        cmbTipoCuenta.getItems().clear();
+
+        if(cliente.getUsuarioAsociado() instanceof PersonaJuridica){
+            cmbTipoCuenta.getItems().addAll("Empresarial", "Corriente");
+        }else{
+            cmbTipoCuenta.getItems().addAll("Ahorro", "Corriente", "Empresarial");
+        }
     }
 
     /**
@@ -80,9 +90,10 @@ public class FormularioNuevaCuentaController {
             mostrarAlerta("No se ha seleccionado un cliente");
             return;
         }
+
         String tipoCuenta = cmbTipoCuenta.getValue();
 
-        if(tipoCuenta == null || txtSaldoInicial.getText() == null){
+        if(tipoCuenta == null){
             mostrarAlerta("Complete todos los campos");
             return;
         }

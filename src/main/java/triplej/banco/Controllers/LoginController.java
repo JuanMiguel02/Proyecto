@@ -22,18 +22,42 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
-
+/**
+ * Controlador de la vista de inicio de sesión del sistema UQBank.
+ * <p>
+ * Esta clase gestiona la autenticación de usuarios (Administrador, Cajero o Cliente),
+ * validando las credenciales ingresadas y redirigiendo a la ventana correspondiente
+ * según el rol asignado al usuario.
+ * </p>
+ *
+ * <p>Responsabilidades principales:</p>
+ * <ul>
+ *     <li>Validar las credenciales de acceso contra los datos almacenados.</li>
+ *     <li>Activar la sesión del usuario autenticado.</li>
+ *     <li>Abrir la vista correspondiente al rol del usuario.</li>
+ *     <li>Permitir la visualización opcional de la contraseña ingresada.</li>
+ * </ul>
+ *
+ * <p>Vista asociada: <b>Login-view.fxml</b></p>
+ */
 public class LoginController {
 
+    //Campos de la vista
     @FXML private TextField txtCorreo;
     @FXML private PasswordField txtContrasenia;
     @FXML private TextField txtPasswordSignInMask;
     @FXML private CheckBox checkViewPassSignIn;
 
-
+    //Repositorio de la gestión de usuarios
     private UsuarioRepository usuarioRepository;
+    //Repositorio de la gestión de empleados
     private EmpleadoRepository empleadoRepository;
 
+    /**
+     * Inicializa los componentes y repositorios al cargar la vista de login.
+     * Obtiene las instancias de {@link UsuarioRepository} y {@link EmpleadoRepository}
+     * a partir del banco singleton, y configura la opción de mostrar/ocultar contraseña.
+     */
     @FXML
     public  void initialize(){
         Banco banco = Banco.getInstancia();
@@ -44,6 +68,15 @@ public class LoginController {
 
     }
 
+    /**
+     * Procesa el intento de inicio de sesión con las credenciales ingresadas.
+     * <p>
+     * Valida la existencia del usuario y la coincidencia de la contraseña.
+     * Si el acceso es correcto, redirige a la vista correspondiente según el rol.
+     * </p>
+     *
+     * @param event evento de acción generado al presionar el botón "Iniciar sesión"
+     */
     @FXML
     private void login(ActionEvent event) {
         String correo = txtCorreo.getText();
@@ -77,6 +110,13 @@ public class LoginController {
         stage.close();
     }
 
+    /**
+     * Habilita la funcionalidad de mostrar u ocultar la contraseña según el estado del checkbox.
+     *
+     * @param pass  campo de tipo PasswordField (oculto)
+     * @param text  campo de tipo TextField (visible)
+     * @param check checkbox que controla la visibilidad
+     */
     public void mostrarContrasenia(PasswordField pass, TextField text, CheckBox check){
         text.setVisible(false);
         text.setManaged(false);
@@ -87,12 +127,23 @@ public class LoginController {
         text.textProperty().bindBidirectional(pass.textProperty());
     }
 
+    /**
+     * Limpia los campos de texto del formulario de inicio de sesión.
+     *
+     * @param event evento de acción generado al presionar el botón "Limpiar"
+     */
     @FXML
     private void limpiar (ActionEvent event){
         txtCorreo.clear();
         txtContrasenia.clear();
     }
 
+    /**
+     * Abre la ventana principal del rol <b>Administrador</b>.
+     * Carga el controlador {@link AdminController} y asigna el empleado correspondiente.
+     *
+     * @param usuario usuario autenticado con rol ADMIN
+     */
     private void abrirVentanaAdmin(Usuario usuario) {
         try{
 
@@ -124,10 +175,16 @@ public class LoginController {
         catch (IOException e){
             throw new RuntimeException("Error al abrir la ventana del admin: " + e.getMessage(), e);
         }
-        System.out.println("Admin " + usuario.getNombreCompleto() + " inició sesión");
+        System.out.println("Admin: " + usuario.getNombreCompleto() + " inició sesión");
 
     }
 
+    /**
+     * Abre la ventana principal del rol <b>Cajero</b>.
+     * Carga el controlador {@link CajeroController} y asigna el empleado correspondiente.
+     *
+     * @param usuario usuario autenticado con rol CAJERO
+     */
     private void abrirVentanaCajero(Usuario usuario) {
         try{
 
@@ -158,10 +215,17 @@ public class LoginController {
         catch (IOException e){
             throw new RuntimeException("Error al abrir la ventana del cajero " + e.getMessage(), e);
         }
-        System.out.println("cajero" + usuario.getNombreCompleto() + " inició sesión");
+        System.out.println("Cajero: " + usuario.getNombreCompleto() + " inició sesión");
 
     }
 
+
+    /**
+     * Abre la ventana principal del rol <b>Cliente</b>.
+     * Si el cliente no existe en el repositorio, se crea automáticamente una nueva instancia.
+     *
+     * @param usuario usuario autenticado con rol CLIENTE
+     */
     private void abrirVentanaCliente(Usuario usuario) {
         try {
             ClienteRepository clienteRepo = ClienteRepository.getInstancia();

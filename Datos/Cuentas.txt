@@ -1,2 +1,0 @@
-NumeroCuenta	Saldo	TipoCuenta	CorreoCliente
-6663060030	20000000,00	3	shango@gmail

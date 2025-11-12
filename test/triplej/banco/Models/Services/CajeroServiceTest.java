@@ -75,7 +75,7 @@ class CajeroServiceTest {
     @Test
     void realizarDeposito() {
         CuentaBancaria cuenta = mock(CuentaBancaria.class);
-        cajeroService.realizarDeposito(cuenta, 1000, "déposito inicial");
+        cajeroService.realizarDeposito(cuenta, 1000);
 
         verify(cuenta, times(1)).depositar(1000.0);
     }

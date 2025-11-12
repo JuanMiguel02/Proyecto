@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReporteCliente implements Reporte {
+public class ReporteCliente implements ReporteGenerado {
     private final CuentaBancaria cuentaBancaria;
 
     public ReporteCliente(CuentaBancaria cuentaBancaria) {
@@ -15,7 +15,7 @@ public class ReporteCliente implements Reporte {
     }
 
     @Override
-    public ReporteGenerado generarReporte() {
+    public Reporte generarReporte() {
         List<String> contenido = new ArrayList<>();
 
         contenido.add("Reporte de movimientos de la cuenta: " + cuentaBancaria.getNumeroCuenta());
@@ -52,7 +52,7 @@ public class ReporteCliente implements Reporte {
             contenido.add("No se encontraron transacciones registradas");
         }
 
-        return new ReporteGenerado(
+        return new Reporte(
                 "Historial de movimientos - Cuenta: " + cuentaBancaria.getNumeroCuenta(),
                 LocalDateTime.now(),
                 contenido

@@ -1,4 +1,0 @@
-Nombre	Apellido	Documento	Teléfono	Correo	Cargo	Departamento	Ciudad	Salario
-Juan	Henao	123213	2132141	juan@gmail	Jefe	IT	Bogotá	20000,00
-Paco	Jones	1238912	21341	paco@gmail	Cajero	Seguridad	Bogotá	2000,00
-Sancho	Panza	312412	313414	sancho@uqbank	Admin	Gestión	Armenia	2000,00

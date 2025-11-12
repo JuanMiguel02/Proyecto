@@ -131,7 +131,6 @@
                         </AreaChart>
 
                         <Button layoutX="400.0" layoutY="660.0" onAction="#generarReporte" styleClass="btn-admin" text="Generar Reporte" />
-                  <Button layoutX="285.0" layoutY="660.0" mnemonicParsing="false" onAction="#enviarNotificacion" text="Button" />
                     </children>
                 </AnchorPane>
 

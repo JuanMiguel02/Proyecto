@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public  class ReporteAdmin implements Reporte{
+public  class ReporteAdmin implements ReporteGenerado {
 
     private final TransaccionRepository transaccionRepository;
     private final UsuarioRepository usuarioRepository;
@@ -26,7 +26,7 @@ public  class ReporteAdmin implements Reporte{
 
 
     @Override
-    public ReporteGenerado generarReporte() {
+    public Reporte generarReporte() {
         List<String> contenido = new ArrayList<>();
         contenido.add("-----------------REPORTE ADMINISTRATIVO---------------");
         contenido.add("Fecha de generación: " + LocalDateTime.now());
@@ -38,7 +38,7 @@ public  class ReporteAdmin implements Reporte{
         contenido.addAll(generarResumenTransacciones());
         contenido.addAll(generarTransaccionesSospechosas());
 
-        return new ReporteGenerado("Reporte avanzado del sistema", LocalDateTime.now(), contenido);
+        return new Reporte("Reporte avanzado del sistema", LocalDateTime.now(), contenido);
     }
 
     private List<String> generarResumenTransacciones(){

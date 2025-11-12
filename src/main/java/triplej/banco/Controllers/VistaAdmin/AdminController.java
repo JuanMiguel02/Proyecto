@@ -1,13 +1,11 @@
 package triplej.banco.Controllers.VistaAdmin;
 
 import javafx.beans.binding.Bindings;
-import javafx.collections.ObservableArray;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
@@ -15,10 +13,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import triplej.banco.Controllers.LoginController;
 import triplej.banco.Models.Banco;
 import triplej.banco.Models.Reportes.ReporteAdmin;
-import triplej.banco.Models.Reportes.ReporteGenerado;
+import triplej.banco.Models.Reportes.Reporte;
 import triplej.banco.Models.Usuarios.Empleado;
 import triplej.banco.Models.Usuarios.Usuario;
 import triplej.banco.Repositories.UsuarioRepository;
@@ -180,7 +177,7 @@ public class AdminController {
     @FXML
     private void generarReporte(){
         ReporteAdmin reporteAdmin = new ReporteAdmin();
-        ReporteGenerado reporte = reporteAdmin.generarReporte();
+        Reporte reporte = reporteAdmin.generarReporte();
 
         GeneracionReporteVista.generarReporte(reporte, txtContenido, vistaReporte, contenedorCentro);
 
