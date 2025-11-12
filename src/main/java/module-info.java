@@ -3,7 +3,6 @@ module triplej.banco {
     requires javafx.fxml;
     requires javafx.graphics;
     requires javafx.base;
-    requires javafx.media;
     requires java.desktop;
 
     opens triplej.banco to javafx.fxml;
@@ -20,4 +19,5 @@ module triplej.banco {
     opens triplej.banco.Controllers.VistaAdmin to javafx.fxml;
     exports triplej.banco.Controllers.VistaCajero;
     opens triplej.banco.Controllers.VistaCajero to javafx.fxml;
+    opens triplej.banco.Services to javafx.fxml;
 }

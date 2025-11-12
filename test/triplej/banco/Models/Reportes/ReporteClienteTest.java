@@ -5,9 +5,6 @@ import org.junit.jupiter.api.Test;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
 import triplej.banco.Models.Cuentas.Transaccion;
 import triplej.banco.Models.Usuarios.Cliente;
-import triplej.banco.Models.Usuarios.Usuario;
-import triplej.banco.Repositories.TransaccionRepository;
-import triplej.banco.Repositories.UsuarioRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -57,7 +54,7 @@ class ReporteClienteTest {
         when(cuentaBancaria.getHistorial()).thenReturn(transacciones);
 
         //Generar el reporte
-        ReporteGenerado reporte = reporteCliente.generarReporte();
+        Reporte reporte = reporteCliente.generarReporte();
 
         // Aserciones
         assertNotNull(reporte);

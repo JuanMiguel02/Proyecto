@@ -45,17 +45,18 @@ public class EmpleadoRepository {
         PersonaNatural juan = new PersonaNatural(
                 "Juan", "Henao", "juan@gmail", "1212321", RolUsuario.EMPLEADO, TipoDocumento.CEDULACIUDADANIA,
                 "123213", "2132141", "Colombia", "Bogotá");
+        juan.setActivo(true);
         agregarEmpleado(new Empleado(juan, "Jefe",20000, "IT"));
 
         PersonaNatural paco = new PersonaNatural(
                 "Paco", "Jones", "paco@gmail", "123456", RolUsuario.CAJERO, TipoDocumento.CEDULACIUDADANIA,
                 "1238912", "21341", "Colombia", "Bogotá");
+        paco.setActivo(true);
         agregarEmpleado(new Empleado(paco, "Cajero", 2000, "Seguridad"));
 
         PersonaNatural admin = new PersonaNatural("Sancho", "Panza", "sancho@uqbank", "123456", RolUsuario.ADMIN,
                 TipoDocumento.CEDULACIUDADANIA, "312412", "313414", "Colombia", "Armenia");
         agregarEmpleado(new Empleado(admin, "Admin", 2000.0, "Gestión"));
-
     }
 
     public ArrayList<Empleado> getEmpleados() {

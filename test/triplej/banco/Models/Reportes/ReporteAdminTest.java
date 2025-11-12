@@ -60,7 +60,7 @@ class ReporteAdminTest {
         when(transaccionRepository.getTodasTransacciones()).thenReturn(List.of(transaccion));
 
         // Generar el reporte
-        ReporteGenerado reporte = reporteAdmin.generarReporte();
+        Reporte reporte = reporteAdmin.generarReporte();
 
         System.out.println("==== CONTENIDO DEL REPORTE ====");
         reporte.getContenido().forEach(System.out::println);

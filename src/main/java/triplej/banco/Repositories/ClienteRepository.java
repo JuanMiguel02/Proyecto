@@ -1,5 +1,6 @@
 package triplej.banco.Repositories;
 
+import triplej.banco.Models.Cuentas.CuentaAhorro;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
 import triplej.banco.Models.Usuarios.*;
 import triplej.banco.Utils.CuentaFactory;
@@ -39,7 +40,7 @@ public class ClienteRepository {
     }
 
 
-    public static synchronized ClienteRepository getInstancia() {
+    public static ClienteRepository getInstancia() {
         if (instancia == null) {
             instancia = new ClienteRepository();
         }
@@ -114,11 +115,10 @@ public class ClienteRepository {
                 .findFirst();
     }
 
-    public Optional<CuentaBancaria> buscarCuentaDeClientePorNumero(String numeroCuenta) {
-        return clientes.stream()
-                .flatMap(cliente -> cliente.getCuentas().stream())
-                .filter(cuenta -> cuenta.getNumeroCuenta().equals(numeroCuenta))
-                .findFirst();
+    public List<CuentaBancaria> buscarCuentasDeCliente(Cliente cliente) {
+        if (cliente == null) return List.of(); // Evita null pointer
+
+        return cliente.getCuentas(); // devuelve la lista directamente
     }
 
     public Optional<Cliente> buscarClientePorCuenta(String numeroCuenta) {
@@ -139,6 +139,12 @@ public class ClienteRepository {
 
         Cliente cliente1 = new Cliente(juan);
         Cliente cliente2 = new Cliente(paco);
+
+        CuentaBancaria cuenta1 = new CuentaAhorro(cliente1);
+        CuentaBancaria cuenta2 = new CuentaAhorro(cliente2);
+
+        cliente1.agregarCuenta(cuenta1);
+        cliente2.agregarCuenta(cuenta2);
 
         clientes.add(cliente1);
         clientes.add(cliente2);

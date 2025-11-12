@@ -1,2 +1,0 @@
-NumeroCuenta	Saldo	TipoCuenta	CorreoCliente
-6661007264	0,00	1	ladylavendedoraderosas@gmail
