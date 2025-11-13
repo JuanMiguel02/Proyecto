@@ -42,7 +42,6 @@ class UsuarioRepositoryTest {
 
     }
 
-
     @Test
     void existeUsuarioConCorreo() {
         PersonaNatural usuario1 = new PersonaNatural(

@@ -82,6 +82,29 @@ class CajeroServiceTest {
     }
 
     @Test
+    void realizarRetiro() {
+        CuentaBancaria cuenta = mock(CuentaBancaria.class);
+        when(cuenta.getNumeroCuenta()).thenReturn("12345");
+        cajeroService.realizarRetiro(cuenta, 1000);
+
+        verify(cuenta, times(1)).retirar(1000.0, false);
+    }
+
+    @Test
+    void realizarTransferencia() {
+        CuentaBancaria cuenta1 = mock(CuentaBancaria.class);
+        when(cuenta1.getNumeroCuenta()).thenReturn("12345");
+
+        CuentaBancaria cuenta2 = mock(CuentaBancaria.class);
+        when(cuenta2.getNumeroCuenta()).thenReturn("67890");
+
+        cajeroService.realizarTransferencia(cuenta1, cuenta2, 1000);
+
+        verify(cuenta1, times(1)).retirar(1000.0, true);
+        verify(cuenta2, times(1)).depositar(1000.0, true);
+    }
+
+    @Test
     void consultarSaldoExitoso() {
         Persona usuario = new PersonaNatural("Juan", "Henao", "correo@test.com",
                 "12345", RolUsuario.CLIENTE, TipoDocumento.CEDULACIUDADANIA, "14124", "13414", "Colombia", "Armenia");
@@ -100,4 +123,14 @@ class CajeroServiceTest {
     @Test
     void generarReporteCliente() {
     }
+
+    @Test
+    void registrarPersonaNatural() {
+    }
+
+    @Test
+    void registrarPersonaJuridica() {
+    }
+
+
 }

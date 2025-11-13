@@ -118,6 +118,7 @@ public class FormularioClienteController {
             campoSobregiro.setVisible(false);
             campoSobregiro.setManaged(false);
         }
+
     }
 
     /**
@@ -188,112 +189,124 @@ public class FormularioClienteController {
      */
     private boolean validarCampos() {
 
-            if (cmbDocumento.getSelectionModel().isEmpty()) {
-                mostrarAlerta("Debe seleccionar un tipo de documento");
-                cmbDocumento.requestFocus();
-                return false;
-            }
+        if (cmbDocumento.getSelectionModel().isEmpty()) {
+            mostrarAlerta("Debe seleccionar un tipo de documento");
+            cmbDocumento.requestFocus();
+            return false;
+        }
 
-            if (txtNumDocumento.getText().trim().isEmpty()) {
-                mostrarAlerta("El número de documento es obligatorio");
-                txtNumDocumento.requestFocus();
-                return false;
-            }
+        if (txtNumDocumento.getText().trim().isEmpty()) {
+            mostrarAlerta("El número de documento es obligatorio");
+            txtNumDocumento.requestFocus();
+            return false;
+        }
 
-            if (!txtNumDocumento.getText().matches("\\d{5,}")) {
-                mostrarAlerta("El número de documento debe contener solo dígitos (mínimo 5)");
-                txtNumDocumento.requestFocus();
-                return false;
-            }
+        if (!txtNumDocumento.getText().matches("\\d{5,}")) {
+            mostrarAlerta("El número de documento debe contener solo dígitos (mínimo 5)");
+            txtNumDocumento.requestFocus();
+            return false;
+        }
 
-            if (txtTelefono.getText().trim().isEmpty()) {
-                mostrarAlerta("El teléfono es obligatorio");
-                txtTelefono.requestFocus();
-                return false;
-            }
+        if (txtTelefono.getText().trim().isEmpty()) {
+            mostrarAlerta("El teléfono es obligatorio");
+            txtTelefono.requestFocus();
+            return false;
+        }
 
-            if (!txtTelefono.getText().matches("\\d{7,15}")) {
-                mostrarAlerta("El teléfono debe contener solo dígitos (mínimo 7)");
-                txtTelefono.requestFocus();
-                return false;
-            }
+        if (!txtTelefono.getText().matches("\\d{7,15}")) {
+            mostrarAlerta("El teléfono debe contener solo dígitos (mínimo 7)");
+            txtTelefono.requestFocus();
+            return false;
+        }
 
-            if (txtCiudad.getText().trim().isEmpty()) {
-                mostrarAlerta("La ciudad es obligatoria");
-                txtCiudad.requestFocus();
-                return false;
-            }
+        if (txtCiudad.getText().trim().isEmpty()) {
+            mostrarAlerta("La ciudad es obligatoria");
+            txtCiudad.requestFocus();
+            return false;
+        }
 
-            if (txtPais.getText().trim().isEmpty()) {
-                mostrarAlerta("El país es obligatorio");
-                txtPais.requestFocus();
-                return false;
-            }
+        if (txtPais.getText().trim().isEmpty()) {
+            mostrarAlerta("El país es obligatorio");
+            txtPais.requestFocus();
+            return false;
+        }
 
-            if (txtCorreo.getText().trim().isEmpty()) {
-                mostrarAlerta("El correo electrónico es obligatorio");
-                txtCorreo.requestFocus();
-                return false;
-            }
+        if (txtCorreo.getText().trim().isEmpty()) {
+            mostrarAlerta("El correo electrónico es obligatorio");
+            txtCorreo.requestFocus();
+            return false;
+        }
 
-            if (!txtCorreo.getText().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
-                mostrarAlerta("El correo electrónico no es válido");
-                txtCorreo.requestFocus();
-                return false;
-            }
+        if (!txtCorreo.getText().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            mostrarAlerta("El correo electrónico no es válido");
+            txtCorreo.requestFocus();
+            return false;
+        }
 
-            if (txtPassword.getText().isEmpty()) {
-                mostrarAlerta("La contraseña es obligatoria");
-                txtPassword.requestFocus();
-                return false;
-            }
+        if (txtPassword.getText().isEmpty()) {
+            mostrarAlerta("La contraseña es obligatoria");
+            txtPassword.requestFocus();
+            return false;
+        }
 
-            if (txtPassword.getText().length() < 6) {
-                mostrarAlerta("La contraseña debe tener al menos 6 caracteres");
-                txtPassword.requestFocus();
-                return false;
-            }
+        if (txtPassword.getText().length() < 6) {
+            mostrarAlerta("La contraseña debe tener al menos 6 caracteres");
+            txtPassword.requestFocus();
+            return false;
+        }
 
-            if (txtConfirmarPassword.getText().isEmpty()) {
-                mostrarAlerta("Debe confirmar la contraseña");
-                txtConfirmarPassword.requestFocus();
-                return false;
-            }
+        if (txtConfirmarPassword.getText().isEmpty()) {
+            mostrarAlerta("Debe confirmar la contraseña");
+            txtConfirmarPassword.requestFocus();
+            return false;
+        }
 
-            if (!txtPassword.getText().equals(txtConfirmarPassword.getText())) {
-                mostrarAlerta("Las contraseñas no coinciden");
-                txtConfirmarPassword.requestFocus();
-                return false;
-            }
+        if (!txtPassword.getText().equals(txtConfirmarPassword.getText())) {
+            mostrarAlerta("Las contraseñas no coinciden");
+            txtConfirmarPassword.requestFocus();
+            return false;
+        }
 
-            if (cmbCuenta.getValue() == null) {
-                mostrarAlerta("Debe seleccionar un tipo de cuenta");
-                cmbCuenta.requestFocus();
-                return false;
-            }
+        if (cmbCuenta.getValue() == null) {
+            mostrarAlerta("Debe seleccionar un tipo de cuenta");
+            cmbCuenta.requestFocus();
+            return false;
+        }
 
-            try {
-                double saldo = Double.parseDouble(txtSaldo.getText().trim());
-                if (saldo < 0) {
-                    mostrarAlerta("El saldo no puede ser negativo");
-                    txtSaldo.requestFocus();
-                    return false;
-                }
-                double sobregiro = Double.parseDouble(txtSobregiro.getText().trim());
-                if (sobregiro < 0) {
-                    mostrarAlerta("El sobregiro no puede ser negativo");
-                    txtSaldo.requestFocus();
-                    return false;
-                }
-            } catch (NumberFormatException e) {
-                mostrarAlerta("El saldo y el sobregiro deben ser un número válido");
+        try {
+            double saldo = Double.parseDouble(txtSaldo.getText().trim());
+            if (saldo < 0) {
+                mostrarAlerta("El saldo no puede ser negativo");
                 txtSaldo.requestFocus();
                 return false;
             }
+        } catch (NumberFormatException e) {
+            mostrarAlerta("El saldo debe de ser un número válido");
+            txtSaldo.requestFocus();
+            return false;
+        }
 
-            return true;
+        if ("Corriente".equalsIgnoreCase(cmbCuenta.getValue())) {
+            if (txtSobregiro.getText().trim().isEmpty()) {
+                mostrarAlerta("Debe ingresar un valor de sobregiro para la cuenta corriente");
+                txtSobregiro.requestFocus();
+                return false;
+            }
+            try {
+                double sobregiro = Double.parseDouble(txtSobregiro.getText().trim());
+                if (sobregiro < 0) {
+                    mostrarAlerta("El sobregiro no puede ser negativo");
+                    txtSobregiro.requestFocus();
+                    return false;
+                }
+            } catch (NumberFormatException e) {
+                mostrarAlerta("El sobregiro debe ser un número válido");
+                txtSobregiro.requestFocus();
+                return false;
+            }
+        }
+        return true;
     }
-
     /**
      * Limpia todos los campos del formulario y restaura la imagen por defecto.
      */
