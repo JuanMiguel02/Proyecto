@@ -15,9 +15,21 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+/**
+ * Clase de pruebas unitarias para {@link TransaccionRepository}.
+ * Evalúa las operaciones de almacenamiento y consulta de transacciones bancarias,
+ * garantizando que el repositorio mantenga correctamente los datos en memoria
+ * y en los archivos del sistema.
+ */
 class TransaccionRepositoryTest {
+    // Repositorio bajo prueba (patrón Singleton)
     private final TransaccionRepository transaccionRepository = TransaccionRepository.getInstancia();
 
+    /**
+     * Se ejecuta antes de cada prueba para preparar un entorno limpio.
+     * Elimina el archivo de transacciones y limpia la lista en memoria.
+     * Esto asegura que cada test sea independiente y no herede datos previos.
+     */
     @BeforeEach
     void setUp() throws IOException {
         //Limpia la carpeta antes de cada test
@@ -28,6 +40,11 @@ class TransaccionRepositoryTest {
         transaccionRepository.getTodasTransacciones().clear();
     }
 
+    /**
+     * Prueba 2 para {@link TransaccionRepository#agregar(Transaccion)}.
+     * Verifica que una transacción nueva se registre correctamente
+     * dentro del repositorio.
+     */
     @Test
     void agregar() {
         Transaccion trans = new Transaccion("1234", "Retiro", 5000.0,"1223", "12345");
@@ -37,7 +54,11 @@ class TransaccionRepositoryTest {
         assertEquals(1, transaccionRepository.getTodasTransacciones().size());
     }
 
-
+    /**
+     * Prueba 1 para {@link TransaccionRepository#getPorCuenta(String)}.
+     * Comprueba que el repositorio devuelva correctamente las transacciones
+     * asociadas a una cuenta bancaria específica.
+     */
     @Test
     void getPorCuenta() {
         CuentaBancaria cuenta = mock(CuentaBancaria.class);

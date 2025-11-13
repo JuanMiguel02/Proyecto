@@ -8,13 +8,54 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Genera reportes personalizados de movimientos para un cliente específico.
+ * <p>
+ * Este reporte se enfoca en mostrar el historial de transacciones asociadas a una cuenta
+ * bancaria determinada, incluyendo transferencias, depósitos y retiros.
+ * </p>
+ *
+ * <p>
+ * Implementa la interfaz {@link ReporteGenerado}, lo que permite integrarla con otros tipos
+ * de reportes dentro del sistema, como reportes administrativos o globales.
+ * </p>
+ *
+ * <p>
+ * Cada reporte incluye información sobre el titular, tipo de cuenta, saldo actual y
+ * un listado detallado de los movimientos realizados.
+ * </p>
+ */
 public class ReporteCliente implements ReporteGenerado {
+
+    /** Cuenta bancaria asociada al reporte. */
     private final CuentaBancaria cuentaBancaria;
 
+    /**
+     * Crea un nuevo generador de reportes para una cuenta bancaria específica.
+     *
+     * @param cuentaBancaria La cuenta del cliente sobre la cual se generará el reporte.
+     */
     public ReporteCliente(CuentaBancaria cuentaBancaria) {
         this.cuentaBancaria = cuentaBancaria;
     }
 
+    /**
+     * Genera el reporte completo de movimientos de la cuenta.
+     * <p>
+     * El reporte contiene:
+     * </p>
+     * <ul>
+     *     <li>Encabezado con la información del titular y la cuenta.</li>
+     *     <li>Saldo actual.</li>
+     *     <li>Listado detallado de transacciones realizadas (depósitos, retiros o transferencias).</li>
+     * </ul>
+     *
+     * <p>
+     * Si la cuenta no tiene movimientos registrados, el reporte lo indicará explícitamente.
+     * </p>
+     *
+     * @return Objeto {@link Reporte} que contiene toda la información formateada.
+     */
     @Override
     public Reporte generarReporte() {
         List<String> contenido = new ArrayList<>();
@@ -47,7 +88,7 @@ public class ReporteCliente implements ReporteGenerado {
                 tipoMovimiento = t.getTipo().toUpperCase();
                 detalle = "";
             }
-
+            //Línea formateada del movimiento
             String linea = String.format(
                     "ID: %s | %s | %-22s | Monto: $%.2f | %s %s | %s%n",
                     t.getId(),
@@ -61,7 +102,7 @@ public class ReporteCliente implements ReporteGenerado {
 
             contenido.add(linea);
         }
-
+        //Si no hay transacciones
         if (contenido.size() == 5) {
             contenido.add("No se encontraron transacciones registradas.");
         }

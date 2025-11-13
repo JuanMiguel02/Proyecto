@@ -94,7 +94,7 @@ public class FormularioEmpleadoController {
 
     /**
      * Maneja el evento del botón "Guardar".
-     * Valida los campos del formulario, crea la persona y el empleado,
+     * Válida los campos del formulario, crea la persona y el empleado,
      * y lo registra mediante el servicio de administración.
      */
     @FXML

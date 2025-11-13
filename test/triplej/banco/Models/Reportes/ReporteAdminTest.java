@@ -17,6 +17,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+/**
+ * Clase de prueba para el reporte del Admin  {@link ReporteAdmin}.
+ */
 class ReporteAdminTest {
     private TransaccionRepository transaccionRepository;
     private UsuarioRepository usuarioRepository;

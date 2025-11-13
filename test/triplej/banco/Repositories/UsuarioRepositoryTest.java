@@ -13,10 +13,23 @@ import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Clase de pruebas unitarias para {@link UsuarioRepository}.
+ * Válida las operaciones CRUD (crear, leer, actualizar, eliminar) y de filtrado
+ * sobre los objetos {@link triplej.banco.Models.Usuarios.Usuario}.
+ * <p>
+ * Estas pruebas garantizan que el repositorio gestione correctamente la persistencia
+ * de usuarios y el manejo en memoria dentro del sistema bancario.
+ */
 class UsuarioRepositoryTest {
-
+    // Repositorio bajo prueba (patrón Singleton)
     private final UsuarioRepository usuarioRepository= UsuarioRepository.getInstancia();
 
+    /**
+     * Se ejecuta antes de cada prueba.
+     * Elimina el archivo de datos existente y limpia la lista de usuarios en memoria
+     * para garantizar que cada test se ejecute en un entorno limpio y aislado.
+     */
     @BeforeEach
     void setUp() throws IOException {
         //Limpia la carpeta antes de cada test
@@ -27,6 +40,10 @@ class UsuarioRepositoryTest {
         usuarioRepository.getUsuarios().clear();
     }
 
+    /**
+     * Prueba que un usuario pueda ser guardado correctamente en el repositorio
+     * y luego encontrado mediante diferentes métodos de búsqueda.
+     */
     @Test
     void guardarUsuarioYBuscarUsuario() {
         PersonaNatural usuario = new PersonaNatural(
@@ -42,6 +59,10 @@ class UsuarioRepositoryTest {
 
     }
 
+    /**
+     * Prueba 1. Verifica que el repositorio detecte correctamente si un usuario
+     * ya existe mediante su correo electrónico.
+     */
     @Test
     void existeUsuarioConCorreo() {
         PersonaNatural usuario1 = new PersonaNatural(
@@ -63,6 +84,10 @@ class UsuarioRepositoryTest {
         assertEquals(2, usuarioRepository.contarTodos());
     }
 
+    /**
+     * Prueba 2 el filtrado de usuarios según su rol dentro del sistema.
+     * Se asegura de que solo se devuelvan los usuarios que correspondan al rol indicado.
+     */
     @Test
     void obtenerPorRol() {
         PersonaNatural admin = new PersonaNatural(
@@ -90,6 +115,10 @@ class UsuarioRepositoryTest {
 
     }
 
+    /**
+     * Prueba 3. Verifica la eliminación correcta de un usuario.
+     * Luego de eliminarlo, no debe quedar registro alguno en el repositorio.
+     */
     @Test
     void eliminarUsuario() {
         PersonaNatural usuario = new PersonaNatural(
@@ -104,6 +133,11 @@ class UsuarioRepositoryTest {
         assertEquals(0, usuarioRepository.contarTodos());
     }
 
+    /**
+     * Prueba 4. Verifica la actualización de los datos de un usuario existente.
+     * Válida que los cambios en sus atributos (correo, ciudad, etc.)
+     * se reflejen correctamente dentro del repositorio.
+     */
     @Test
     void actualizarUsuario() {
         PersonaNatural usuario = new PersonaNatural(

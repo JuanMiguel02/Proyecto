@@ -4,8 +4,10 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import triplej.banco.Models.Cuentas.Transaccion;
 import triplej.banco.Repositories.ClienteRepository;
 import triplej.banco.Repositories.EmpleadoRepository;
+import triplej.banco.Repositories.TransaccionRepository;
 import triplej.banco.Repositories.UsuarioRepository;
 
 import java.io.IOException;
@@ -21,7 +23,7 @@ public class Launcher extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 900, 700);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/triplej/banco/Styles/login.css")).toExternalForm());
         stage.setMaximized(true);
-        stage.setTitle("UQ Bank");
+        stage.setTitle("Inicio UQ BANK");
         stage.setScene(scene);
         stage.show();
     }
@@ -30,6 +32,7 @@ public class Launcher extends Application {
         UsuarioRepository.getInstancia();
         ClienteRepository.getInstancia();
         EmpleadoRepository.getInstancia();
+        TransaccionRepository.getInstancia();
     }
 
 }

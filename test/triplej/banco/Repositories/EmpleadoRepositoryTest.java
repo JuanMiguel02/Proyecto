@@ -14,10 +14,21 @@ import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Esta clase realiza pruebas unitarias para el repositorio de empleados.
+ * Se encarga de verificar que las operaciones CRUD (crear, leer, actualizar, eliminar)
+ * sobre los empleados funcionen correctamente dentro de la clase {@link EmpleadoRepository}.
+ */
 class EmpleadoRepositoryTest {
-
+    // Repositorio bajo prueba (patrón Singleton)
     private final EmpleadoRepository empleadoRepository = EmpleadoRepository.getInstancia();
 
+
+    /**
+     * Método que se ejecuta antes de cada prueba (@BeforeEach).
+     * Su objetivo es limpiar el archivo de datos y reiniciar la lista interna de empleados
+     * para que cada test empiece con un entorno controlado y vacío.
+     */
     @BeforeEach
     void setUp() throws IOException {
         //Limpia la carpeta antes de cada test
@@ -28,6 +39,11 @@ class EmpleadoRepositoryTest {
         empleadoRepository.getEmpleados().clear();
     }
 
+    /**
+     * Prueba 1 para el método {@link EmpleadoRepository#agregarEmpleado(Empleado)}.
+     * Verifica que al agregar un nuevo empleado, este se almacene correctamente
+     * en la lista interna del repositorio.
+     */
     @Test
     void agregarEmpleado() {
         PersonaNatural persona = new PersonaNatural("Camilo", "Agudelo",
@@ -41,6 +57,10 @@ class EmpleadoRepositoryTest {
         assertEquals(1,  empleadoRepository.getEmpleados().size());
     }
 
+    /**
+     * Prueba 2 para el método {@link EmpleadoRepository#eliminarEmpleado(Empleado)}.
+     * Comprueba que un empleado existente se elimine correctamente de la lista del repositorio.
+     */
     @Test
     void eliminarEmpleado() {
         PersonaNatural persona = new PersonaNatural("Jerónimo", "Delgado",
@@ -58,6 +78,11 @@ class EmpleadoRepositoryTest {
         assertEquals(0,  empleadoRepository.getEmpleados().size());
     }
 
+    /**
+     * Prueba 3 para {@link EmpleadoRepository#buscarPorCorreo(String)}.
+     * Verifica que el método encuentre correctamente un empleado
+     * según su correo electrónico.
+     */
     @Test
     void buscarPorCorreo() {
         PersonaNatural persona = new PersonaNatural("Juan", "Henao",
@@ -70,6 +95,10 @@ class EmpleadoRepositoryTest {
         assertTrue(empleadoRepository.buscarPorCorreo("juan@test.com").isPresent());
     }
 
+    /**
+     * Prueba 4 para {@link EmpleadoRepository#existeEmpleadoConCorreo(String)}.
+     * Evalúa que el método detecte correctamente si un correo ya está registrado.
+     */
     @Test
     void existeEmpleadoConCorreo() {
         PersonaNatural persona = new PersonaNatural("Jacobo", "Valencia",
@@ -82,6 +111,11 @@ class EmpleadoRepositoryTest {
         assertTrue(empleadoRepository.existeEmpleadoConCorreo("jacobo@test.com"));
     }
 
+    /**
+     * Prueba 5 para {@link EmpleadoRepository#actualizarEmpleado(Empleado)}.
+     * Comprueba que los cambios realizados a un empleado (como el salario o el correo)
+     * se actualicen correctamente dentro del repositorio.
+     */
     @Test
     void actualizarEmpleado() {
         PersonaNatural persona = new PersonaNatural("Jacobo", "Valencia",

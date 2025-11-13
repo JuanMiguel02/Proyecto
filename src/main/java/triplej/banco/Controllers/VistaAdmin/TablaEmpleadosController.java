@@ -10,7 +10,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import triplej.banco.Models.Usuarios.PersonaNatural;
 import triplej.banco.Models.Usuarios.RolUsuario;
 import triplej.banco.Models.Usuarios.Usuario;
 import triplej.banco.Repositories.EmpleadoRepository;
@@ -19,6 +18,7 @@ import triplej.banco.Services.AdminService;
 
 import java.io.File;
 import java.util.Objects;
+import java.util.UUID;
 
 import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
 
@@ -178,7 +178,8 @@ public class TablaEmpleadosController {
             return;
         }
 
-        if (seleccionado.getCargo().equalsIgnoreCase("Admin") && !adminActual.getId().equals("11111111-1111-1111-1111-111111111111")) {
+        //Compara que no se pueda eliminar a otro administrador a menos que sea el admin principal
+        if (seleccionado.getCargo().equalsIgnoreCase("Admin") && !adminActual.getId().equals(UUID.fromString("11111111-1111-1111-1111-111111111111"))) {
             mostrarAlerta("No se puede eliminar a otro administrador");
             return;
         }
@@ -362,6 +363,7 @@ public class TablaEmpleadosController {
         }
     }
 
+    //Se guarda el admin actual
     public void setAdminActual(Usuario adminActual) {
         this.adminActual = adminActual;
     }

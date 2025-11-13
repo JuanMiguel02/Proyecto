@@ -17,6 +17,7 @@ import triplej.banco.Models.Reportes.ReporteAdmin;
 import triplej.banco.Models.Reportes.Reporte;
 import triplej.banco.Models.Usuarios.Usuario;
 import triplej.banco.Repositories.UsuarioRepository;
+import triplej.banco.Services.AdminService;
 import triplej.banco.Utils.GeneracionReporteVista;
 import triplej.banco.Utils.VolverLogin;
 
@@ -76,6 +77,8 @@ public class AdminController {
 
     //Repositorio que contiene la lista observable de todos los usuarios del sistema.
     private UsuarioRepository usuarioRepository;
+
+    private AdminService adminService = new AdminService();
 
     /**
      *  Método que se ejecuta automáticamente al cargar la vista del administrador.
@@ -173,8 +176,7 @@ public class AdminController {
      */
     @FXML
     private void generarReporte(){
-        ReporteAdmin reporteAdmin = new ReporteAdmin();
-        Reporte reporte = reporteAdmin.generarReporte();
+        Reporte reporte = adminService.generarReporteAvanzado();
 
         GeneracionReporteVista.generarReporte(reporte, txtContenido, vistaReporte, contenedorCentro);
 

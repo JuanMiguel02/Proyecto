@@ -13,6 +13,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+/**
+ * Clase de prueba para el reporte del Cliente  {@link ReporteCliente}.
+ */
 class ReporteClienteTest {
     private ReporteCliente reporteCliente;
     private CuentaBancaria cuentaBancaria;

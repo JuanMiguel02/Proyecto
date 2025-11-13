@@ -7,16 +7,40 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Representa una transacción bancaria dentro del sistema.
+ *
+ * <p>
+ * Cada transacción almacena información sobre el tipo de operación realizada
+ * (por ejemplo: depósito, retiro, transferencia), la cuenta de origen,
+ * la cuenta de destino (si aplica), el monto involucrado, la fecha y hora,
+ * y si fue o no exitosa.
+ * </p>
+ *
+ * <p>
+ * Además, la clase incluye lógica para identificar operaciones sospechosas
+ * según criterios de negocio (por ejemplo, montos elevados o frecuencia de transacciones).
+ * </p>
+ */
 public class Transaccion {
-    private String id;
-    private LocalDateTime fecha;
-    private final String tipo;
-    private final double monto;
-    private String descripcion;
-    private final String cuentaOrigen;
-    private String cuentaDestino;
-    private boolean exitosa;
+    private final String id;                    //ID de la transacción
+    private LocalDateTime fecha;                //Fecha de la transacción
+    private final String tipo;                  //Tipo de transacción
+    private final double monto;                 //Monto de la transacción
+    private String descripcion;                 //Descripción de la transacción
+    private final String cuentaOrigen;          //Cuenta de origen de la transacción
+    private String cuentaDestino;               //Cuenta de destino de la transacción
+    private boolean exitosa;                    //Determina su exito
 
+    /**
+     * Crea una transacción con cuenta de origen y cuenta de destino.
+     *
+     * @param id            Identificador único de la transacción.
+     * @param tipo          Tipo de transacción (ej. "Transferencia", "Depósito").
+     * @param monto         Monto involucrado en la operación.
+     * @param cuentaOrigen  Número de cuenta de origen.
+     * @param cuentaDestino Número de cuenta de destino.
+     */
     public Transaccion(String id, String tipo, double monto, String cuentaOrigen, String cuentaDestino){
         this.id = id;
         this.cuentaOrigen = cuentaOrigen;
@@ -27,6 +51,14 @@ public class Transaccion {
         this.exitosa = false;
     }
 
+    /**
+     * Crea una transacción que solo tiene cuenta de origen (por ejemplo, un retiro o depósito).
+     *
+     * @param id           Identificador único de la transacción.
+     * @param tipo         Tipo de transacción (ej. "Depósito", "Retiro").
+     * @param monto        Monto involucrado en la operación.
+     * @param cuentaOrigen Número de cuenta de origen.
+     */
     public Transaccion(String id, String tipo, double monto, String cuentaOrigen){
         this.id = id;
         this.cuentaOrigen = cuentaOrigen;
@@ -36,6 +68,7 @@ public class Transaccion {
         this.exitosa = false;
     }
 
+    // Getters y Setters
     public String getId() {
         return id;
     }
@@ -44,6 +77,11 @@ public class Transaccion {
         return fecha;
     }
 
+    /**
+     * Devuelve la fecha de la transacción formateada en formato legible.
+     *
+     * @return Fecha y hora en formato "dd/MM/yyyy HH:mm:ss".
+     */
     public String getFechaFormateada(){
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         return fecha.format(formato);
@@ -89,6 +127,18 @@ public class Transaccion {
         this.fecha = fecha;
     }
 
+    /**
+     * Determina si una transacción debe considerarse sospechosa.
+     *
+     * <p>Se aplica cualquiera de las siguientes condiciones:</p>
+     * <ul>
+     *     <li>El monto supera los 10 millones de pesos.</li>
+     *     <li>La cuenta ha realizado más de 5 transacciones en los últimos 10 minutos.</li>
+     *     <li>La operación se realiza entre la medianoche y las 4 a. m.</li>
+     * </ul>
+     *
+     * @return {@code true} si la transacción es sospechosa; {@code false} en caso contrario.
+     */
     public boolean esSospechosa(){
         if(monto > 10_000_000) return true;
 
@@ -121,7 +171,14 @@ public class Transaccion {
                 '}';
     }
 
-
+    /**
+     * Genera un identificador único para una nueva transacción.
+     * <p>
+     * El formato es: {@code TXN-[timestamp]-[número aleatorio de 4 dígitos]}.
+     * </p>
+     *
+     * @return Identificador único de transacción.
+     */
     public static String generarIdTransaccion(){
         return "TXN-" + System.currentTimeMillis() + "-" + ThreadLocalRandom.current().nextInt(1000, 9999);
     }
