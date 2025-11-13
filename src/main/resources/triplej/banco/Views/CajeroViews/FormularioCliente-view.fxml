@@ -113,11 +113,16 @@
                     <!-- Datos cuenta -->
                     <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Datos de Cuenta" />
                     <Label text="Tipo de Cuenta:*" />
-                    <ComboBox fx:id="cmbCuenta" promptText="Seleccione un tipo de cuenta" />
+                    <ComboBox fx:id="cmbCuenta" promptText="Seleccione un tipo de cuenta" onAction="#onTipoCuentaSeleccionado" />
 
                     <VBox prefHeight="52.0" prefWidth="704.0" spacing="5">
                         <Label text="Saldo Inicial:*" />
                         <TextField fx:id="txtSaldo" promptText="Ej: 2500000" />
+                    </VBox>
+
+                    <VBox fx:id="campoSobregiro" spacing="5" visible="false" managed="false">
+                        <Label text="Sobregiro Disponible:" />
+                        <TextField fx:id="txtSobregiro" promptText="Ej: 500000" />
                     </VBox>
                     <Separator />
                     <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Fotografía Cliente" />

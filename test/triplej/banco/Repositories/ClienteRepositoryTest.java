@@ -138,4 +138,12 @@ class ClienteRepositoryTest {
         assertEquals("Armenia", cliente.getCiudad());
         assertEquals("tom123@gmail.com", cliente.getCorreo());
     }
+
+    @Test
+    void buscarCuentasDeCliente() {
+    }
+
+    @Test
+    void buscarCuentaPorNumero() {
+    }
 }

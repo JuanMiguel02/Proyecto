@@ -2,6 +2,7 @@ package triplej.banco.Repositories;
 
 import triplej.banco.Models.Cuentas.CuentaAhorro;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
+import triplej.banco.Models.Cuentas.CuentaCorriente;
 import triplej.banco.Models.Usuarios.*;
 import triplej.banco.Utils.CuentaFactory;
 
@@ -128,6 +129,13 @@ public class ClienteRepository {
                 .findFirst();
     }
 
+    public Optional<CuentaBancaria> buscarCuentaPorNumero (String numeroCuenta) {
+        return clientes.stream()
+                .flatMap(c -> c.getCuentas().stream())
+                .filter(cuenta -> cuenta.getNumeroCuenta().equalsIgnoreCase(numeroCuenta))
+                .findFirst();
+    }
+
     private void cargarDatosEjemplo() {
         PersonaNatural juan = new PersonaNatural(
                 "Juan", "Henao", "juancho@gmail", "12345", RolUsuario.CLIENTE,
@@ -162,12 +170,11 @@ public class ClienteRepository {
      * Si el cliente no existía en memoria, se reconstruye desde UsuarioRepository.
      */
     public void cargarDesdeArchivo() {
-
         Path ruta = Paths.get("Banco", "Datos", "Cuentas.txt");
         if (!Files.exists(ruta)) return;
 
         try (BufferedReader lector = Files.newBufferedReader(ruta)) {
-            lector.readLine(); // saltar encabezado
+            lector.readLine(); // Saltar encabezado
             String linea;
             while ((linea = lector.readLine()) != null) {
                 String[] datos = linea.split("\t");
@@ -177,11 +184,10 @@ public class ClienteRepository {
                 double saldo = Double.parseDouble(datos[1].replace(",", "."));
                 String tipo = datos[2];
                 String correo = datos[3];
+                double sobregiro = (datos.length >= 5) ? Double.parseDouble(datos[4].replace(",", ".")) : 500000.0;
 
-                // Busca el cliente por correo
                 Cliente cliente = buscarPorCorreo(correo).orElse(null);
                 if (cliente == null) {
-                    // Si no existe en memoria, se reconstruye a partir del usuario asociado
                     Usuario usuario = usuarioRepository.buscarUsuarioPorCorreo(correo).orElse(null);
                     if (usuario == null) continue;
 
@@ -189,18 +195,22 @@ public class ClienteRepository {
                     clientes.add(cliente);
                 }
 
-                // Evitar duplicar cuentas ya cargadas
                 boolean yaExiste = cliente.getCuentas().stream()
                         .anyMatch(c -> c.getNumeroCuenta().equals(numeroCuenta));
                 if (yaExiste) continue;
 
-                // Crear cuenta con datos persistentes (sin generar nuevo número)
-                CuentaBancaria cuenta = CuentaFactory.crearCuentaConDatos(tipo, cliente, numeroCuenta, saldo);
+                CuentaBancaria cuenta;
+
+                //  si es cuenta corriente, usa el sobregiro leído
+                if ("2".equals(tipo)) {
+                    cuenta = new CuentaCorriente(cliente, numeroCuenta, saldo, sobregiro);
+                } else {
+                    cuenta = CuentaFactory.crearCuentaConDatos(tipo, cliente, numeroCuenta, saldo, sobregiro);
+                }
 
                 cliente.agregarCuenta(cuenta);
-                if (cliente.getCuentaActiva() == null) {
+                if (cliente.getCuentaPorNumero() == null) {
                     cliente.setCuentaActiva(cuenta);
-
                 }
             }
         } catch (IOException e) {
@@ -218,22 +228,36 @@ public class ClienteRepository {
                 Files.createDirectories(ruta.getParent());
             }
 
+            //  encabezado con columna sobregiro
             if (!Files.exists(ruta)) {
-                Files.writeString(ruta, "NumeroCuenta\tSaldo\tTipoCuenta\tCorreoCliente\n");
+                Files.writeString(ruta, "NumeroCuenta\tSaldo\tTipoCuenta\tCorreoCliente\tSobregiro\n");
             }
 
             String contenido = Files.readString(ruta);
             if (contenido.contains(cuenta.getNumeroCuenta())) {
-                return; // ya está registrada
+                return;
             }
 
-            String linea = String.format(
-                    "%s\t%.2f\t%s\t%s%n",
-                    cuenta.getNumeroCuenta(),
-                    cuenta.getSaldo(),
-                    cuenta.getCodigoTipoCuenta(),
-                    cuenta.getPropietario().getCorreo()
-            );
+            String linea;
+            //   guardar sobregiro solo si es cuenta corriente
+            if (cuenta instanceof CuentaCorriente corriente) {
+                linea = String.format(
+                        "%s\t%.2f\t%s\t%s\t%.2f%n",
+                        cuenta.getNumeroCuenta(),
+                        cuenta.getSaldo(),
+                        cuenta.getCodigoTipoCuenta(),
+                        cuenta.getPropietario().getCorreo(),
+                        corriente.getLimiteSobregiro()
+                );
+            } else {
+                linea = String.format(
+                        "%s\t%.2f\t%s\t%s%n",
+                        cuenta.getNumeroCuenta(),
+                        cuenta.getSaldo(),
+                        cuenta.getCodigoTipoCuenta(),
+                        cuenta.getPropietario().getCorreo()
+                );
+            }
 
             Files.writeString(ruta, linea, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
 
@@ -250,38 +274,43 @@ public class ClienteRepository {
             Path ruta = Paths.get("Banco", "Datos", "Cuentas.txt");
             if (!Files.exists(ruta)) return;
 
-            // Leer todas las líneas
             List<String> lineas = Files.readAllLines(ruta);
             List<String> nuevasLineas = new ArrayList<>();
 
-            // Conservar el encabezado
             if (!lineas.isEmpty()) {
                 nuevasLineas.add(lineas.getFirst());
             }
 
-            // Actualizar la línea de la cuenta específica
             for (int i = 1; i < lineas.size(); i++) {
                 String linea = lineas.get(i);
                 String[] datos = linea.split("\t");
 
                 if (datos.length >= 4 && datos[0].equals(cuentaActualizada.getNumeroCuenta())) {
-                    // Reemplazar con los nuevos datos
-                    String nuevaLinea = String.format(
-                            "%s\t%.2f\t%s\t%s",
-                            cuentaActualizada.getNumeroCuenta(),
-                            cuentaActualizada.getSaldo(),
-                            cuentaActualizada.getCodigoTipoCuenta(),
-                            cuentaActualizada.getPropietario().getCorreo()
-                    );
+                    String nuevaLinea;
+                    if (cuentaActualizada instanceof CuentaCorriente corriente) {
+                        nuevaLinea = String.format(
+                                "%s\t%.2f\t%s\t%s\t%.2f",
+                                cuentaActualizada.getNumeroCuenta(),
+                                cuentaActualizada.getSaldo(),
+                                cuentaActualizada.getCodigoTipoCuenta(),
+                                cuentaActualizada.getPropietario().getCorreo(),
+                                corriente.getLimiteSobregiro()
+                        );
+                    } else {
+                        nuevaLinea = String.format(
+                                "%s\t%.2f\t%s\t%s",
+                                cuentaActualizada.getNumeroCuenta(),
+                                cuentaActualizada.getSaldo(),
+                                cuentaActualizada.getCodigoTipoCuenta(),
+                                cuentaActualizada.getPropietario().getCorreo()
+                        );
+                    }
                     nuevasLineas.add(nuevaLinea);
-                    System.out.println(" Actualizando saldo de cuenta " + cuentaActualizada.getNumeroCuenta() +
-                            " a: " + cuentaActualizada.getSaldo());
                 } else {
                     nuevasLineas.add(linea);
                 }
             }
 
-            // Reescribir el archivo completo
             Files.write(ruta, nuevasLineas, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE);
 
         } catch (IOException e) {

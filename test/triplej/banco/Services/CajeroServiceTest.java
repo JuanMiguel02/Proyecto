@@ -1,4 +1,4 @@
-package triplej.banco.Models.Services;
+package triplej.banco.Services;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -75,9 +75,10 @@ class CajeroServiceTest {
     @Test
     void realizarDeposito() {
         CuentaBancaria cuenta = mock(CuentaBancaria.class);
+        when(cuenta.getNumeroCuenta()).thenReturn("12345");
         cajeroService.realizarDeposito(cuenta, 1000);
 
-        verify(cuenta, times(1)).depositar(1000.0);
+        verify(cuenta, times(1)).depositar(1000.0, false);
     }
 
     @Test

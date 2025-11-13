@@ -52,7 +52,7 @@ class CuentaFactoryTest {
     void crearCuentaConDatos() {
         Cliente cliente = mock(Cliente.class);
 
-        var cuenta = CuentaFactory.crearCuentaConDatos("1", cliente, "1234", 5000.0);
+        var cuenta = CuentaFactory.crearCuentaConDatos("1", cliente, "1234", 5000.0, null);
 
         assertAll(
                 () -> assertInstanceOf(CuentaAhorro.class, cuenta),
@@ -67,7 +67,7 @@ class CuentaFactoryTest {
         Cliente cliente = mock(Cliente.class);
 
         assertThrows(IllegalArgumentException.class, () ->
-                CuentaFactory.crearCuentaConDatos("9", cliente, "123", 5000.0)
+                CuentaFactory.crearCuentaConDatos("9", cliente, "123", 5000.0, null)
         );
     }
 }

@@ -38,7 +38,7 @@ public  class ReporteAdmin implements ReporteGenerado {
         contenido.addAll(generarResumenTransacciones());
         contenido.addAll(generarTransaccionesSospechosas());
 
-        return new Reporte("Reporte avanzado del sistema", LocalDateTime.now(), contenido);
+        return new Reporte("Reporte general del banco - ", LocalDateTime.now(), contenido);
     }
 
     private List<String> generarResumenTransacciones(){

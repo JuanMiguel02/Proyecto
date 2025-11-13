@@ -16,7 +16,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 public class AdminService {
-    private final NotificacionService notificacionService = new NotificacionService();
+
     private static final String RUTA_IMAGENES =
             System.getProperty("user.home") + File.separator + "UQBank" + File.separator + "imagenes";
     private static final String IMAGEN_POR_DEFECTO = "/triplej/banco/Images/avatar.png";
@@ -40,10 +40,10 @@ public class AdminService {
         }
     }
 
-    public boolean correoYaExiste(String email) {
-        String normalizado = email.trim().toLowerCase();
-        return empleadoRepository.existeEmpleadoConCorreo(normalizado)
-                || usuarioRepository.existeUsuarioConCorreo(normalizado);
+    public boolean correoYaExiste(String correo) {
+        String correoNormalizado = correo.trim().toLowerCase();
+        return empleadoRepository.existeEmpleadoConCorreo(correoNormalizado)
+                || usuarioRepository.existeUsuarioConCorreo(correoNormalizado);
     }
 
     // ---------------------------------------
@@ -107,24 +107,6 @@ public class AdminService {
         if (upper.contains("CAJERO")) return RolUsuario.CAJERO;
         return RolUsuario.EMPLEADO;
     }
-
-    // ---------------------------------------
-    // NOTIFICACIONES
-    // ---------------------------------------
-    public void enviarNotificacionMovimientoSospechoso(Cliente cliente, String mensaje) {
-        notificacionService.enviarCorreo(
-                cliente.getCorreo(),
-                "Movimiento sospechoso detectado",
-                mensaje
-        );
-    }
-
-    public void enviarRecordatorioPago(Cliente cliente, String fecha) {
-        notificacionService.enviarCorreo(
-                cliente.getCorreo(),
-                " Recordatorio de pago",
-                "Estimado " + cliente.getNombre() + ",\n\nSu pago vence el " + fecha + ".\n\nBanco TripleJ"
-        );
-    }
-
 }
+
+

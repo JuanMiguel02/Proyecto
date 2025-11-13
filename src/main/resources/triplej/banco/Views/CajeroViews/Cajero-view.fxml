@@ -160,8 +160,8 @@
                   <!--  Botones de operaciones -->
                   <HBox alignment="CENTER" layoutX="165.0" layoutY="568.0" prefHeight="159.0" prefWidth="935.0" spacing="40" style="-fx-border-color: black;">
                       <Button fx:id="btnDepositar" onAction="#onDepositar" prefHeight="50" prefWidth="180" text="Depositar" />
-                      <Button fx:id="btnRetirar" prefHeight="50" prefWidth="180" text="Retirar" />
-                      <Button fx:id="btnTransferir" prefHeight="50" prefWidth="180" text="Transferir" />
+                      <Button fx:id="btnRetirar" onAction="#onRetirar" prefHeight="50" prefWidth="180" text="Retirar" />
+                      <Button fx:id="btnTransferir" onAction="#onTransferir" prefHeight="50" prefWidth="180" text="Transferir" />
                   <Button layoutX="608.0" layoutY="65.0" onAction="#onConsultarSaldo" prefHeight="50" prefWidth="180" text="Consultar Saldo" />
                   </HBox>
             </children>

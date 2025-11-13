@@ -1,6 +1,5 @@
 package triplej.banco.Models;
 
-import triplej.banco.Models.Usuarios.Usuario;
 import triplej.banco.Repositories.ClienteRepository;
 import triplej.banco.Repositories.EmpleadoRepository;
 import triplej.banco.Repositories.TransaccionRepository;

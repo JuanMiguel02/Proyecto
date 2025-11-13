@@ -3,16 +3,21 @@ package triplej.banco.Controllers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import triplej.banco.Controllers.VistaCajero.TransferenciaController;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
 import triplej.banco.Models.Usuarios.Cliente;
 import triplej.banco.Repositories.ClienteRepository;
 import triplej.banco.Repositories.UsuarioRepository;
 import triplej.banco.Utils.VolverLogin;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -35,6 +40,7 @@ public class ClienteController {
     @FXML private Label lblDinero;
     @FXML private Label lblNumCuenta;
     @FXML private Button btnSalir;
+    @FXML private Button btnTransferir;
     @FXML private ComboBox<CuentaBancaria> cmbCuentas;
 
     private final ObservableList<CuentaBancaria> cuentasCliente = FXCollections.observableArrayList();
@@ -87,9 +93,9 @@ public class ClienteController {
 
         // Mostrar información general
         lblNombre.setText(cliente.getNombre());
-        if (cliente.getCuentaActiva() != null) {
-            lblDinero.setText(String.format("$%,.2f", cliente.getCuentaActiva().getSaldo()));
-            lblNumCuenta.setText(cliente.getCuentaActiva().getNumeroCuenta());
+        if (cliente.getCuentaPorNumero() != null) {
+            lblDinero.setText(String.format("$%,.2f", cliente.getCuentaPorNumero().getSaldo()));
+            lblNumCuenta.setText(cliente.getCuentaPorNumero().getNumeroCuenta());
         } else {
             lblDinero.setText("$0.00");
             lblNumCuenta.setText("Sin cuenta activa");
@@ -147,12 +153,41 @@ public class ClienteController {
         VolverLogin.volverLogin(ventanaActual);
     }
 
+    @FXML
+    private void onTransferir() {
+        CuentaBancaria cuentaSeleccionada = cmbCuentas.getSelectionModel().getSelectedItem();
+        if (cuentaSeleccionada == null) {
+            mostrarAlerta("Error", "Seleccione una cuenta para operar.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/CajeroViews/Transferencia-view.fxml"));
+            Parent root = loader.load();
+
+            TransferenciaController controller = loader.getController();
+            controller.setDatosOperacion(cliente, cuentaSeleccionada);
+
+            controller.setOnTransferenciaExitosa(this::actualizarInterfaz);
+
+
+            Stage stage = new Stage();
+            stage.setTitle("Déposito de dinero");
+            stage.setScene(new Scene(root));
+            stage.initOwner(btnTransferir.getScene().getWindow());
+            stage.show();
+
+        } catch (IOException e) {
+            mostrarAlerta("Error", "No se pudo abrir la ventana de déposito.", Alert.AlertType.ERROR);
+        }
+    }
+
     /**
      * Actualiza el saldo mostrado en pantalla, por ejemplo, tras una transacción.
      */
     private void actualizarInterfaz() {
-        if (cliente.getCuentaActiva() != null) {
-            double saldoActual = cliente.getCuentaActiva().getSaldo();
+        if (cliente.getCuentaPorNumero() != null) {
+            double saldoActual = cliente.getCuentaPorNumero().getSaldo();
             lblDinero.setText(String.format("$%,.2f", saldoActual));
             System.out.println("Interfaz actualizada - Saldo: " + saldoActual);
         }
@@ -162,8 +197,4 @@ public class ClienteController {
         return cliente;
     }
 
-    @FXML
-    private void onTransferir() {
-        mostrarAlerta("Funcionalidad en desarrollo: transferencias");
-    }
 }

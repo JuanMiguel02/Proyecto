@@ -13,6 +13,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import triplej.banco.Models.Cuentas.CuentaAhorro;
+import triplej.banco.Models.Cuentas.CuentaCorriente;
+import triplej.banco.Models.Cuentas.CuentaEmpresarial;
 import triplej.banco.Repositories.UsuarioRepository;
 import triplej.banco.Services.CajeroService;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
@@ -39,7 +42,7 @@ import static triplej.banco.Utils.GeneracionReporteVista.generarReporte;
  * Se encarga de gestionar las operaciones que un cajero puede realizar,
  * como buscar clientes, consultar sus cuentas, hacer depósitos, generar reportes
  * y registrar nuevas cuentas.
- *
+
  * Esta clase conecta la interfaz de usuario (FXML) con la lógica de negocio
  * que reside en los servicios y repositorios del modelo.
  */
@@ -239,26 +242,79 @@ public class CajeroController {
             return;
         }
 
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Depósito");
-        dialog.setHeaderText("Depositar dinero en la cuenta " + cuentaSeleccionada.getNumeroCuenta());
-        dialog.setContentText("Ingrese el monto a depositar:");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/CajeroViews/Deposito-view.fxml"));
+            Parent root = loader.load();
 
-        dialog.showAndWait().ifPresent(valor -> {
-            try {
-                double monto = Double.parseDouble(valor);
-                cajeroService.realizarDeposito(cuentaSeleccionada, monto);
-                ClienteRepository.getInstancia().actualizarCliente(clienteActual);
-                mostrarAlerta("Éxito", "Depósito realizado correctamente.", Alert.AlertType.INFORMATION);
-            } catch (NumberFormatException e) {
-                mostrarAlerta("Error", "Monto inválido.", Alert.AlertType.ERROR);
-            }
-        });
+            DepositoController controller = loader.getController();
+            controller.setDatosOperacion(clienteActual, cuentaSeleccionada);
+
+            Stage stage = new Stage();
+            stage.setTitle("Déposito de dinero");
+            stage.setScene(new Scene(root));
+            stage.initOwner(btnDepositar.getScene().getWindow());
+            stage.show();
+
+        } catch (IOException e) {
+            mostrarAlerta("Error", "No se pudo abrir la ventana de déposito.", Alert.AlertType.ERROR);
+        }
     }
+
+    @FXML
+    private void onRetirar() {
+        if (cuentaSeleccionada == null) {
+            mostrarAlerta("Error", "Seleccione una cuenta para operar.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/CajeroViews/Retiro-view.fxml"));
+            Parent root = loader.load();
+
+            RetiroController controller = loader.getController();
+            controller.setDatosOperacion(clienteActual, cuentaSeleccionada);
+
+            Stage stage = new Stage();
+            stage.setTitle("Retiro de dinero");
+            stage.setScene(new Scene(root));
+            stage.initOwner(btnRetirar.getScene().getWindow());
+            stage.show();
+
+        } catch (IOException e) {
+            mostrarAlerta("Error", "No se pudo abrir la ventana de retiro.", Alert.AlertType.ERROR);
+        }
+    }
+
+    @FXML
+    private void onTransferir() {
+        if (cuentaSeleccionada == null) {
+            mostrarAlerta("Error", "Seleccione una cuenta para operar.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/CajeroViews/Transferencia-view.fxml"));
+            Parent root = loader.load();
+
+            TransferenciaController controller = loader.getController();
+            controller.setDatosOperacion(clienteActual, cuentaSeleccionada);
+
+            Stage stage = new Stage();
+            stage.setTitle("Déposito de dinero");
+            stage.setScene(new Scene(root));
+            stage.initOwner(btnTransferir.getScene().getWindow());
+            stage.show();
+
+        } catch (IOException e) {
+            mostrarAlerta("Error", "No se pudo abrir la ventana de déposito.", Alert.AlertType.ERROR);
+        }
+    }
+
 
     /**
      * Muestra una ventana emergente con el saldo actual de la cuenta seleccionada.
      */
+
     @FXML
     private void onConsultarSaldo(){
         if (cuentaSeleccionada == null) {
@@ -269,18 +325,34 @@ public class CajeroController {
         double saldo = cajeroService.consultarSaldo(cuentaSeleccionada);
 
         Stage ventanaSaldo = new Stage();
-        ventanaSaldo.setTitle("Saldo de la cuenta");
+        ventanaSaldo.setTitle("Detalles de la cuenta");
 
-        Label lblCuenta = new Label("Cliente: " + clienteActual.getNombre() + " Cuenta: " + cuentaSeleccionada.getNumeroCuenta());
+        Label lblCliente = new Label("Cliente: " + clienteActual.getNombre());
+        Label lblCuenta = new Label("Cuenta N°: " + cuentaSeleccionada.getNumeroCuenta());
         Label lblSaldo = new Label("Saldo actual: $" + String.format("%,.2f", saldo));
-        lblCuenta.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-        lblSaldo.setStyle("-fx-font-size: 20px; -fx-text-fill: green;");
 
-        VBox layout = new VBox(15, lblCuenta, lblSaldo);
-        layout.setAlignment(Pos.CENTER);
+        lblCliente.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+        lblSaldo.setStyle("-fx-font-size: 18px; -fx-text-fill: green;");
+
+        VBox layout = new VBox(10, lblCliente, lblCuenta, lblSaldo);
+        layout.setAlignment(Pos.CENTER_LEFT);
         layout.setPadding(new Insets(20));
 
-        Scene scene = new Scene(layout, 400, 250);
+        // 🔍 Detectar el tipo de cuenta y mostrar detalles específicos
+        if (cuentaSeleccionada instanceof CuentaAhorro ahorro) {
+            Label lblTasa = new Label("Tasa de interés: " + (ahorro.getTasaInteres() * 100) + " % anual");
+            layout.getChildren().add(lblTasa);
+        }
+        else if (cuentaSeleccionada instanceof CuentaCorriente corriente) {
+            Label lblSobregiro = new Label("Límite de sobregiro: $" + String.format("%,.2f", corriente.getLimiteSobregiro()));
+            layout.getChildren().add(lblSobregiro);
+        }
+        else if (cuentaSeleccionada instanceof CuentaEmpresarial emp) {
+            Label lblTope = new Label("Tope de transferencia: $" + String.format("%,.2f", emp.getTopeTransferencia()));
+            layout.getChildren().add(lblTope);
+        }
+
+        Scene scene = new Scene(layout, 400, 300);
         ventanaSaldo.setScene(scene);
         ventanaSaldo.show();
     }
@@ -369,7 +441,7 @@ public class CajeroController {
      */
     @FXML
     private void onGenerarReporte(){
-        if(clienteActual == null || clienteActual.getCuentaActiva() == null){
+        if(clienteActual == null || clienteActual.getCuentaPorNumero() == null){
             mostrarAlerta("No se encontró la cuenta activa del cliente");
             return;
         }

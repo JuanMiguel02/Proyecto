@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="triplej.banco.Controllers.VistaCajero.TransferenciaController"
+            prefHeight="400.0" prefWidth="600.0">
+    <VBox spacing="10" alignment="CENTER" style="-fx-padding: 20;">
+        <Label text="Transferencia de dinero" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+        <!-- Información de la cuenta origen -->
+        <Label fx:id="lblCuenta" text="Cuenta origen: "/>
+
+        <!-- Campo para ingresar la cuenta destino -->
+        <TextField fx:id="txtCuentaDestino" promptText="Número de cuenta destino" prefWidth="250"/>
+
+        <!-- Campo para ingresar la confirmación de la cuenta destino -->
+        <TextField fx:id="txtCuentaDestinoConfirmacion" promptText="Comfirme el número de la cuenta destino" prefWidth="250"/>
+
+        <!-- Campo para ingresar el monto -->
+        <TextField fx:id="txtMonto" promptText="Ingrese monto a transferir" prefWidth="250"/>
+
+        <!-- Botones -->
+        <Button text="Confirmar Transferencia" onAction="#onConfirmarTransferencia"/>
+        <Button text="Cancelar" onAction="#onCancelar"/>
+    </VBox>
+</AnchorPane>

@@ -11,17 +11,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import triplej.banco.Services.CajeroService;
-import triplej.banco.Models.Cuentas.CuentaBancaria;
 import triplej.banco.Models.Usuarios.*;
 import triplej.banco.Repositories.ClienteRepository;
 
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 
 import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
@@ -50,6 +44,7 @@ public class FormularioClienteController {
     @FXML private PasswordField txtPassword;
     @FXML private PasswordField txtConfirmarPassword;
     @FXML private TextField txtSaldo;
+    @FXML private TextField txtSobregiro;
 
     @FXML private ComboBox<TipoDocumento> cmbDocumento;
     @FXML private ComboBox<String> cmbCuenta;
@@ -57,6 +52,7 @@ public class FormularioClienteController {
 
     @FXML private VBox datosPersonaJuridica;    // Sección visible solo para personas jurídicas
     @FXML private VBox datosPersonaNatural;     // Sección visible solo para personas naturales
+    @FXML private VBox campoSobregiro;
 
     @FXML private ImageView imgCliente;     // Imagen del cliente
 
@@ -83,7 +79,6 @@ public class FormularioClienteController {
 
     }
 
-
     /**
      * Cambia la visibilidad de las secciones del formulario dependiendo
      * del tipo de cliente (natural o jurídica).
@@ -99,6 +94,7 @@ public class FormularioClienteController {
         datosPersonaJuridica.setVisible(esJuridica);
         datosPersonaJuridica.setManaged(esJuridica);
 
+        cmbDocumento.getItems().clear();
         // Configurar opciones válidas de cuenta y documento
         cmbCuenta.getItems().clear();
         if(esJuridica){
@@ -107,6 +103,20 @@ public class FormularioClienteController {
             cmbDocumento.getItems().addAll(TipoDocumento.NIT);
         }else{
             cmbCuenta.getItems().addAll("Ahorro", "Corriente", "Empresarial");
+            cmbDocumento.getItems().addAll(TipoDocumento.values());
+        }
+    }
+
+    @FXML
+    private void onTipoCuentaSeleccionado() {
+        String tipoSeleccionado = cmbCuenta.getValue();
+
+        if ("Corriente".equalsIgnoreCase(tipoSeleccionado)) {
+            campoSobregiro.setVisible(true);
+            campoSobregiro.setManaged(true);
+        } else {
+            campoSobregiro.setVisible(false);
+            campoSobregiro.setManaged(false);
         }
     }
 
@@ -121,13 +131,18 @@ public class FormularioClienteController {
         try {
             double saldo = Double.parseDouble(txtSaldo.getText().trim());
             String tipoCliente = cmbTipoCliente.getValue();
+            Double sobregiro = null;
 
-            if ("Persona Jurídica".equalsIgnoreCase(tipoCliente)) {
+            if ("Corriente".equalsIgnoreCase(cmbCuenta.getValue()) && !txtSobregiro.getText().isBlank()) {
+                sobregiro = Double.parseDouble(txtSobregiro.getText().trim());
+            }
+
+           if ("Persona Jurídica".equalsIgnoreCase(tipoCliente)) {
                 cajeroService.registrarPersonaJuridica(
                         txtRazonSocial.getText(), txtRepresentante.getText(), txtTipoEmpresa.getText(),
                         txtCorreo.getText(), txtPassword.getText(), cmbDocumento.getValue(),
                         txtNumDocumento.getText(), txtTelefono.getText(), txtPais.getText(), txtCiudad.getText(),
-                        cmbCuenta.getValue(), saldo, imagenSeleccionada
+                        cmbCuenta.getValue(), saldo, sobregiro, imagenSeleccionada
                 );
             } else {
                 cajeroService.registrarPersonaNatural(
@@ -135,7 +150,7 @@ public class FormularioClienteController {
                         txtPassword.getText(), cmbDocumento.getValue(),
                         txtNumDocumento.getText(), txtTelefono.getText(),
                         txtPais.getText(), txtCiudad.getText(), cmbCuenta.getValue(),
-                        saldo, imagenSeleccionada
+                        saldo, sobregiro, imagenSeleccionada
                 );
             }
 
@@ -264,8 +279,14 @@ public class FormularioClienteController {
                     txtSaldo.requestFocus();
                     return false;
                 }
+                double sobregiro = Double.parseDouble(txtSobregiro.getText().trim());
+                if (sobregiro < 0) {
+                    mostrarAlerta("El sobregiro no puede ser negativo");
+                    txtSaldo.requestFocus();
+                    return false;
+                }
             } catch (NumberFormatException e) {
-                mostrarAlerta("El saldo debe ser un número válido");
+                mostrarAlerta("El saldo y el sobregiro deben ser un número válido");
                 txtSaldo.requestFocus();
                 return false;
             }
