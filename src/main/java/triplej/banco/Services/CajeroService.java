@@ -105,7 +105,7 @@ public class CajeroService {
         return cliente;
     }
 
-    public void registrarCliente(Usuario usuario, String tipoCuenta, double saldo, double sobregiro) {
+    private void registrarCliente(Usuario usuario, String tipoCuenta, double saldo, Double sobregiro) {
         if (usuarioRepository.buscarUsuarioPorCorreo(usuario.getCorreo()).isPresent()) {
             mostrarAlerta("El correo ya está registrado: " + usuario.getCorreo());
             throw new IllegalArgumentException(
@@ -134,7 +134,7 @@ public class CajeroService {
     /**
      * Guarda una imagen asociada al cliente. Si no se selecciona una imagen, se usa una por defecto.
      */
-    public String guardarImagenCliente(File archivo, String numeroDocumento) {
+    private String guardarImagenCliente(File archivo, String numeroDocumento) {
         try {
             Path carpeta = Paths.get(RUTA_IMAGENES);
             Files.createDirectories(carpeta);
@@ -151,7 +151,7 @@ public class CajeroService {
         return IMAGEN_POR_DEFECTO;
     }
 
-    public CuentaBancaria agregarCuentaACliente(Cliente cliente, String tipoCuenta) {
+    public void agregarCuentaACliente(Cliente cliente, String tipoCuenta) {
         if (cliente == null) {
             throw new IllegalArgumentException("El cliente no puede estar nulo");
         }
@@ -160,7 +160,6 @@ public class CajeroService {
         clienteRepository.actualizarCliente(cliente);
         System.out.println("Cuenta " + nuevaCuenta.getNumeroCuenta() + " agregada ");
 
-        return nuevaCuenta;
     }
 
     public CuentaBancaria agregarCuentaACliente(Cliente cliente, String tipoCuenta, double saldoInicial) {

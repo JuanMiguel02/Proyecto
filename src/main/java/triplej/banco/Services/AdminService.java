@@ -1,6 +1,5 @@
 package triplej.banco.Services;
 
-import triplej.banco.Models.Usuarios.Cliente;
 import triplej.banco.Models.Usuarios.Empleado;
 import triplej.banco.Models.Usuarios.PersonaNatural;
 import triplej.banco.Models.Usuarios.RolUsuario;
@@ -94,11 +93,8 @@ public class AdminService {
             empleado.getPersona().setContrasenia(contrasenia);
         }
 
-        EmpleadoRepository empleadoRepo = EmpleadoRepository.getInstance();
-        UsuarioRepository usuarioRepo = UsuarioRepository.getInstancia();
-
-        usuarioRepo.actualizarUsuario(empleado.getPersona());
-        empleadoRepo.actualizarEmpleado(empleado);
+        usuarioRepository.actualizarUsuario(empleado.getPersona());
+        empleadoRepository.actualizarEmpleado(empleado);
     }
 
     public RolUsuario determinarRolPorCargo(String cargo) {

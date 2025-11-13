@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class EmpleadoRepository {
@@ -59,7 +60,7 @@ public class EmpleadoRepository {
         agregarEmpleado(new Empleado(admin, "Admin", 2000.0, "Gestión"));
     }
 
-    public ArrayList<Empleado> getEmpleados() {
+    public List<Empleado> getEmpleados() {
         return empleados;
     }
 
