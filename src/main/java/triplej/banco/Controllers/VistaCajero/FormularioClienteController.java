@@ -11,17 +11,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import triplej.banco.Services.CajeroService;
-import triplej.banco.Models.Cuentas.CuentaBancaria;
 import triplej.banco.Models.Usuarios.*;
 import triplej.banco.Repositories.ClienteRepository;
 
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 
 import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
@@ -100,6 +94,7 @@ public class FormularioClienteController {
         datosPersonaJuridica.setVisible(esJuridica);
         datosPersonaJuridica.setManaged(esJuridica);
 
+        cmbDocumento.getItems().clear();
         // Configurar opciones válidas de cuenta y documento
         cmbCuenta.getItems().clear();
         if(esJuridica){
@@ -108,6 +103,7 @@ public class FormularioClienteController {
             cmbDocumento.getItems().addAll(TipoDocumento.NIT);
         }else{
             cmbCuenta.getItems().addAll("Ahorro", "Corriente", "Empresarial");
+            cmbDocumento.getItems().addAll(TipoDocumento.values());
         }
     }
 
@@ -283,8 +279,14 @@ public class FormularioClienteController {
                     txtSaldo.requestFocus();
                     return false;
                 }
+                double sobregiro = Double.parseDouble(txtSobregiro.getText().trim());
+                if (sobregiro < 0) {
+                    mostrarAlerta("El sobregiro no puede ser negativo");
+                    txtSaldo.requestFocus();
+                    return false;
+                }
             } catch (NumberFormatException e) {
-                mostrarAlerta("El saldo debe ser un número válido");
+                mostrarAlerta("El saldo y el sobregiro deben ser un número válido");
                 txtSaldo.requestFocus();
                 return false;
             }

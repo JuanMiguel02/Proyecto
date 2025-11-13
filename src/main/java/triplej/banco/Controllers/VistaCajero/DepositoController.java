@@ -31,10 +31,10 @@ public class DepositoController {
         try{
             double monto = Double.parseDouble(txtMonto.getText());
             cajeroService.realizarDeposito(cuentaSeleccionada, monto);
-            mostrarAlerta("Éxito", "Retiro realizado correctamente", Alert.AlertType.INFORMATION);
+            mostrarAlerta("Éxito", "Déposito realizado correctamente", Alert.AlertType.INFORMATION);
             cerrarVentana();
         }catch (NumberFormatException e){
-            mostrarAlerta("Ingrese un motno válido");
+            mostrarAlerta("Ingrese un monto válido");
         } catch(IllegalArgumentException e){
             mostrarAlerta(e.getMessage());
         }

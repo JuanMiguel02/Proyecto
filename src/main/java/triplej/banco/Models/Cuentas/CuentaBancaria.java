@@ -23,6 +23,7 @@ public abstract class CuentaBancaria {
     private double saldo;
     private final LocalDate fechaApertura;
     private final Cliente propietario;
+    private static final double DEPOSITO_MINIMO = 10_000;
 
     public CuentaBancaria(Cliente propietario) {
         this.propietario = propietario;
@@ -100,10 +101,16 @@ public abstract class CuentaBancaria {
         return this.propietario;
     }
 
-    public abstract void retirar(Double monto);
+    public abstract double getRetiroMinimo();
 
-    public void depositar(Double monto) {
-        if (monto <= 0) throw new IllegalArgumentException("El monto debe ser positivo");
+    public abstract void retirar(Double monto, boolean esTransferencia);
+
+    public void depositar(Double monto, boolean esTransferencia) {
+        if(monto <= 0) {
+            throw new IllegalArgumentException("El monto debe de ser mayor a 0");
+        }
+
+        if (!esTransferencia && monto < DEPOSITO_MINIMO) throw new IllegalArgumentException("El déposito mínimo es de $" + DEPOSITO_MINIMO);
         saldo += monto;
     }
 

@@ -28,8 +28,11 @@ public class CuentaAhorro extends CuentaBancaria {
     }
 
     @Override
-    public void retirar(Double monto) {
-        if (monto <= 0) throw new IllegalArgumentException("El monto debe ser positivo");
+    public void retirar(Double monto, boolean esTransferencia) {
+        if (monto <= 0) throw new IllegalArgumentException("El monto debe de ser mayor a 0");
+
+        if (!esTransferencia && monto <  getRetiroMinimo()) throw new IllegalArgumentException("El retiro mínimo para cuentas de ahorro es de $" +  getRetiroMinimo());
+
         if (monto > getSaldo()) throw new IllegalArgumentException("Fondos insuficientes");
 
         double comision = 0.0;
@@ -45,6 +48,11 @@ public class CuentaAhorro extends CuentaBancaria {
 
         setSaldo(getSaldo() - total);
 
+    }
+
+    @Override
+    public double getRetiroMinimo() {
+        return 10000;
     }
 
     /**

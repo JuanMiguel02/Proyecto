@@ -19,6 +19,8 @@ public class TransferenciaController {
     @FXML private TextField txtMonto;
     @FXML private TextField txtCuentaDestino;
     @FXML private TextField txtCuentaDestinoConfirmacion;
+    private Runnable onTransferenciaExitosa;
+
 
     private final CajeroService cajeroService = new CajeroService();
     private Cliente clienteActual;
@@ -60,6 +62,9 @@ public class TransferenciaController {
 
            cajeroService.realizarTransferencia(cuentaOrigen, cuentaDestino, monto);
            mostrarAlerta("Éxito", "Transferencia realizada correctamente a: " + cuentaDestino.getNumeroCuenta(), Alert.AlertType.INFORMATION );
+           if (onTransferenciaExitosa != null) {
+               onTransferenciaExitosa.run();
+           }
 
        } catch (NumberFormatException e) {
         mostrarAlerta( "El monto debe ser un número válido.");
@@ -77,5 +82,10 @@ public class TransferenciaController {
 
     private void cerrarVentana(){
         ((Stage) txtMonto.getScene().getWindow()).close();
+    }
+
+
+    public void setOnTransferenciaExitosa(Runnable onTransferenciaExitosa) {
+        this.onTransferenciaExitosa = onTransferenciaExitosa;
     }
 }

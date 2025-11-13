@@ -172,7 +172,7 @@ public class CajeroService {
         CuentaBancaria nuevaCuenta = CuentaFactory.crearCuenta(tipoCuenta.toUpperCase(), cliente);
 
         // Asignar saldo inicial
-        nuevaCuenta.depositar(saldoInicial);
+        nuevaCuenta.setSaldo(saldoInicial);
 
         // Agregar al cliente y guardar
         cliente.agregarCuenta(nuevaCuenta);
@@ -191,7 +191,7 @@ public class CajeroService {
             return;
         }
         try {
-            cuenta.depositar(monto);
+            cuenta.depositar(monto, false);
             registrarTransaccion(
                     "DÉPOSITO",
                     monto,
@@ -215,7 +215,7 @@ public class CajeroService {
             return;
         }
         try {
-            cuenta.retirar(monto);
+            cuenta.retirar(monto, false);
             registrarTransaccion(
                     "RETIRO",
                     monto,
@@ -244,8 +244,8 @@ public class CajeroService {
         }
 
         try {
-            origen.retirar(monto);
-            destino.depositar(monto);
+            origen.retirar(monto, true);
+            destino.depositar(monto, true);
 
             registrarTransaccion(
                     "TRANSFERENCIA",

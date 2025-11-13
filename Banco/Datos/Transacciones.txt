@@ -1,0 +1,4 @@
+ID	Tipo	Monto	CuentaOrigen	CuentaDestino	Fecha	Descripción	Exitosa%nTXN-1762959204921-5141	DÉPOSITO	1000,00	null	null	2025-11-12T09:53:24.926843700	Retiro realizado correctamente	true
+TXN-1762959248592-7914	DÉPOSITO	1000,00	null	null	2025-11-12T09:54:08.592794200	Retiro realizado correctamente	true
+TXN-1762959436603-6584	DÉPOSITO	1000,00	null	null	2025-11-12T09:57:16.608294300	Retiro realizado correctamente	true
+TXN-1762959461141-4447	DÉPOSITO	1000,00	12345	12345	2025-11-12T09:57:41.150272	Retiro realizado correctamente	true
