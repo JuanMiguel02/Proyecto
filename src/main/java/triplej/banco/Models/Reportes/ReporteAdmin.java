@@ -15,7 +15,7 @@ public  class ReporteAdmin implements ReporteGenerado {
     private final UsuarioRepository usuarioRepository;
 
     public ReporteAdmin(){
-        this.transaccionRepository = TransaccionRepository.getInstance();
+        this.transaccionRepository = TransaccionRepository.getInstancia();
         this.usuarioRepository = UsuarioRepository.getInstancia();
     }
 
@@ -63,7 +63,7 @@ public  class ReporteAdmin implements ReporteGenerado {
         seccion.add("USUARIOS ACTIVOS: ");
             for(Usuario u : usuarioRepository.getUsuarios()){
                 seccion.add(String.format("- %s | %s | Estado: %s",
-                u.getNombreCompleto(),
+                u.getNombreUsuario(),
                 u.getRolUsuario(),
                 u.isActivo() ? "Activo" : "Inactivo"));
             }

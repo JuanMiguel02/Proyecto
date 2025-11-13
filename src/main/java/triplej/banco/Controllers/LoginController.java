@@ -11,7 +11,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import triplej.banco.Controllers.VistaAdmin.AdminController;
 import triplej.banco.Controllers.VistaCajero.CajeroController;
-import triplej.banco.Models.Banco;
 import triplej.banco.Models.Usuarios.*;
 import triplej.banco.Repositories.ClienteRepository;
 import triplej.banco.Repositories.EmpleadoRepository;
@@ -60,9 +59,8 @@ public class LoginController {
      */
     @FXML
     public  void initialize(){
-        Banco banco = Banco.getInstancia();
-        usuarioRepository = banco.getUsuarioRepository();
-        empleadoRepository = banco.getEmpleadoRepository();
+        usuarioRepository = UsuarioRepository.getInstancia();
+        empleadoRepository = EmpleadoRepository.getInstancia();
         System.out.println(usuarioRepository.getUsuarios().size());
         mostrarContrasenia(txtContrasenia,txtPasswordSignInMask,checkViewPassSignIn);
 
@@ -150,13 +148,13 @@ public class LoginController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/triplej/banco/Views/AdminViews/Admin-view.fxml"));
             Parent root = loader.load();
 
-            Optional<Empleado> adminExistente = empleadoRepository.buscarPorCorreo(usuario.getCorreo());
+            Optional<Usuario> adminExistente = usuarioRepository.buscarUsuarioPorCorreo(usuario.getCorreo());
 
-            Empleado admin;
+            Usuario admin;
 
             if (adminExistente.isPresent()) {
                 admin = adminExistente.get();
-                System.out.println("Admin existente encontrado: " + admin.getNombre());
+                System.out.println("Admin existente encontrado: " + admin.getNombreUsuario());
 
                 AdminController adminController = loader.getController();
                 adminController.setAdmin(admin);
@@ -175,7 +173,7 @@ public class LoginController {
         catch (IOException e){
             throw new RuntimeException("Error al abrir la ventana del admin: " + e.getMessage(), e);
         }
-        System.out.println("Admin: " + usuario.getNombreCompleto() + " inició sesión");
+        System.out.println("Admin: " + usuario.getNombreUsuario() + " inició sesión");
 
     }
 
@@ -215,7 +213,7 @@ public class LoginController {
         catch (IOException e){
             throw new RuntimeException("Error al abrir la ventana del cajero " + e.getMessage(), e);
         }
-        System.out.println("Cajero: " + usuario.getNombreCompleto() + " inició sesión");
+        System.out.println("Cajero: " + usuario.getNombreUsuario() + " inició sesión");
 
     }
 
@@ -260,7 +258,7 @@ public class LoginController {
             throw new RuntimeException("Error al abrir la ventana del cliente: " + e.getMessage(), e);
         }
 
-        System.out.println("Cliente " + usuario.getNombreCompleto() + " inició sesión");
+        System.out.println("Cliente " + usuario.getNombreUsuario() + " inició sesión");
     }
 
 }

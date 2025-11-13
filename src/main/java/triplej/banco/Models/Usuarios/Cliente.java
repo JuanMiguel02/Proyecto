@@ -7,12 +7,12 @@ import java.util.stream.Collectors;
 
 public class Cliente {
 
-    private Persona usuarioAsociado;
+    private Persona personaAsociada;
     private final ArrayList<CuentaBancaria> cuentas;
     private CuentaBancaria cuentaActiva;
 
-    public Cliente(Persona usuarioAsociado) {
-        this.usuarioAsociado = usuarioAsociado;
+    public Cliente(Persona personaAsociada) {
+        this.personaAsociada = personaAsociada;
         this.cuentas = new ArrayList<>();
 
     }
@@ -24,27 +24,27 @@ public class Cliente {
         return 0.0;
     }
 
-    public Usuario getUsuarioAsociado() {
-        return usuarioAsociado;
+    public Usuario getPersonaAsociada() {
+        return personaAsociada;
     }
 
-    public String getCorreo(){return usuarioAsociado.getCorreo();}
+    public String getCorreo(){return personaAsociada.getCorreo();}
 
     public String getNombre(){
-        return usuarioAsociado.getNombreCompleto();
+        return personaAsociada.getNombreUsuario();
     }
 
-    public String getCiudad(){ return usuarioAsociado.getCiudad();}
+    public String getCiudad(){ return personaAsociada.getCiudad();}
 
-    public String getTelefono(){return usuarioAsociado.getTelefono();}
+    public String getTelefono(){return personaAsociada.getTelefono();}
 
-    public String getTipoDocumento(){ return usuarioAsociado.getTipoDocumento().toString();}
+    public String getTipoDocumento(){ return personaAsociada.getTipoDocumento().toString();}
 
-    public void setUsuarioAsociado(Persona usuarioAsociado) {
-        this.usuarioAsociado = usuarioAsociado;
+    public void setPersonaAsociada(Persona personaAsociada) {
+        this.personaAsociada = personaAsociada;
     }
 
-    public String getFoto(){ return usuarioAsociado.getFoto();}
+    public String getFoto(){ return personaAsociada.getFoto();}
 
     public ArrayList<CuentaBancaria> getCuentas() {
         return cuentas;
@@ -59,7 +59,7 @@ public class Cliente {
     }
 
     public String getDocumento(){
-        return usuarioAsociado.getNumeroDocumento();
+        return personaAsociada.getNumeroDocumento();
     }
 
     public CuentaBancaria getCuentaPorNumero() {
@@ -85,7 +85,7 @@ public class Cliente {
         String cuentasString = nombrarCuentasTipo();
 
         return "Cliente: " +
-                usuarioAsociado.getNombreCompleto() +
+                personaAsociada.getNombreUsuario() +
                 ", cuentas= " + cuentasString +'\'';
     }
 

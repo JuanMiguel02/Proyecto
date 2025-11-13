@@ -1,0 +1,7 @@
+Id	Nombre/RazónSocial	Apellido/Representante	Correo	Contraseña	Rol	TipoDocumento	Documento	Teléfono	País	Ciudad	TipoEmpresa	Foto	Activo
+c83f4561-4c62-4327-934c-54845737376c	Sancho	Panza	sancho@uqbank	123456	ADMIN	CEDULACIUDADANIA	312412	313414	Colombia	Armenia	-	-	true
+ec048d91-6eca-4f4e-94f0-d3d5358c332d	Juan	Henao	juancho@gmail	12345	CLIENTE	CEDULACIUDADANIA	1232190	2132141	Colombia	Bogotá	-	-	false
+783c276f-222a-4a55-9fa2-58d35d42664e	Paco	Jones	pacojones@gmail	123456	CLIENTE	CEDULACIUDADANIA	123345	21341	Colombia	Bogotá	-	-	false
+7bf75371-aff6-4b4d-a922-9af1174dd244	Juan	Henao	juan@gmail	1212321	EMPLEADO	CEDULACIUDADANIA	123213	2132141	Colombia	Bogotá	-	-	true
+98fe5a57-5ce8-4dfa-b797-145747c6ac04	Paco	Jones	paco@gmail	123456	CAJERO	CEDULACIUDADANIA	1238912	21341	Colombia	Bogotá	-	-	true
+765cfe92-ce5a-42bb-bdac-ef0fc978352d	kepo	jhon	kepo@gmail	123456	ADMIN	CEDULACIUDADANIA	123456	123456131	colombia	armenia	-	/triplej/banco/Images/avatar.png	false

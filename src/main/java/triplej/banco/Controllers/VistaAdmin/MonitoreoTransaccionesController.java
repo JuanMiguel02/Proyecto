@@ -49,7 +49,7 @@ public class MonitoreoTransaccionesController {
      */
     public void initialize(){
         // Inicializa el repositorio (patrón Singleton)
-        transaccionRepository = TransaccionRepository.getInstance();
+        transaccionRepository = TransaccionRepository.getInstancia();
 
         // Configurar las columnas para que tomen los valores de las propiedades de Transaccion
         colId.setCellValueFactory(new PropertyValueFactory<>("id")); //

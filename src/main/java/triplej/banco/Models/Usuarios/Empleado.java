@@ -1,7 +1,5 @@
 package triplej.banco.Models.Usuarios;
 
-import javafx.scene.image.Image;
-
 public class Empleado{
 
     private String cargo;
@@ -49,7 +47,7 @@ public class Empleado{
     }
 
     public String getNombreCompleto(){
-        return this.persona.getNombreCompleto();
+        return this.persona.getNombreUsuario();
     }
 
     public String getCorreo(){

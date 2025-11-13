@@ -13,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CuentaBancariaTest {
 
-    private Cliente cliente;
     private List<CuentaBancaria> cuentas;
 
     @BeforeEach
@@ -21,7 +20,7 @@ class CuentaBancariaTest {
         PersonaNatural p = new PersonaNatural("Pepito", "Pérez", "pepe@gmail.com"
         , "1234", RolUsuario.CLIENTE, TipoDocumento.CEDULACIUDADANIA, "1231",
                 "313123123", "Colombia", "Cali");
-        cliente = new Cliente(p);
+        Cliente cliente = new Cliente(p);
         cuentas = List.of(
                 new CuentaAhorro(cliente),
                 new CuentaCorriente(cliente),

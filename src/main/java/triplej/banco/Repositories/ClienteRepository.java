@@ -25,7 +25,7 @@ public class ClienteRepository {
     private ClienteRepository() {
         this.clientes = new ArrayList<>();
         this.usuarioRepository = UsuarioRepository.getInstancia();
-        this.transaccionRepository = TransaccionRepository.getInstance();
+        this.transaccionRepository = TransaccionRepository.getInstancia();
 
         Path rutaUsuarios = Paths.get("Banco", "Datos", "Usuarios.txt");
         Path rutaCuentas = Paths.get("Banco", "Datos", "Cuentas.txt");
@@ -49,9 +49,9 @@ public class ClienteRepository {
     }
 
     public void guardar(Cliente cliente) {
-        usuarioRepository.guardar(cliente.getUsuarioAsociado());
+        usuarioRepository.guardarUsuario(cliente.getPersonaAsociada());
 
-        if (!clientes.contains(cliente) && cliente.getUsuarioAsociado().getRolUsuario() == RolUsuario.CLIENTE) {
+        if (!clientes.contains(cliente) && cliente.getPersonaAsociada().getRolUsuario() == RolUsuario.CLIENTE) {
             clientes.add(cliente);
         }
 
@@ -68,7 +68,7 @@ public class ClienteRepository {
     public void actualizarCliente(Cliente clienteActualizado) {
         for (Cliente clienteActual : clientes) {
             //  Comparar por documento, accediendo desde PersonaNatural
-            if (clienteActual.getUsuarioAsociado().getId().equals(clienteActualizado.getUsuarioAsociado().getId())) {
+            if (clienteActual.getPersonaAsociada().getId().equals(clienteActualizado.getPersonaAsociada().getId())) {
                 for (CuentaBancaria cuenta : clienteActualizado.getCuentas()) {
                     if (cuentaExisteEnArchivo(cuenta.getNumeroCuenta())) {
                         actualizarSaldoEnArchivo(cuenta);
@@ -112,7 +112,7 @@ public class ClienteRepository {
 
     public Optional<Cliente> buscarPorCorreo(String email) {
         return clientes.stream()
-                .filter(c -> c.getUsuarioAsociado().getCorreo().equals(email))
+                .filter(c -> c.getPersonaAsociada().getCorreo().equals(email))
                 .findFirst();
     }
 
@@ -239,7 +239,7 @@ public class ClienteRepository {
             }
 
             String linea;
-            //   guardar sobregiro solo si es cuenta corriente
+            //   guardarUsuario sobregiro solo si es cuenta corriente
             if (cuenta instanceof CuentaCorriente corriente) {
                 linea = String.format(
                         "%s\t%.2f\t%s\t%s\t%.2f%n",

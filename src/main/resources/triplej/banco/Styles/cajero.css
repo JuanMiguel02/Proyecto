@@ -88,7 +88,7 @@
     -fx-border-radius: 8;
 }
 
-/* Botón guardar reporte */
+/* Botón guardarUsuario reporte */
 .cajero-btn-guardar {
     -fx-background-color: linear-gradient(to bottom, #10b981, #047857);
     -fx-text-fill: white;

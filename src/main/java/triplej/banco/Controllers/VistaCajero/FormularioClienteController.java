@@ -10,6 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import triplej.banco.Models.Cuentas.CuentaBancaria;
 import triplej.banco.Services.CajeroService;
 import triplej.banco.Models.Usuarios.*;
 import triplej.banco.Repositories.ClienteRepository;
@@ -23,8 +24,8 @@ import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
 /**
  * Controlador para el formulario de registro de clientes en la vista del cajero.
  * Permite registrar tanto personas naturales como jurídicas, validar los datos ingresados,
- * guardar una imagen opcional y crear automáticamente una cuenta bancaria asociada al cliente.
- *
+ * guardarUsuario una imagen opcional y crear automáticamente una cuenta bancaria asociada al cliente.
+ * <p>
  * Se comunica con el servicio {@link CajeroService} y el repositorio {@link ClienteRepository}
  * para realizar las operaciones de negocio y persistencia.
  */
@@ -61,8 +62,6 @@ public class FormularioClienteController {
     private final CajeroService cajeroService = new CajeroService();
     private CajeroController cajeroController;
 
-    private final ClienteRepository clienteRepository = ClienteRepository.getInstancia();
-
     /**
      * Inicializa el formulario configurando las listas desplegables
      * y los comportamientos dinámicos según el tipo de cliente seleccionado.
@@ -77,6 +76,7 @@ public class FormularioClienteController {
         // Detecta cuando se cambia el tipo de cliente y actualiza la interfaz
         cmbTipoCliente.setOnAction(e -> onTipoClienteSeleccionado());
 
+        configurarValidaciones();
     }
 
     /**
@@ -138,15 +138,17 @@ public class FormularioClienteController {
                 sobregiro = Double.parseDouble(txtSobregiro.getText().trim());
             }
 
+            CuentaBancaria cuentaCreada;
+
            if ("Persona Jurídica".equalsIgnoreCase(tipoCliente)) {
-                cajeroService.registrarPersonaJuridica(
+                cuentaCreada = cajeroService.registrarPersonaJuridica(
                         txtRazonSocial.getText(), txtRepresentante.getText(), txtTipoEmpresa.getText(),
                         txtCorreo.getText(), txtPassword.getText(), cmbDocumento.getValue(),
                         txtNumDocumento.getText(), txtTelefono.getText(), txtPais.getText(), txtCiudad.getText(),
                         cmbCuenta.getValue(), saldo, sobregiro, imagenSeleccionada
                 );
             } else {
-                cajeroService.registrarPersonaNatural(
+                 cuentaCreada = cajeroService.registrarPersonaNatural(
                         txtNombre.getText(), txtApellido.getText(), txtCorreo.getText(),
                         txtPassword.getText(), cmbDocumento.getValue(),
                         txtNumDocumento.getText(), txtTelefono.getText(),
@@ -155,7 +157,7 @@ public class FormularioClienteController {
                 );
             }
 
-            mostrarAlerta("Cliente registrado correctamente", Alert.AlertType.INFORMATION);
+            mostrarAlerta("ÉXITO","Cliente registrado correctamente \nNúmero de Cuenta: " + cuentaCreada.getNumeroCuenta(), Alert.AlertType.INFORMATION);
             limpiarCampos();
 
         } catch (Exception e) {
@@ -346,4 +348,72 @@ public class FormularioClienteController {
         cajeroController.mostrarInicio();
     }
 
+    /**
+     * Configura validaciones básicas en tiempo real para los campos del formulario.
+     * Restringe caracteres inválidos mientras el usuario escribe.
+     */
+    private void configurarValidaciones() {
+
+        // Solo letras y espacios
+        txtNombre.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.matches("[a-zA-ZÁÉÍÓÚáéíóúÑñ\\s]*")) {
+                txtNombre.setText(oldVal);
+            }
+        });
+
+        txtApellido.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.matches("[a-zA-ZÁÉÍÓÚáéíóúÑñ\\s]*")) {
+                txtApellido.setText(oldVal);
+            }
+        });
+
+        txtCiudad.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.matches("[a-zA-ZÁÉÍÓÚáéíóúÑñ\\s]*")) {
+                txtCiudad.setText(oldVal);
+            }
+        });
+
+        txtPais.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.matches("[a-zA-ZÁÉÍÓÚáéíóúÑñ\\s]*")) {
+                txtPais.setText(oldVal);
+            }
+        });
+
+        txtRepresentante.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.matches("[a-zA-ZÁÉÍÓÚáéíóúÑñ\\s]*")) {
+                txtRepresentante.setText(oldVal);
+            }
+        });
+
+        txtTipoEmpresa.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.matches("[a-zA-ZÁÉÍÓÚáéíóúÑñ\\s]*")) {
+                txtTipoEmpresa.setText(oldVal);
+            }
+        });
+
+        // Solo números
+        txtNumDocumento.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.matches("\\d*")) {
+                txtNumDocumento.setText(oldVal);
+            }
+        });
+
+        txtTelefono.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.matches("\\d*")) {
+                txtTelefono.setText(oldVal);
+            }
+        });
+
+        txtSaldo.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.matches("\\d*(\\.\\d{0,2})?")) { // permite decimales
+                txtSaldo.setText(oldVal);
+            }
+        });
+
+        txtSobregiro.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.matches("\\d*(\\.\\d{0,2})?")) {
+                txtSobregiro.setText(oldVal);
+            }
+        });
+    }
 }

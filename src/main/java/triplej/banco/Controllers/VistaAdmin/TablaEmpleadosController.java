@@ -10,10 +10,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import triplej.banco.Models.Usuarios.PersonaNatural;
 import triplej.banco.Models.Usuarios.RolUsuario;
+import triplej.banco.Models.Usuarios.Usuario;
 import triplej.banco.Repositories.EmpleadoRepository;
 import triplej.banco.Models.Usuarios.Empleado;
-import triplej.banco.Repositories.UsuarioRepository;
 import triplej.banco.Services.AdminService;
 
 import java.io.File;
@@ -23,10 +24,10 @@ import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
 
 /**
  * Controlador de la vista de administración de empleados.
- *
+ * <p>
  * Esta clase gestiona las operaciones que el administrador puede realizar
  * sobre los empleados del banco, como visualizar, filtrar, editar y eliminar.
- *
+ * <p>
  * También maneja la interfaz gráfica para alternar entre la vista de tabla
  * (donde se listan los empleados) y la vista de edición (donde se actualizan sus datos).
  */
@@ -79,15 +80,17 @@ public class TablaEmpleadosController {
 
     /** Repositorios y servicios para gestionar los datos */
     private EmpleadoRepository empleadoRepository;
-    private UsuarioRepository usuarioRepository;
     private ObservableList<Empleado> listaEmpleados;
 
     /** Servicio que centraliza las operaciones del administrador */
     private final AdminService adminService = new AdminService();
 
+    private Usuario adminActual;
+
+
     /**
      * Método que se ejecuta automáticamente al cargar la vista.
-     *
+     * <p>
      * - Configura las columnas de la tabla para mostrar los datos del empleado.
      * - Carga la lista de empleados desde el repositorio.
      * - Configura la búsqueda dinámica por nombre, apellido o cargo.
@@ -95,8 +98,8 @@ public class TablaEmpleadosController {
      */
     @FXML
     public void initialize() {
-        empleadoRepository = EmpleadoRepository.getInstance();
-        usuarioRepository = UsuarioRepository.getInstancia();
+
+        empleadoRepository = EmpleadoRepository.getInstancia();
 
         // Configuración de columnas con los getters de Empleado
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre")); // llama a getNombre()
@@ -157,7 +160,7 @@ public class TablaEmpleadosController {
 
     /**
      * Elimina el empleado actualmente seleccionado.
-     *
+     * <p>
      * Si no hay selección, muestra una alerta.
      * Si la eliminación es exitosa, se elimina también de la lista de la tabla.
      */
@@ -170,6 +173,16 @@ public class TablaEmpleadosController {
             return;
         }
 
+        if(adminActual == null){
+            mostrarAlerta("No se detectó un administrador activo");
+            return;
+        }
+
+        if (seleccionado.getCargo().equalsIgnoreCase("Admin") && !adminActual.getId().equals("11111111-1111-1111-1111-111111111111")) {
+            mostrarAlerta("No se puede eliminar a otro administrador");
+            return;
+        }
+
         if (adminService.eliminarEmpleado(seleccionado)) {
             listaEmpleados.remove(seleccionado);
             mostrarAlerta("Éxito", "Empleado eliminado correctamente.", Alert.AlertType.INFORMATION);
@@ -178,7 +191,7 @@ public class TablaEmpleadosController {
 
     /**
      * Permite editar la información del empleado seleccionado.
-     *
+     * <p>
      * Carga sus datos en los campos del formulario de edición,
      * incluyendo la contraseña, y cambia la vista de tabla a la vista de edición.
      */
@@ -227,10 +240,10 @@ public class TablaEmpleadosController {
 
     /**
      * Guarda los cambios realizados en el formulario de edición.
-     *
+     * <p>
      * Los valores se obtienen de los campos del formulario y se envían al `AdminService`,
      * que actualiza tanto la información personal como los datos laborales del empleado.
-     *
+     * <p>
      * También actualiza la tabla y regresa a la vista principal.
      */
     @FXML
@@ -280,7 +293,7 @@ public class TablaEmpleadosController {
 
     /**
      * Muestra la imagen del empleado seleccionado en la vista.
-     *
+     * <p>
      * Si no tiene foto personalizada, se muestra una imagen predeterminada.
      * Soporta imágenes tanto del sistema de archivos como del classpath del proyecto.
      */
@@ -329,9 +342,9 @@ public class TablaEmpleadosController {
 
     /**
      * Alterna entre mostrar y ocultar la contraseña en el formulario de edición.
-     *
+     * <p>
      * Se realiza intercambiando la visibilidad entre el campo `PasswordField` y el `TextField`.
-     *
+     * <p>
      * Este enfoque permite ver el texto de la contraseña sin perder la funcionalidad de ocultarla.
      */
     @FXML
@@ -348,5 +361,10 @@ public class TablaEmpleadosController {
             txtContrasenia.setText(txtContraseniaVisible.getText());
         }
     }
+
+    public void setAdminActual(Usuario adminActual) {
+        this.adminActual = adminActual;
+    }
+
 }
 

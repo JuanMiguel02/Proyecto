@@ -28,13 +28,13 @@ class UsuarioRepositoryTest {
     }
 
     @Test
-    void guardarYBuscarUsuario() {
+    void guardarUsuarioYBuscarUsuario() {
         PersonaNatural usuario = new PersonaNatural(
                 "Armando", "Casas", "armando@test.com", "1234",
                 RolUsuario.CAJERO, TipoDocumento.CEDULACIUDADANIA, "1021",
                 "2414", "Colombia", "Medellín"
         );
-        usuarioRepository.guardar(usuario);
+        usuarioRepository.guardarUsuario(usuario);
         assertTrue(usuarioRepository.existeUsuarioConCorreo("armando@test.com"));
         assertEquals(1, usuarioRepository.contarTodos());
         assertTrue(usuarioRepository.buscarUsuarioPorCorreo("armando@test.com").isPresent());
@@ -56,8 +56,8 @@ class UsuarioRepositoryTest {
                 "21414", "Colombia", "Medellín"
         );
 
-        usuarioRepository.guardar(usuario1);
-        usuarioRepository.guardar(usuario2);
+        usuarioRepository.guardarUsuario(usuario1);
+        usuarioRepository.guardarUsuario(usuario2);
 
         assertTrue(usuarioRepository.existeUsuarioConCorreo("rosario@test.com"));
         assertEquals(2, usuarioRepository.contarTodos());
@@ -77,16 +77,16 @@ class UsuarioRepositoryTest {
                 "241144", "Colombia", "Medellín"
         );
 
-        usuarioRepository.guardar(admin);
-        usuarioRepository.guardar(cliente);
+        usuarioRepository.guardarUsuario(admin);
+        usuarioRepository.guardarUsuario(cliente);
 
         var clientes = usuarioRepository.obtenerPorRol(RolUsuario.CLIENTE);
         assertEquals(1, clientes.size());
-        assertEquals("Armando Paredes", clientes.getFirst().getNombreCompleto());
+        assertEquals("Armando Paredes", clientes.getFirst().getNombreUsuario());
 
         var admins = usuarioRepository.obtenerPorRol(RolUsuario.ADMIN);
         assertEquals(1, admins.size());
-        assertEquals("Chino Moreno", admins.getFirst().getNombreCompleto());
+        assertEquals("Chino Moreno", admins.getFirst().getNombreUsuario());
 
     }
 
@@ -97,7 +97,7 @@ class UsuarioRepositoryTest {
                 RolUsuario.EMPLEADO, TipoDocumento.CEDULACIUDADANIA, "104121",
                 "414141", "Colombia", "Bogotá"
         );
-        usuarioRepository.guardar(usuario);
+        usuarioRepository.guardarUsuario(usuario);
         assertEquals(1, usuarioRepository.contarTodos());
 
         usuarioRepository.eliminarUsuario(usuario);
@@ -111,7 +111,7 @@ class UsuarioRepositoryTest {
                 RolUsuario.CAJERO, TipoDocumento.CEDULACIUDADANIA, "1021",
                 "2414", "Colombia", "Medellín"
         );
-        usuarioRepository.guardar(usuario);
+        usuarioRepository.guardarUsuario(usuario);
         assertTrue(usuarioRepository.existeUsuarioConCorreo("armando@test.com"));
         assertEquals(1, usuarioRepository.contarTodos());
         assertTrue(usuarioRepository.buscarUsuarioPorCorreo("armando@test.com").isPresent());

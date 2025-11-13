@@ -7,8 +7,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import triplej.banco.Models.Usuarios.*;
-import triplej.banco.Repositories.EmpleadoRepository;
-import triplej.banco.Repositories.UsuarioRepository;
 import triplej.banco.Services.AdminService;
 
 import java.io.File;
@@ -18,10 +16,10 @@ import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
 
 /**
  * Controlador encargado del formulario de registro de empleados.
- *
+ * <p>
  * Permite a un administrador ingresar los datos de un nuevo empleado, validar la información,
  * cargar una imagen opcional y registrar el empleado en el sistema.
- *
+ * <p>
  * Además, implementa verificaciones para evitar correos duplicados y errores de formato.
  */
 public class FormularioEmpleadoController {
@@ -59,8 +57,6 @@ public class FormularioEmpleadoController {
 
     // Referencias a otros controladores y repositorios
     private AdminController adminController;
-    private EmpleadoRepository empleadoRepository;
-    private UsuarioRepository usuarioRepository;
 
     // Servicio que gestiona la lógica de negocio del administrador
     private final AdminService adminService = new AdminService();
@@ -72,9 +68,6 @@ public class FormularioEmpleadoController {
      */
     @FXML
     public void initialize() {
-
-        empleadoRepository = EmpleadoRepository.getInstance();
-        usuarioRepository = UsuarioRepository.getInstancia();
 
         // Configurar ComboBox de departamentos
         cmbDepartamento.getItems().addAll(
@@ -92,7 +85,7 @@ public class FormularioEmpleadoController {
     }
 
     /**
-     * Vuelve a la vista principal del administrador sin guardar los cambios.
+     * Vuelve a la vista principal del administrador sin guardarUsuario los cambios.
      */
     @FXML
     private void onCancelar() {
@@ -133,7 +126,7 @@ public class FormularioEmpleadoController {
                     imagenSeleccionada
             );
 
-            mostrarAlerta("Éxito", "Empleado registrado correctamente: " + nuevoEmpleado.getPersona().getNombreCompleto(), Alert.AlertType.INFORMATION);
+            mostrarAlerta("Éxito", "Empleado registrado correctamente: " + nuevoEmpleado.getPersona().getNombreUsuario(), Alert.AlertType.INFORMATION);
             // Limpia los campos después del registro exitoso
             limpiarFormulario();
 
@@ -160,7 +153,7 @@ public class FormularioEmpleadoController {
         }
 
         // Crear PersonaNatural
-        PersonaNatural persona = new PersonaNatural(
+        return new PersonaNatural(
                 txtNombre.getText().trim(),
                 txtApellido.getText().trim(),
                 txtCorreo.getText().trim().toLowerCase(),
@@ -172,7 +165,6 @@ public class FormularioEmpleadoController {
                 txtPais.getText().trim(),
                 txtCiudad.getText().trim()
         );
-        return persona;
     }
 
 
@@ -204,7 +196,7 @@ public class FormularioEmpleadoController {
     }
 
     /**
-     * Verifica que los campos del formulario sean válidos antes de guardar.
+     * Verifica que los campos del formulario sean válidos antes de guardarUsuario.
      * <p>
      * Realiza comprobaciones de formato, vacíos, longitud mínima de contraseñas
      * y formato de correo electrónico.
@@ -333,6 +325,18 @@ public class FormularioEmpleadoController {
      * - El correo valida su formato en tiempo real.
      */
     private void configurarValidaciones() {
+        // Solo letras y espacios
+        txtNombre.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.matches("[a-zA-ZÁÉÍÓÚáéíóúÑñ\\s]*")) {
+                txtNombre.setText(oldVal);
+            }
+        });
+
+        txtApellido.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.matches("[a-zA-ZÁÉÍÓÚáéíóúÑñ\\s]*")) {
+                txtApellido.setText(oldVal);
+            }
+        });
         // Solo números en cédula
         txtCedula.textProperty().addListener((obs, oldVal, newVal) -> {
             if (!newVal.matches("\\d*")) {

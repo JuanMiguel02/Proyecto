@@ -14,7 +14,7 @@ public class PersonaJuridica extends Persona{
     }
 
     @Override
-    public String getNombreCompleto(){
+    public String getNombreUsuario(){
         return this.razonSocial;
     }
 

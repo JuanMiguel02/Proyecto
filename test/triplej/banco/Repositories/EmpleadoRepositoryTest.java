@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class EmpleadoRepositoryTest {
 
-    private final EmpleadoRepository empleadoRepository = EmpleadoRepository.getInstance();
+    private final EmpleadoRepository empleadoRepository = EmpleadoRepository.getInstancia();
 
     @BeforeEach
     void setUp() throws IOException {

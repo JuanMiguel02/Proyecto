@@ -37,7 +37,7 @@ public class TransaccionRepository {
         }
     }
 
-    public static TransaccionRepository getInstance() {
+    public static TransaccionRepository getInstancia() {
         if (instance == null) {
             instance = new TransaccionRepository();
         }
@@ -99,7 +99,7 @@ public class TransaccionRepository {
             Files.writeString(ruta, linea, StandardOpenOption.APPEND);
 
         } catch (IOException e) {
-            throw new RuntimeException("Error al guardar transacción: " + e.getMessage(), e);
+            throw new RuntimeException("Error al guardarUsuario transacción: " + e.getMessage(), e);
         }
 
     }

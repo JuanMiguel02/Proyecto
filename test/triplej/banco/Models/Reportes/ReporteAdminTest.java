@@ -38,7 +38,7 @@ class ReporteAdminTest {
         // Crear el mock del usuario
         Usuario usuario = mock(Usuario.class);
 
-        when(usuario.getNombreCompleto()).thenReturn("Aquiles Tengo");
+        when(usuario.getNombreUsuario()).thenReturn("Aquiles Tengo");
         when(usuario.getRolUsuario()).thenReturn(RolUsuario.CLIENTE);
         when(usuario.isActivo()).thenReturn(true);
 
@@ -71,7 +71,6 @@ class ReporteAdminTest {
         assertTrue(reporte.getContenido().stream().anyMatch(linea -> linea.contains("Total de transacciones")));
         assertTrue(reporte.getContenido().stream().anyMatch(linea -> linea.contains("Aquiles Tengo")));
         assertTrue(reporte.getContenido().stream().anyMatch(linea -> linea.contains("T001")));
-
 
     }
 }

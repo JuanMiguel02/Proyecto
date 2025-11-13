@@ -163,10 +163,10 @@ public class CajeroController {
     private void cargarDatosCliente() {
 
         // Diferenciar entre persona natural y jurídica
-        if(clienteActual.getUsuarioAsociado() instanceof PersonaJuridica juridica){
+        if(clienteActual.getPersonaAsociada() instanceof PersonaJuridica juridica){
            mostrarDatosPersonaJuridica(juridica);
         }
-        else if(clienteActual.getUsuarioAsociado() instanceof PersonaNatural personaNatural){
+        else if(clienteActual.getPersonaAsociada() instanceof PersonaNatural personaNatural){
             mostrarDatosPersonaNatural(personaNatural);
         }
         // Campos comunes
@@ -458,7 +458,7 @@ public class CajeroController {
     private void onGuardarReporte(){
         String contenido = txtReporteGeneral.getText();
         if(contenido == null || contenido.isBlank()){
-            mostrarAlerta("No hay reporte para guardar");
+            mostrarAlerta("No hay reporte para guardarUsuario");
             return;
         }
         exportarReporteTxt(contenido);

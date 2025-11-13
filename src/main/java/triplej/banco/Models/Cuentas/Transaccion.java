@@ -92,7 +92,7 @@ public class Transaccion {
     public boolean esSospechosa(){
         if(monto > 10_000_000) return true;
 
-        TransaccionRepository repo = TransaccionRepository.getInstance();
+        TransaccionRepository repo = TransaccionRepository.getInstancia();
         List<Transaccion> historial = repo.getPorCuenta(cuentaOrigen);
 
         LocalDateTime ahora = LocalDateTime.now();

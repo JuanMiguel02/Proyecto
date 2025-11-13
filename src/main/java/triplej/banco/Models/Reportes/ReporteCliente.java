@@ -25,7 +25,7 @@ public class ReporteCliente implements ReporteGenerado {
         contenido.add("Fecha de generación: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
         contenido.add("-----------------------------------------------------");
 
-        for (Transaccion t : cuentaBancaria.getHistorial()) {
+        for (Transaccion t : cuentaBancaria.getHistorialTransacciones()) {
             String tipoMovimiento;
             String detalle;
 

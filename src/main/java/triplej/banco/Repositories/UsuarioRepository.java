@@ -26,10 +26,11 @@ public class UsuarioRepository {
         Path ruta = Paths.get("Banco", "Datos", "Usuarios.txt");
 
         if (Files.exists(ruta)) {
-                System.out.println("cargando usuarios");
-                cargarDesdeArchivo();
+            System.out.println("cargando usuarios");
+            cargarDesdeArchivo();
 
         }else{
+            cargarDatosEjemplo();
             System.out.println("Primera ejecución");
         }
 
@@ -42,8 +43,8 @@ public class UsuarioRepository {
         return instancia;
     }
 
-    // Unico metodo para guardar cualquier tipo de usuario.
-    public void guardar(Usuario usuario) {
+    // Unico metodo para guardarUsuario cualquier tipo de usuario.
+    public void guardarUsuario(Usuario usuario) {
         Optional<Usuario> existente = buscarUsuarioPorCorreo(usuario.getCorreo());
         if (existente.isPresent() && !existente.get().getId().equals(usuario.getId())) {
             return;
@@ -111,6 +112,14 @@ public class UsuarioRepository {
 
     public int contarTodos() {
         return usuarios.size();
+    }
+
+    private void cargarDatosEjemplo(){
+        UUID idSancho = UUID.fromString("11111111-1111-1111-1111-111111111111");
+        PersonaNatural admin = new PersonaNatural("Sancho", "Panza", "sancho@uqbank", "123456", RolUsuario.ADMIN,
+                TipoDocumento.CEDULACIUDADANIA, "312412", "313414", "Colombia", "Armenia");
+        admin.setId(idSancho);
+      guardarUsuario(admin);
     }
 
 
@@ -185,7 +194,7 @@ public class UsuarioRepository {
             Files.writeString(ruta, linea, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
 
         } catch (IOException e) {
-            throw new RuntimeException("Error al guardar en archivo: " + e.getMessage(), e);
+            throw new RuntimeException("Error al guardarUsuario en archivo: " + e.getMessage(), e);
         }
     }
 

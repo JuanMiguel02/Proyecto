@@ -11,14 +11,14 @@ public class CuentaAhorro extends CuentaBancaria {
     public CuentaAhorro(Cliente propietario){
         super(propietario);
         this.tasaInteres = 0.04; // 4% mensual
-        this.limiteRetirosMensuales = 3;
+        this.limiteRetirosMensuales = 5;
         this.retirosMensuales = 0;
     }
 
     public CuentaAhorro(Cliente propietario, String numeroCuenta, double saldo){
         super(propietario,numeroCuenta,saldo);
         this.tasaInteres = 0.04; // 4% mensual
-        this.limiteRetirosMensuales = 3;
+       this.limiteRetirosMensuales = 5;
         this.retirosMensuales = 0;
     }
 

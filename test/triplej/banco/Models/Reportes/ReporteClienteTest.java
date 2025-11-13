@@ -42,7 +42,7 @@ class ReporteClienteTest {
         when(transaccion.getId()).thenReturn("T001");
         when(transaccion.getTipo()).thenReturn("Depósito");
         when(transaccion.getCuentaDestino()).thenReturn("123");
-        when(transaccion.getCuentaOrigen()).thenReturn("456");
+        when(transaccion.getCuentaOrigen()).thenReturn("123");
         when(transaccion.getMonto()).thenReturn(2000.0);
         when(transaccion.getFechaFormateada()).thenReturn(LocalDate.now().toString());
         when(transaccion.esSospechosa()).thenReturn(false);
@@ -51,7 +51,7 @@ class ReporteClienteTest {
         ArrayList<Transaccion> transacciones = new ArrayList<>();
         transacciones.add(transaccion);
 
-        when(cuentaBancaria.getHistorial()).thenReturn(transacciones);
+        when(cuentaBancaria.getHistorialTransacciones()).thenReturn(transacciones);
 
         //Generar el reporte
         Reporte reporte = reporteCliente.generarReporte();
@@ -64,6 +64,6 @@ class ReporteClienteTest {
         assertTrue(reporte.getContenido().stream().anyMatch(linea -> linea.contains("2000")));
         assertTrue(reporte.getContenido().stream().anyMatch(linea -> linea.contains("Aquiles Tengo")));
         assertTrue(reporte.getContenido().stream().anyMatch(linea -> linea.contains("T001")));
-        assertTrue(reporte.getContenido().stream().anyMatch(linea -> linea.contains("Depósito")));
+        assertTrue(reporte.getContenido().stream().anyMatch(linea -> linea.contains("DEPÓSITO")));
     }
 }

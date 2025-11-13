@@ -1,7 +1,5 @@
 package triplej.banco.Models.Usuarios;
 
-import javafx.scene.image.Image;
-
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -59,7 +57,7 @@ public abstract class Usuario {
         this.rolUsuario = rolUsuario;
     }
 
-    public abstract String getNombreCompleto();
+    public abstract String getNombreUsuario();
 
     public String getFoto() {
         return this.rutaImagen;

@@ -28,7 +28,7 @@ public class PersonaNatural extends Persona{
     }
 
     @Override
-    public String getNombreCompleto(){
+    public String getNombreUsuario(){
         return this.nombre + " " + this.apellido;
     }
 

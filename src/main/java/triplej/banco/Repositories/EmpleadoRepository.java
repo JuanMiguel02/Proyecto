@@ -34,13 +34,12 @@ public class EmpleadoRepository {
 
     }
 
-    public static EmpleadoRepository getInstance() {
+    public static EmpleadoRepository getInstancia() {
         if(instance == null) {
             instance = new EmpleadoRepository();
         }
         return instance;
     }
-
 
     private void cargarDatosEjemplo() {
         PersonaNatural juan = new PersonaNatural(
@@ -55,9 +54,6 @@ public class EmpleadoRepository {
         paco.setActivo(true);
         agregarEmpleado(new Empleado(paco, "Cajero", 2000, "Seguridad"));
 
-        PersonaNatural admin = new PersonaNatural("Sancho", "Panza", "sancho@uqbank", "123456", RolUsuario.ADMIN,
-                TipoDocumento.CEDULACIUDADANIA, "312412", "313414", "Colombia", "Armenia");
-        agregarEmpleado(new Empleado(admin, "Admin", 2000.0, "Gestión"));
     }
 
     public List<Empleado> getEmpleados() {
@@ -65,7 +61,7 @@ public class EmpleadoRepository {
     }
 
     public void agregarEmpleado(Empleado empleado){
-        UsuarioRepository.getInstancia().guardar(empleado.getPersona());
+        UsuarioRepository.getInstancia().guardarUsuario(empleado.getPersona());
         empleados.add(empleado);
         guardarEnArchivo(empleado);
     }

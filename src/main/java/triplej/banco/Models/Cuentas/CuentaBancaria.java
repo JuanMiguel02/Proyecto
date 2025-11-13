@@ -1,6 +1,5 @@
 package triplej.banco.Models.Cuentas;
 
-import triplej.banco.Models.Banco;
 import triplej.banco.Models.Usuarios.Cliente;
 import triplej.banco.Repositories.TransaccionRepository;
 
@@ -10,15 +9,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static triplej.banco.Models.Cuentas.Transaccion.generarIdTransaccion;
-
 /*
 *Clase que representa una Cuenta de Banco
 */
 public abstract class CuentaBancaria {
 
     private static final HashSet<String> numerosExistentes = new HashSet<>();
-    private final ArrayList<Transaccion> historial;
+    private static final int CODIGO_BANCO = 666;
+    private final ArrayList<Transaccion> historialTransacciones;
     private String numeroCuenta;
     private double saldo;
     private final LocalDate fechaApertura;
@@ -30,7 +28,7 @@ public abstract class CuentaBancaria {
         this.numeroCuenta = generarNumeroCuenta();
         this.saldo = 0.0;
         this.fechaApertura = LocalDate.now();
-        this.historial = new ArrayList<>();
+        this.historialTransacciones = new ArrayList<>();
     }
 
     public CuentaBancaria(Cliente propietario, String numeroCuenta, double saldo) {
@@ -38,7 +36,7 @@ public abstract class CuentaBancaria {
         this.numeroCuenta = numeroCuenta;
         this.saldo = saldo;
         this.fechaApertura = LocalDate.now();
-        this.historial = new ArrayList<>();
+        this.historialTransacciones = new ArrayList<>();
 
         cargarTransaccionesDesdeArchivo();
     }
@@ -50,7 +48,7 @@ public abstract class CuentaBancaria {
             //Crea una secuencia aleatoria de 5 caracteres entre 0 y 9999, luego formatea con ceros a la izquieda si es necesario
             String secuencia = String.format("%05d", ThreadLocalRandom.current().nextInt(0, 10000));
             //Codigo del banco + codigo de la cuenta + secuencia generada
-            numero = Banco.getCodigo() + getCodigoTipoCuenta() + secuencia;
+            numero = CODIGO_BANCO + getCodigoTipoCuenta() + secuencia;
             //Se le añade el digito verificador al de la cuenta
             numero += calcularDigitoVerificador(numero);
 
@@ -123,16 +121,16 @@ public abstract class CuentaBancaria {
         };
     }
 
-    public ArrayList<Transaccion> getHistorial() {
-        return historial;
+    public ArrayList<Transaccion> getHistorialTransacciones() {
+        return historialTransacciones;
     }
 
     private void cargarTransaccionesDesdeArchivo() {
         List<Transaccion> transaccionesDeEstaCuenta =
-                TransaccionRepository.getInstance().getPorCuenta(this.numeroCuenta);
+                TransaccionRepository.getInstancia().getPorCuenta(this.numeroCuenta);
 
-        this.historial.clear();
-        this.historial.addAll(transaccionesDeEstaCuenta);
+        this.historialTransacciones.clear();
+        this.historialTransacciones.addAll(transaccionesDeEstaCuenta);
 
         System.out.println(" Cargadas " + transaccionesDeEstaCuenta.size() +
                 " transacciones para cuenta " + this.numeroCuenta);

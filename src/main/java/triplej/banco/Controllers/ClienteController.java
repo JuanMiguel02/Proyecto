@@ -85,7 +85,7 @@ public class ClienteController {
     private void cargarCliente() {
         // Obtener la versión actual del cliente desde el repositorio
 
-        this.cliente = clienteRepository.buscarPorCorreo(cliente.getUsuarioAsociado().getCorreo())
+        this.cliente = clienteRepository.buscarPorCorreo(cliente.getPersonaAsociada().getCorreo())
                 .orElse(cliente);
 
         // Mostrar imagen
@@ -146,8 +146,8 @@ public class ClienteController {
      */
     @FXML
     private void volverMenu() {
-        cliente.getUsuarioAsociado().setActivo(false);
-        UsuarioRepository.getInstancia().actualizarUsuario(cliente.getUsuarioAsociado());
+        cliente.getPersonaAsociada().setActivo(false);
+        UsuarioRepository.getInstancia().actualizarUsuario(cliente.getPersonaAsociada());
 
         Stage ventanaActual = (Stage) btnSalir.getScene().getWindow();
         VolverLogin.volverLogin(ventanaActual);

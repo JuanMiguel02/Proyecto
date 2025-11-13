@@ -16,7 +16,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class TransaccionRepositoryTest {
-    private final TransaccionRepository transaccionRepository = TransaccionRepository.getInstance();
+    private final TransaccionRepository transaccionRepository = TransaccionRepository.getInstancia();
 
     @BeforeEach
     void setUp() throws IOException {

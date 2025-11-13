@@ -20,7 +20,7 @@ public class AdminService {
             System.getProperty("user.home") + File.separator + "UQBank" + File.separator + "imagenes";
     private static final String IMAGEN_POR_DEFECTO = "/triplej/banco/Images/avatar.png";
 
-    private final EmpleadoRepository empleadoRepository = EmpleadoRepository.getInstance();
+    private final EmpleadoRepository empleadoRepository = EmpleadoRepository.getInstancia();
     private final UsuarioRepository usuarioRepository = UsuarioRepository.getInstancia();
 
     // ---------------------------------------
