@@ -1,32 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="triplej.banco.Controllers.VistaCajero.TransferenciaController"
-            prefHeight="400.0" prefWidth="600.0">
-    <VBox spacing="10" alignment="CENTER" style="-fx-padding: 20;">
-        <Label text="Transferencia de dinero" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+<AnchorPane prefHeight="450.0" prefWidth="600.0" styleClass="ventana-operacion" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="triplej.banco.Controllers.VistaCajero.TransferenciaController">
 
-        <!-- Información de la cuenta origen -->
-        <Label fx:id="lblCuenta" text="Cuenta origen: "/>
+    <VBox alignment="CENTER" layoutX="150.0" layoutY="107.0" spacing="15" styleClass="panel-operacion">
 
-        <!-- Campo para ingresar la cuenta destino -->
-        <TextField fx:id="txtCuentaDestino" promptText="Número de cuenta destino" prefWidth="250"/>
+        <Label styleClass="titulo-operacion" text="Transferencia de dinero" />
 
-        <!-- Campo para ingresar la confirmación de la cuenta destino -->
-        <TextField fx:id="txtCuentaDestinoConfirmacion" promptText="Comfirme el número de la cuenta destino" prefWidth="250"/>
+        <Label fx:id="lblCuenta" styleClass="texto-operacion" text="Cuenta origen:" />
 
-        <!-- Campo para ingresar el monto -->
-        <TextField fx:id="txtMonto" promptText="Ingrese monto a transferir" prefWidth="250"/>
+        <TextField fx:id="txtCuentaDestino" promptText="Número de cuenta destino" styleClass="campo-operacion" />
 
-        <!-- Botones -->
-        <Button text="Confirmar Transferencia" onAction="#onConfirmarTransferencia"/>
-        <Button text="Cancelar" onAction="#onCancelar"/>
+        <TextField fx:id="txtCuentaDestinoConfirmacion" promptText="Confirme número de cuenta destino" styleClass="campo-operacion" />
+
+        <TextField fx:id="txtMonto" promptText="Ingrese monto a transferir" styleClass="campo-operacion" />
+
+        <Button onAction="#onConfirmarTransferencia" styleClass="boton-principal" text="Confirmar Transferencia" />
+
+        <Button onAction="#onCancelar" styleClass="boton-secundario" text="Cancelar" />
+
     </VBox>
+
 </AnchorPane>

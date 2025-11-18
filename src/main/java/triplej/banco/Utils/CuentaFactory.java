@@ -32,7 +32,7 @@ public class CuentaFactory {
         };
     }
 
-    public static CuentaBancaria crearCuentaConDatos(String tipo, Cliente cliente, String numeroCuenta, double saldo, Double sobregiro) {
+    public static CuentaBancaria crearCuentaConDatos(String tipo, Cliente cliente, String numeroCuenta,Double saldo, Double sobregiro) {
         if (tipo.equals("1")) {
             return new CuentaAhorro(cliente, numeroCuenta, saldo);
         } else if (tipo.equals("2")) {
