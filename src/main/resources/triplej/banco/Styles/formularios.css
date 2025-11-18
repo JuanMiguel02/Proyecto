@@ -1,0 +1,138 @@
+/* =========================================
+   FORMULARIOS (Cliente , Empleado, Nueva Cuenta)
+
+   ========================================= */
+
+/* Fondo general */
+.formulario-root {
+    -fx-background-color: linear-gradient(to bottom right, #e8f0ff, #cfe0ff);
+    -fx-padding: 20;
+    -fx-font-family: "Segoe UI";
+}
+
+/* Contenido principal del formulario */
+.form-content {
+    -fx-background-color: linear-gradient(to bottom right, #f5f8ff, #e6edff);
+    -fx-background-radius: 10;
+    -fx-padding: 20;
+}
+
+/* Encabezado principal */
+.titulo-form {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(to right, #0048a3, #0094ff);
+}
+
+/* Subtítulos */
+.section-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #003366;
+}
+
+/* --- INPUTS (TextField, PasswordField, ComboBox) --- */
+.input-field {
+    -fx-background-color: white;
+    -fx-border-color: #9dbdff;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 6 10;
+    -fx-text-fill: #1c2b4a;
+    -fx-prompt-text-fill: #9aa6c1;
+}
+
+.input-field:focused {
+    -fx-border-color: #4a90e2;
+    -fx-effect: dropshadow(three-pass-box, rgba(74,144,226,0.3), 8, 0, 0, 2);
+}
+
+/* Separadores */
+.form-separator {
+    -fx-background-color: linear-gradient(to right, #80aaff, #ffffff);
+    -fx-opacity: 0.6;
+    -fx-padding: 1;
+}
+
+/* ScrollPane */
+.form-scroll {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+/* --- Secciones de agrupación --- */
+.form-group {
+    -fx-spacing: 5;
+}
+
+.form-section {
+    -fx-spacing: 10;
+}
+
+/* Caja de información (Nueva cuenta) */
+.info-box {
+    -fx-background-color: rgba(200,220,255,0.35);
+    -fx-padding: 12;
+    -fx-background-radius: 10;
+}
+
+.info-text {
+    -fx-text-fill: #1a2a45;
+    -fx-font-size: 14px;
+}
+
+/* Grid general */
+.form-grid {
+    -fx-padding: 10;
+}
+
+/* Botonera */
+.form-buttons {
+    -fx-padding: 10 0 0 0;
+}
+
+/* CONTENEDOR DE IMAGEN */
+.image-container {
+    -fx-background-color: linear-gradient(to bottom, derive(#1976d2, 20%), derive(#42a5f5, -10%));
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-padding: 10;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 3);
+}
+
+/* --- BOTONES GENERALES --- */
+.btn-save, .btn-cancel, .btn-load {
+    -fx-background-radius: 8;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 15px;
+    -fx-text-fill: white;
+    -fx-padding: 10 25;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 6, 0, 0, 2);
+}
+
+/* Guardar */
+.btn-save {
+    -fx-background-color: linear-gradient(to bottom right, #2ecc71, #1eaa5a);
+}
+.btn-save:hover {
+    -fx-background-color: linear-gradient(to bottom right, #36d67b, #27b263);
+}
+
+/* Cancelar */
+.btn-cancel {
+    -fx-background-color: linear-gradient(to bottom right, #e74c3c, #c0392b);
+}
+.btn-cancel:hover {
+    -fx-background-color: linear-gradient(to bottom right, #f15b4a, #d14436);
+}
+
+/* Cargar imagen */
+.btn-load {
+    -fx-background-color: linear-gradient(to right, #1565c0, #42a5f5);
+    -fx-font-size: 14px;
+}
+.btn-load:hover {
+    -fx-background-color: linear-gradient(to right, #1e88e5, #64b5f6);
+}

@@ -1,0 +1,11 @@
+Reporte de movimientos de la cuenta: 6661024926 ( Cuenta de Ahorro )
+Titular: Iniesta Albilla
+Saldo actual: $7800,00
+Fecha de generación: 12/11/2025 23:20:22
+-----------------------------------------------------
+ID: TXN-1763004510817-1774 | 2025-11-12T22:28:30.821268300 | DÉPOSITO               | Monto: $10000,00 |  | Retiro realizado correctamente | Exitosa
+
+ID: TXN-1763004543442-2564 | 2025-11-12T22:29:03.443291800 | RETIRO                 | Monto: $12000,00 |  | Retiro realizado correctamente | Exitosa
+
+ID: TXN-1763004577655-7804 | 2025-11-12T22:29:37.655051500 | Transferencia enviada  | Monto: $200,00 | A cuenta: 6661080782 | Transferencia realizada correctamente | Exitosa
+

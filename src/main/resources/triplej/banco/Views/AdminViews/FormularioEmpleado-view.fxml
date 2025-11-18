@@ -1,134 +1,129 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
-<VBox prefHeight="600" prefWidth="500" spacing="15" style="-fx-background-color: #f5f5f5;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="triplej.banco.Controllers.VistaAdmin.FormularioEmpleadoController">
+<VBox prefHeight="600" prefWidth="500" spacing="15"
+      xmlns="http://javafx.com/javafx/24.0.1"
+      xmlns:fx="httpfx.com/fxml/1"
+      fx:controller="triplej.banco.Controllers.VistaAdmin.FormularioEmpleadoController"
+      styleClass="formulario-root">
 
-        <padding>
-            <Insets bottom="20" left="30" right="30" top="20" />
-        </padding>
+    <padding>
+        <Insets top="20" right="30" bottom="20" left="30" />
+    </padding>
 
-        <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Registrar Nuevo Empleado" />
+    <Label text="Registrar Nuevo Empleado" fx:id="lblTituloFormulario" styleClass="titulo-form" />
 
-        <Separator />
+    <Separator styleClass="form-separator" />
 
-        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
-            <VBox spacing="10">
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="form-scroll">
+        <content>
+            <VBox spacing="15" styleClass="form-content">
 
-                <!-- Datos Personales -->
-                <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Datos Personales" />
+                <!-- Sección: Datos personales -->
+                <Label text="Datos Personales" styleClass="section-title" />
 
                 <HBox spacing="10">
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <VBox spacing="5">
                         <Label text="Nombre:*" />
-                        <TextField fx:id="txtNombre" promptText="Ej: Carlos" />
+                        <TextField fx:id="txtNombre" promptText="Ej: Carlos" styleClass="input-field" />
                     </VBox>
-
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <VBox spacing="5">
                         <Label text="Apellido:*" />
-                        <TextField fx:id="txtApellido" promptText="Ej: López" />
+                        <TextField fx:id="txtApellido" promptText="Ej: López" styleClass="input-field" />
                     </VBox>
                 </HBox>
 
                 <VBox spacing="5">
                     <Label text="Cédula:*" />
-                    <TextField fx:id="txtCedula" promptText="Ej: 1234567890" />
+                    <TextField fx:id="txtCedula" promptText="Ej: 1234567890" styleClass="input-field" />
                 </VBox>
 
                 <VBox spacing="5">
                     <Label text="Teléfono:*" />
-                    <TextField fx:id="txtTelefono" promptText="Ej: 3001234567" />
+                    <TextField fx:id="txtTelefono" promptText="Ej: 3001234567" styleClass="input-field" />
                 </VBox>
 
                 <HBox spacing="10">
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <VBox spacing="5">
                         <Label text="Ciudad:*" />
-                        <TextField fx:id="txtCiudad" promptText="Ej: Armenia" />
+                        <TextField fx:id="txtCiudad" promptText="Ej: Armenia" styleClass="input-field" />
                     </VBox>
 
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <VBox spacing="5">
                         <Label text="País:*" />
-                        <TextField fx:id="txtPais" promptText="Ej: Colombia" />
+                        <TextField fx:id="txtPais" promptText="Ej: Colombia" styleClass="input-field" />
                     </VBox>
                 </HBox>
 
-                <Separator />
+                <Separator styleClass="form-separator" />
 
-                <!-- Datos de Cuenta -->
-                <Label  text="Datos de Acceso" />
+                <!-- Sección: Datos de acceso -->
+                <Label text="Datos de Acceso" styleClass="section-title" />
 
                 <VBox spacing="5">
                     <Label text="Correo Electrónico:*" />
-                    <TextField fx:id="txtCorreo" promptText="Ej: carlos@banco.com" />
+                    <TextField fx:id="txtCorreo" promptText="Ej: carlos@banco.com" styleClass="input-field" />
                 </VBox>
 
                 <VBox spacing="5">
                     <Label text="Contraseña:*" />
-                    <PasswordField fx:id="txtPassword" promptText="Mínimo 6 caracteres" />
+                    <PasswordField fx:id="txtPassword" promptText="Mínimo 6 caracteres" styleClass="input-field" />
                 </VBox>
 
                 <VBox spacing="5">
                     <Label text="Confirmar Contraseña:*" />
-                    <PasswordField fx:id="txtConfirmarPassword" />
+                    <PasswordField fx:id="txtConfirmarPassword" styleClass="input-field" />
                 </VBox>
 
-                <Separator />
+                <Separator styleClass="form-separator" />
 
-                <!-- Datos Laborales -->
-                <Label text="Datos Laborales" />
+                <!-- Datos laborales -->
+                <Label text="Datos Laborales" styleClass="section-title" />
 
                 <VBox spacing="5">
                     <Label text="Cargo:*" />
-                    <TextField fx:id="txtCargo" promptText="Ej: Cajero" />
+                    <TextField fx:id="txtCargo" promptText="Ej: Cajero" styleClass="input-field" />
                 </VBox>
 
                 <VBox spacing="5">
                     <Label text="Salario:*" />
-                    <TextField fx:id="txtSalario" promptText="Ej: 2500000" />
+                    <TextField fx:id="txtSalario" promptText="Ej: 2500000" styleClass="input-field" />
                 </VBox>
 
                 <VBox spacing="5">
                     <Label text="Departamento:*" />
-                    <ComboBox fx:id="cmbDepartamento" maxWidth="Infinity" promptText="Seleccione un departamento" />
+                    <ComboBox fx:id="cmbDepartamento"
+                              promptText="Seleccione un departamento"
+                              styleClass="input-field" />
                 </VBox>
-                <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Fotografía del Empleado" />
+
+                <Label text="Fotografía del Empleado" styleClass="section-title" />
 
                 <VBox alignment="CENTER" spacing="15">
-                    <StackPane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black;">
-                        <ImageView fx:id="imgEmpleado" fitHeight="220.0" fitWidth="180.0"
-                                   preserveRatio="true" pickOnBounds="true">
+                    <StackPane prefHeight="200" prefWidth="200" styleClass="image-container">
+                        <ImageView fx:id="imgEmpleado"
+                                   fitHeight="220" fitWidth="180"
+                                   preserveRatio="true">
                             <image>
                                 <Image url="@../../Images/avatar.png" />
                             </image>
                         </ImageView>
                     </StackPane>
 
-                    <Button text="Cargar Imagen" onAction="#onCargarImagen"
-                            style="-fx-background-color: #2980b9; -fx-text-fill: white;
-                               -fx-font-size: 14px; -fx-padding: 8 20; -fx-background-radius: 8;" />
+                    <Button text="Cargar Imagen" onAction="#onCargarImagen" styleClass="btn-load" />
                 </VBox>
 
             </VBox>
+        </content>
+    </ScrollPane>
 
-        </ScrollPane>
+    <HBox alignment="CENTER" spacing="15" styleClass="form-buttons">
+        <Button text="Guardar" defaultButton="true" onAction="#onGuardar" styleClass="btn-save" />
+        <Button text="Cancelar" onAction="#onCancelar" styleClass="btn-cancel" />
+    </HBox>
 
-        <!-- Botones -->
-        <HBox alignment="CENTER" spacing="10">
-            <Button defaultButton="true" onAction="#onGuardar" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 30;" text="Guardar" />
-
-            <Button onAction="#onCancelar" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 30;" text="Cancelar" />
-        </HBox>
-
-    </VBox>
+</VBox>
