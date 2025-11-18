@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
 
@@ -139,6 +140,11 @@ public class AdminController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlRuta));
             Parent vista = loader.load();
+            vista.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/triplej/banco/Styles/tabla.css")).toExternalForm()
+            );
+            vista.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/triplej/banco/Styles/formularios.css")).toExternalForm()
+            );
+
 
             Object controller = loader.getController();
 

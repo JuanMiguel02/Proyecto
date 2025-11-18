@@ -167,13 +167,14 @@ public class ClienteController {
 
             TransferenciaController controller = loader.getController();
             controller.setDatosOperacion(cliente, cuentaSeleccionada);
-
             controller.setOnTransferenciaExitosa(this::actualizarInterfaz);
-
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/triplej/banco/Styles/operacion.css")).toExternalForm()
+            );
 
             Stage stage = new Stage();
             stage.setTitle("Déposito de dinero");
-            stage.setScene(new Scene(root));
+            stage.setScene(scene);
             stage.initOwner(btnTransferir.getScene().getWindow());
             stage.show();
 

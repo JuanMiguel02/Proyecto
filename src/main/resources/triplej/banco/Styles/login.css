@@ -4,8 +4,8 @@
 .login-root {
     -fx-background-color: linear-gradient(
         from 0% 0% to 100% 100%,
-        derive(#00bfff, 50%),  /* azul más claro */
-        derive(white, -10%)    /* blanco un poco más tenue */
+        derive(#00bfff, 50%),
+        derive(white, -10%)
     );
     -fx-alignment: center;
     -fx-padding: 40;

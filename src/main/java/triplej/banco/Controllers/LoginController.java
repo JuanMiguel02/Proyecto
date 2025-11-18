@@ -248,9 +248,15 @@ public class LoginController {
             ClienteController clienteController = loader.getController();
             clienteController.setCliente(cliente);
 
+
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(
+                    Objects.requireNonNull(getClass().getResource("/triplej/banco/Styles/cliente.css")).toExternalForm()
+            );
+
             Stage stage = new Stage();
             stage.setTitle("UQ Bank");
-            stage.setScene(new Scene(root));
+            stage.setScene(scene);
             stage.setMaximized(true);
             stage.show();
 

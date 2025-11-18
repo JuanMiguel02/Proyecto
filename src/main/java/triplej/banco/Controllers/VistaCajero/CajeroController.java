@@ -248,10 +248,13 @@ public class CajeroController {
 
             DepositoController controller = loader.getController();
             controller.setDatosOperacion(clienteActual, cuentaSeleccionada);
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/triplej/banco/Styles/operacion.css")).toExternalForm()
+            );
 
             Stage stage = new Stage();
             stage.setTitle("Déposito de dinero");
-            stage.setScene(new Scene(root));
+            stage.setScene(scene);
             stage.initOwner(btnDepositar.getScene().getWindow());
             stage.show();
 
@@ -273,10 +276,14 @@ public class CajeroController {
 
             RetiroController controller = loader.getController();
             controller.setDatosOperacion(clienteActual, cuentaSeleccionada);
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/triplej/banco/Styles/operacion.css")).toExternalForm()
+            );
+
 
             Stage stage = new Stage();
             stage.setTitle("Retiro de dinero");
-            stage.setScene(new Scene(root));
+            stage.setScene(scene);
             stage.initOwner(btnRetirar.getScene().getWindow());
             stage.show();
 
@@ -298,10 +305,13 @@ public class CajeroController {
 
             TransferenciaController controller = loader.getController();
             controller.setDatosOperacion(clienteActual, cuentaSeleccionada);
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/triplej/banco/Styles/operacion.css")).toExternalForm()
+            );
 
             Stage stage = new Stage();
             stage.setTitle("Déposito de dinero");
-            stage.setScene(new Scene(root));
+            stage.setScene(scene);
             stage.initOwner(btnTransferir.getScene().getWindow());
             stage.show();
 
@@ -338,7 +348,7 @@ public class CajeroController {
         layout.setAlignment(Pos.CENTER_LEFT);
         layout.setPadding(new Insets(20));
 
-        // 🔍 Detectar el tipo de cuenta y mostrar detalles específicos
+        //  Detectar el tipo de cuenta y mostrar detalles específicos
         if (cuentaSeleccionada instanceof CuentaAhorro ahorro) {
             Label lblTasa = new Label("Tasa de interés: " + (ahorro.getTasaInteres() * 100) + " % anual");
             layout.getChildren().add(lblTasa);
@@ -377,6 +387,11 @@ public class CajeroController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlRuta));
             Parent vista = loader.load();
+
+            vista.getStylesheets().add(
+                    Objects.requireNonNull(getClass().getResource("/triplej/banco/Styles/formularios.css")).toExternalForm()
+            );
+
 
             Object controller = loader.getController();
 
@@ -423,10 +438,14 @@ public class CajeroController {
             // Pasar el cliente actual al nuevo formulario
             controlador.setCliente(clienteActual);
 
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/triplej/banco/Styles/formularios.css")).toExternalForm()
+            );
+
             // Crear y mostrar la nueva ventana
             Stage stage = new Stage();
             stage.setTitle("Apertura de nueva cuenta");
-            stage.setScene(new Scene(root));
+            stage.setScene(scene);
             stage.initOwner(btnBuscarCliente.getScene().getWindow());
             stage.show();
 
@@ -488,6 +507,7 @@ public class CajeroController {
     @FXML
     private void mostrarFormulario() {
         cargarVistaEnCentro("/triplej/banco/Views/CajeroViews/FormularioCliente-view.fxml");
+
     }
 
     /**
