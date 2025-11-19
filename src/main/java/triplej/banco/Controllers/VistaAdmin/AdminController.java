@@ -10,6 +10,8 @@ import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -70,6 +72,7 @@ public class AdminController {
     @FXML private Label lblNombre;
     @FXML private Label lblUsuariosActivos;
     @FXML private Label lblUsuariosInactivos;
+    @FXML private ImageView imgAdmin;
 
     //Gráfica de área que muestra la cantidad total de usuarios registrados.
     @FXML
@@ -79,7 +82,7 @@ public class AdminController {
     //Repositorio que contiene la lista observable de todos los usuarios del sistema.
     private UsuarioRepository usuarioRepository;
 
-    private AdminService adminService = new AdminService();
+    private final AdminService adminService = new AdminService();
 
     /**
      *  Método que se ejecuta automáticamente al cargar la vista del administrador.
@@ -119,6 +122,7 @@ public class AdminController {
         if (lblNombre != null && admin != null) {
             lblNombre.setText(admin.getNombreUsuario());
         }
+        mostrarImagenAdmin();
     }
 
     /**
@@ -241,6 +245,36 @@ public class AdminController {
          usuarioRepository.getUsuarios().addListener((javafx.collections.ListChangeListener<? super Object>) c-> actualizarGrafico());
 
     }
+
+    /**
+     * Muestra la imagen del admin, cargándola desde la ruta guardada o una imagen por defecto.
+     */
+    private void mostrarImagenAdmin() {
+        try {
+            String rutaFoto = admin.getFoto();
+
+            if (rutaFoto != null && !rutaFoto.isBlank()) {
+                if (rutaFoto.startsWith("/")) {
+                    // Imagen guardada en los recursos del proyecto
+                    imgAdmin.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(rutaFoto))));
+                } else {
+                    // Imagen guardada en el sistema de archivos del usuario
+                    Path path = Paths.get(rutaFoto);
+                    if (Files.exists(path)) {
+                        imgAdmin.setImage(new Image(path.toUri().toString()));
+                        return;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("No se pudo cargar la imagen del admin: " + e.getMessage());
+        }
+
+        // Imagen por defecto si no hay ninguna guardada
+        imgAdmin.setImage(new Image(Objects.requireNonNull(
+                getClass().getResourceAsStream("/triplej/banco/Images/avatar.png"))));
+    }
+
 
     /**
      * Actualiza los valores de la gráfica según el número total de usuarios.

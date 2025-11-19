@@ -213,7 +213,7 @@ public class ClienteRepository {
      */
     private void cargarDatosEjemplo() {
         PersonaNatural juan = new PersonaNatural(
-                "Kepo", "John", "kepo", "12345", RolUsuario.CLIENTE,
+                "Kepo", "John", "kepo@gmail", "12345", RolUsuario.CLIENTE,
                 TipoDocumento.CEDULACIUDADANIA, "1232190", "2132141", "Colombia", "Bogotá");
 
         PersonaJuridica paco = new PersonaJuridica(

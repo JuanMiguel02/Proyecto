@@ -77,6 +77,7 @@ public class CajeroController {
     @FXML private TextField txtRepresentanteLegal;
     @FXML private TextArea  txtReporteGeneral;
     @FXML private ImageView imgCliente;
+    @FXML private ImageView imgCajero;
 
     // --- Etiquetas para mostrar nombres dinámicos ---
     @FXML private Label lblNombreCajero;
@@ -121,6 +122,7 @@ public class CajeroController {
         if (lblNombreCajero != null && cajero != null) {
             lblNombreCajero.setText(cajero.getNombreCompleto());
         }
+        mostrarImagenCajero();
     }
 
     /**
@@ -206,6 +208,36 @@ public class CajeroController {
             cuentaSeleccionada = cmbCuentasCliente.getValue();
         }
     }
+
+    /**
+     * Muestra la imagen del cajero, cargándola desde la ruta guardada o una imagen por defecto.
+     */
+    private void mostrarImagenCajero() {
+        try {
+            String rutaFoto = cajero.getFoto();
+
+            if (rutaFoto != null && !rutaFoto.isBlank()) {
+                if (rutaFoto.startsWith("/")) {
+                    // Imagen guardada en los recursos del proyecto
+                    imgCajero.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(rutaFoto))));
+                } else {
+                    // Imagen guardada en el sistema de archivos del usuario
+                    Path path = Paths.get(rutaFoto);
+                    if (Files.exists(path)) {
+                        imgCajero.setImage(new Image(path.toUri().toString()));
+                        return;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("No se pudo cargar la imagen del cajero: " + e.getMessage());
+        }
+
+        // Imagen por defecto si no hay ninguna guardada
+        imgCajero.setImage(new Image(Objects.requireNonNull(
+                getClass().getResourceAsStream("/triplej/banco/Images/avatar.png"))));
+    }
+
 
     /**
      * Limpia los campos de información y reinicia la selección del cliente.
@@ -350,7 +382,7 @@ public class CajeroController {
 
         //  Detectar el tipo de cuenta y mostrar detalles específicos
         if (cuentaSeleccionada instanceof CuentaAhorro ahorro) {
-            Label lblTasa = new Label("Tasa de interés: " + (ahorro.getTasaInteres() * 100) + " % anual");
+            Label lblTasa = new Label("Tasa de interés: " + (ahorro.getTasaInteres() * 100) + " % mensual");
             layout.getChildren().add(lblTasa);
         }
         else if (cuentaSeleccionada instanceof CuentaCorriente corriente) {

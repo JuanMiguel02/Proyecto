@@ -41,7 +41,7 @@
             <children>
                 <ImageView fitHeight="160" fitWidth="160" layoutX="42" layoutY="20" pickOnBounds="true" preserveRatio="true" />
 
-                <Label  alignment="CENTER" layoutX="34.0" layoutY="190.0" prefHeight="27.0" prefWidth="186.0" styleClass="top-names" text="Bienvenido," textAlignment="CENTER">
+                <Label alignment="CENTER" layoutX="34.0" layoutY="190.0" prefHeight="27.0" prefWidth="186.0" styleClass="top-names" text="Bienvenido," textAlignment="CENTER">
                     <font>
                         <Font size="18" />
                     </font>
@@ -60,12 +60,12 @@
                 <Button fx:id="btnSalir" layoutX="42.0" layoutY="667.0" onAction="#volverMenu" prefHeight="32" prefWidth="95" styleClass="cajero-btn-operacion" text="Salir" />
                 <Button layoutX="42.0" layoutY="481.0" onAction="#mostrarFormulario" prefHeight="37" prefWidth="166" styleClass="cajero-btn-operacion" text="Agregar un Nuevo Cliente" />
                 <Button layoutX="39.0" layoutY="541.0" onAction="#abrirFormularioNuevaCuenta" prefHeight="37" prefWidth="166" styleClass="cajero-btn-operacion" text="Abrir Nueva Cuenta" />
-                <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="52.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true" styleClass="cajero-foto-cliente">
+                <ImageView fx:id="imgCajero" fitHeight="150.0" fitWidth="200.0" layoutX="52.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true" styleClass="cajero-foto-cliente">
                     <image>
                         <Image url="@../../Images/avatar.png" />
                     </image>
                 </ImageView>
-            <Label  styleClass="top-names" layoutX="95.0" layoutY="251.0" prefHeight="18.0" prefWidth="60.0" text="(Cajero)" />
+            <Label layoutX="95.0" layoutY="251.0" prefHeight="18.0" prefWidth="60.0" styleClass="top-names" text="(Cajero)" />
             </children>
         </AnchorPane>
     </left>

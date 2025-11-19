@@ -1,8 +1,6 @@
 /* ======================================= */
 /*      ESTILOS GENERALES - TABLA          */
 /* ======================================= */
-
-/* Fondo general más armonioso con la paleta */
 .table-root {
     -fx-background-color: #e9f3ff; /* azul MUY claro */
     -fx-padding: 20;
@@ -53,7 +51,7 @@
 }
 
 .table-view .table-row-cell:odd {
-    -fx-background-color: #f3f8ff; /* alternado suave */
+    -fx-background-color: #f3f8ff;
 }
 
 /* Fila seleccionada */
@@ -111,7 +109,7 @@
 
 
 /* ======================================= */
-/*         PANEL DE EDICIÓN (MODAL)        */
+/*         PANEL DE EDICIÓN       */
 /* ======================================= */
 
 .edit-overlay {
@@ -170,4 +168,18 @@
 
 .btn-save:hover {
     -fx-background-color: #007BFF;
+
+}
+.btn-sospechoso{
+    -fx-background-color: linear-gradient(to bottom right, #e74c3c, #c0392b);
+    -fx-background-radius: 8;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 15px;
+    -fx-text-fill: white;
+    -fx-padding: 10 25;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 6, 0, 0, 2);
+}
+.btn-sospechoso:hover{
+    -fx-background-color: linear-gradient(to bottom right, #f15b4a, #d14436);
 }

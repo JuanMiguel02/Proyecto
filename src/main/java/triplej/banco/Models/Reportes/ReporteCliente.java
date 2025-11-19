@@ -1,5 +1,6 @@
 package triplej.banco.Models.Reportes;
 
+import triplej.banco.Models.Cuentas.CuentaAhorro;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
 import triplej.banco.Models.Cuentas.Transaccion;
 
@@ -58,6 +59,12 @@ public class ReporteCliente implements ReporteGenerado {
      */
     @Override
     public Reporte generarReporte() {
+
+        //Ejemplificar la tasa de interés en una cuenta de ahorro
+        if (cuentaBancaria instanceof CuentaAhorro ahorro) {
+            ahorro.aplicarInteres();
+        }
+
         List<String> contenido = new ArrayList<>();
 
         contenido.add("Reporte de movimientos de la cuenta: " + cuentaBancaria.getNumeroCuenta() + " ( " + cuentaBancaria.getNombreTipoCuenta() + " )");

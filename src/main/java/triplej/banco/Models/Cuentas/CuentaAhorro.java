@@ -27,7 +27,6 @@ public class CuentaAhorro extends CuentaBancaria {
     /** Número máximo de retiros mensuales sin comisión. */
     private int limiteRetirosMensuales;
 
-
     /**
      * Crea una nueva cuenta de ahorro asociada a un cliente,
      * con valores iniciales por defecto para la tasa de interés
@@ -41,7 +40,6 @@ public class CuentaAhorro extends CuentaBancaria {
         this.limiteRetirosMensuales = 5;
         this.retirosMensuales = 0;
     }
-
 
     /**
      * Crea una cuenta de ahorro con número de cuenta y saldo inicial definidos.
