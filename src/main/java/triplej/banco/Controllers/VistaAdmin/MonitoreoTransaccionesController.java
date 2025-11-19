@@ -14,10 +14,10 @@ import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
 
 /**
  * Controlador encargado de la vista de monitoreo de transacciones.
- *
+ * <p>
  * Permite al administrador visualizar todas las transacciones registradas en el sistema
  * y detectar aquellas que puedan ser sospechosas.
- *
+ * <p>
  * Muestra la información en una tabla (TableView) con datos obtenidos desde el repositorio
  * de transacciones, y ofrece opciones para filtrar y resaltar aquellas con comportamientos anómalos.
  */
@@ -41,7 +41,7 @@ public class MonitoreoTransaccionesController {
 
     /**
      * Método que se ejecuta automáticamente al inicializar la vista.
-     *
+     * <p>
      * Se encarga de:
      * - Configurar las columnas de la tabla con las propiedades de la clase `Transaccion`.
      * - Cargar las transacciones desde el repositorio.
@@ -49,7 +49,7 @@ public class MonitoreoTransaccionesController {
      */
     public void initialize(){
         // Inicializa el repositorio (patrón Singleton)
-        transaccionRepository = TransaccionRepository.getInstance();
+        transaccionRepository = TransaccionRepository.getInstancia();
 
         // Configurar las columnas para que tomen los valores de las propiedades de Transaccion
         colId.setCellValueFactory(new PropertyValueFactory<>("id")); //
@@ -82,11 +82,11 @@ public class MonitoreoTransaccionesController {
 
     /**
      * Filtra y muestra únicamente las transacciones consideradas sospechosas.
-     *
+     * <p>
      * Utiliza el método `esSospechosa()` de la clase `Transaccion` para identificar
      * aquellas que podrían ser irregulares, por ejemplo por montos inusuales o
      * patrones extraños en las transferencias.
-     *
+     * <p>
      * Si no hay transacciones sospechosas, se muestra una alerta informativa.
      */
     @FXML
@@ -104,7 +104,7 @@ public class MonitoreoTransaccionesController {
 
     /**
      * Restablece la vista para mostrar nuevamente todas las transacciones.
-     *
+     * <p>
      * Es útil luego de haber aplicado un filtro de sospechosas,
      * permitiendo al administrador ver la lista completa otra vez.
      */
@@ -117,7 +117,7 @@ public class MonitoreoTransaccionesController {
     /**
      * Carga todas las transacciones almacenadas en el repositorio
      * y las asigna a la tabla principal.
-     *
+     * <p>
      * Convierte la lista obtenida desde el repositorio en una `ObservableList`,
      * lo que permite que la tabla se actualice automáticamente si los datos cambian.
      */

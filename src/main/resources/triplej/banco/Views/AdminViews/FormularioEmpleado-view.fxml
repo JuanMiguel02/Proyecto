@@ -7,7 +7,7 @@
 
 <VBox prefHeight="600" prefWidth="500" spacing="15"
       xmlns="http://javafx.com/javafx/24.0.1"
-      xmlns:fx="httpfx.com/fxml/1"
+      xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="triplej.banco.Controllers.VistaAdmin.FormularioEmpleadoController"
       styleClass="formulario-root">
 

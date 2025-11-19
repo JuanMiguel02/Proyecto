@@ -49,7 +49,7 @@
                 <Button layoutX="66.0" layoutY="633.0" mnemonicParsing="false" onAction="#eliminarEmpleado" prefHeight="42.0" prefWidth="196.0" styleClass="btn-delete" text="Eliminar" />
 
                 <!-- Imagen del empleado -->
-                <AnchorPane layoutX="790.0" layoutY="531.0" prefHeight="166.0" prefWidth="200.0" styleClass="image-container">
+                <AnchorPane layoutX="653.0" layoutY="536.0" prefHeight="166.0" prefWidth="200.0" styleClass="image-container">
                <children>
                         <ImageView fx:id="imgEmpleado" fitHeight="154.0" fitWidth="180.0" layoutX="10.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                      <viewport>

@@ -1,7 +1,0 @@
-NumeroCuenta	Saldo	TipoCuenta	CorreoCliente	Sobregiro
-6661020786	0,00	1	juancho@gmail
-6661080782	200,00	1	pacojones@gmail
-6661024926	7800,00	1	mipueblonosetoca@gmail
-6661042140	28000,00	1	bichosiuu@gmail
-6662093046	30000,00	2	bichosiuu@gmail	200000,00
-6663032376	1000000,00	3	shango@gmail

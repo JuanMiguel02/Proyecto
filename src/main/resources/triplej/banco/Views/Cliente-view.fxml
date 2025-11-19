@@ -12,16 +12,13 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="720.0" prefWidth="1280.0"
-            xmlns="http://javafx.com/javafx/24.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="triplej.banco.Controllers.ClienteController">
+<BorderPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="triplej.banco.Controllers.ClienteController">
 
     <!--  BARRA SUPERIOR -->
     <top>
         <HBox prefHeight="60.0" styleClass="barra-superior" BorderPane.alignment="CENTER">
             <children>
-                <Label text="UQ Bank" styleClass="titulo-superior">
+                <Label styleClass="titulo-superior" text="UQ Bank">
                     <HBox.margin>
                         <Insets left="30.0" top="15.0" />
                     </HBox.margin>
@@ -35,54 +32,30 @@
         <AnchorPane prefWidth="270.0" styleClass="panel-lateral" BorderPane.alignment="CENTER">
             <children>
 
-                <ImageView fx:id="imgCliente"
-                           fitHeight="130.0" fitWidth="130.0"
-                           layoutX="70.0" layoutY="30.0"
-                           preserveRatio="true"
-                           styleClass="avatar-panel">
+                <ImageView fx:id="imgCliente" fitHeight="130.0" fitWidth="130.0" layoutX="70.0" layoutY="30.0" preserveRatio="true" styleClass="avatar-panel">
                     <image>
                         <Image url="@../Images/avatar.png" />
                     </image>
                 </ImageView>
 
-                <Label layoutX="85.0" layoutY="180.0"
-                       text="Bienvenido,"
-                       styleClass="texto-bienvenida">
+                <Label layoutX="85.0" layoutY="180.0" styleClass="texto-bienvenida" text="Bienvenido,">
                 </Label>
 
-                <Label fx:id="lblNombre"
-                       alignment="CENTER"
-                       layoutX="35.0" layoutY="210.0"
-                       prefWidth="200.0"
-                       textAlignment="CENTER"
-                       styleClass="nombre-cliente">
+                <Label fx:id="lblNombre" alignment="CENTER" layoutX="35.0" layoutY="210.0" prefWidth="200.0" styleClass="nombre-cliente" textAlignment="CENTER">
 
                 </Label>
 
-                <Label layoutX="100.0" layoutY="270.0"
-                       text="Cuenta:"
-                       styleClass="texto-cuenta">
+                <Label layoutX="100.0" layoutY="270.0" styleClass="texto-cuenta" text="Cuenta:">
 
                 </Label>
 
-                <Label fx:id="lblNumCuenta"
-                       alignment="CENTER"
-                       layoutX="35.0" layoutY="300.0"
-                       prefWidth="200.0"
-                       textAlignment="CENTER"
-                       styleClass="numero-cuenta">
+                <Label fx:id="lblNumCuenta" alignment="CENTER" layoutX="35.0" layoutY="300.0" prefWidth="200.0" styleClass="numero-cuenta" textAlignment="CENTER">
                     <font>
                         <Font size="16.0" />
                     </font>
                 </Label>
 
-                <Button fx:id="btnSalir"
-                        layoutX="80.0" layoutY="640.0"
-                        mnemonicParsing="false"
-                        onAction="#volverMenu"
-                        prefHeight="36.0" prefWidth="110.0"
-                        text="Salir"
-                        styleClass="boton-salir">
+                <Button fx:id="btnSalir" layoutX="80.0" layoutY="640.0" mnemonicParsing="false" onAction="#volverMenu" prefHeight="36.0" prefWidth="110.0" styleClass="boton-salir" text="Salir">
 
                 </Button>
 
@@ -98,40 +71,27 @@
                 <AnchorPane prefHeight="500.0" prefWidth="600.0">
 
                     <children>
-                        <!-- Caja del saldo -->
-                        <Label layoutX="225.0" layoutY="100.0"
-                               text="Saldo actual:"
-                               styleClass="titulo-saldo">
-                            <font>
-                            </font>
-                        </Label>
 
-                        <Label fx:id="lblDinero"
-                               alignment="CENTER"
-                               layoutX="150.0" layoutY="150.0"
-                               prefHeight="120.0" prefWidth="300.0"
-                               styleClass="caja-saldo">
+                        <Label fx:id="lblDinero" alignment="CENTER" layoutX="346.0" layoutY="172.0" prefHeight="120.0" prefWidth="300.0" styleClass="caja-saldo">
                             <font>
                                 <Font name="System Bold" size="48.0" />
                             </font>
                         </Label>
 
                         <!-- ComboBox para elegir cuenta -->
-                        <ComboBox fx:id="cmbCuentas"
-                                  layoutX="150.0" layoutY="310.0"
-                                  prefWidth="300.0"
-                                  promptText="Seleccione una cuenta"
-                                  styleClass="combo-cuentas" />
+                        <ComboBox fx:id="cmbCuentas" layoutX="355.0" layoutY="366.0" prefWidth="300.0" promptText="Seleccione una cuenta" styleClass="combo-cuentas" />
 
                         <!-- Botón transferir -->
-                        <Button fx:id="btnTransferir"
-                                layoutX="215.0" layoutY="370.0"
-                                mnemonicParsing="false"
-                                onAction="#onTransferir"
-                                prefHeight="55.0" prefWidth="170.0"
-                                text="Transferir"
-                                styleClass="boton-transferir">
+                        <Button fx:id="btnTransferir" layoutX="420.0" layoutY="487.0" mnemonicParsing="false" onAction="#onTransferir" prefHeight="55.0" prefWidth="170.0" styleClass="boton-transferir" text="Transferir">
                         </Button>
+                  <HBox alignment="CENTER" layoutX="390.0" layoutY="109.0" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="47.0" prefWidth="147.0" text="Saldo Actual" textAlignment="CENTER">
+                           <font>
+                              <Font size="21.0" />
+                           </font></Label>
+                     </children>
+                  </HBox>
 
                     </children>
 
@@ -143,8 +103,7 @@
 
     <!--  BARRA INFERIOR -->
     <bottom>
-        <HBox prefHeight="50.0" styleClass="barra-inferior"
-              BorderPane.alignment="CENTER" />
+        <HBox prefHeight="50.0" styleClass="barra-inferior" BorderPane.alignment="CENTER" />
     </bottom>
 
 </BorderPane>

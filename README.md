@@ -64,7 +64,16 @@ Los reportes (`Reportes`) pueden guardarse en una archivo txt
 
 ---
 
-### 🖥 4. Interfaz gráfica (JavaFX)
+### Usuario predefinidos del sistema
+| Rol                    | Nombre completo | Correo         | Contraseña | Descripción                                                                                          |
+|------------------------|-----------------|----------------|------------|------------------------------------------------------------------------------------------------------|
+| ️ **Administrador**    | Sancho Panza    | sancho@uqbank  | **123456** | Tiene acceso total al sistema. Puede crear, editar o eliminar empleados, y monitorear transacciones. |
+| **Cajero**             | Paco Jones      | paco@gmail     | **123456** | Puede registrar clientes, abrir cuentas y procesar depósitos, retiros o transferencias.              |
+| **Cliente (Natural)**  | Kepo John       | kepo@gmail     | **12345**  | Cliente con una cuenta de ahorro activa. Puede consultar su saldo e historial.                       |
+| **Cliente (Jurídico)** | Empresa X       | empresax@gmail | **123456** | Cliente empresarial con cuenta corriente. Puede realizar transacciones y revisar reportes.           |
+
+
+###  4. Interfaz gráfica (JavaFX)
 
 Construida con **JavaFX** y archivos **FXML**, organizados por vistas:
 
@@ -79,48 +88,105 @@ Construida con **JavaFX** y archivos **FXML**, organizados por vistas:
 
 ---
 
-### 5. Estructura del proyecto
+###  5. Interfaz gráfica (JavaFX)
+Las pruebas se encuentran en el directorio src/test/java/triplej/banco/, organizadas por capa:
+
+- ModelsTest → Lógica de negocio.
+
+- RepositoriesTest → Persistencia y CRUD.
+
+- ServicesTest → Casos de uso y reglas de negocio.
+
+### 6. Estructura del proyecto
 
 
 ```
 BancoProyecto/
-├── Banco/
-│   └── Datos/
-│       ├── Cuentas.txt               # Información de las cuentas bancarias
-│       ├── Empleados.txt             # Datos de empleados
-│       ├── Transacciones.txt         # Registro de transacciones
-│       └── Usuarios.txt              # Clientes naturales y jurídicos
-│
 ├── src/
-│   └── main/
-│       ├── java/
-│       │   └── triplej/banco/
-│       │       ├── App.java                          # Clase principal
-│       │       ├── Controllers/
-│       │       │   ├── VistaAdmin/                   # Controladores de vistas del administrador
-│       │       │   └── VistaCajero/                  # Controladores de vistas del cajero
-│       │       │   └── LoginController               # Controlador de la vista del login
-│       │       ├── Models/
-│       │       │   ├── Cuentas/                      # Modelos de cuentas bancarias
-│       │       │   ├── Reportes/                     # Modelos para generación de reportes
-│       │       │   └── Usuarios/                     # Modelos de empleados, clientes y roles
-│       │       ├── Repositories/                     # Manejo de persistencia (archivos TXT)
-│       │       └── Utils/                            # Clases auxiliares o utilitarias
-│       │       └── Launcher                          # Ejecución de la aplicación
-│       │
-│       └── resources/
-│           └── triplej/banco/Views/
-│           │       ├── AdminViews/                       # Vistas del administrador (FXML)
-│           │       ├── CajeroViews/                      # Vistas del cajero (FXML)
-│           │       ├── Cliente-view.fxml                 # Vista principal de cliente
-│           │       ├── Login-view.fxml                   # Vista de inicio de sesión
-│           └── triplej/banco/Styles/
-│               ├── 
-│               └── triplej/banco/Images/
-│               ├── 
-│
-├── pom.xml                                           # Configuración del proyecto Maven
-└── README.md                                         # Documentación del proyecto
+│   ├── main/
+│   │   ├── java/triplej/banco/
+│   │   │   ├── Controllers/
+│   │   │   │   ├── VistaAdmin/                                                     #Controladores de la vista del Admin
+│   │   │   │   │   ├── AdminController.java
+│   │   │   │   │   ├── FormularioEmpleadoController.java
+│   │   │   │   │   ├── MonitoreoTransaccionesController.java
+│   │   │   │   │   └── TablaEmpleadosController.java
+│   │   │   │   ├── VistaCajero/                                                    #Controladores de la vista del Cajero
+│   │   │   │   │   ├── ClienteController.java
+│   │   │   │   │   └── LoginController.java
+│   │   │   │   └── ...
+│   │   │   ├── Models/                                                             #Todos los modelos del sistema
+│   │   │   │   ├── Cuentas/                                                        #Clases relacionadas a las cuentas bancarias
+│   │   │   │   │   ├── CuentaBancaria.java
+│   │   │   │   │   ├── CuentaAhorro.java
+│   │   │   │   │   ├── CuentaCorriente.java
+│   │   │   │   │   ├── CuentaEmpresarial.java
+│   │   │   │   │   └── Transaccion.java
+│   │   │   │   ├── Reportes/                                                       #Clases relacionadas a los reportes
+│   │   │   │   │   ├── Reporte.java
+│   │   │   │   │   ├── ReporteAdmin.java
+│   │   │   │   │   ├── ReporteCliente.java
+│   │   │   │   │   └── ReporteGenerado.java
+│   │   │   │   ├── Usuarios/                                                       #Clases relacionadas a los usuarios
+│   │   │   │   │   ├── Usuario.java
+│   │   │   │   │   ├── Persona.java
+│   │   │   │   │   ├── PersonaNatural.java
+│   │   │   │   │   ├── PersonaJuridica.java
+│   │   │   │   │   ├── Cliente.java
+│   │   │   │   │   ├── Empleado.java
+│   │   │   │   │   ├── RolUsuario.java
+│   │   │   │   │   └── TipoDocumento.java
+│   │   │   ├── Repositories/                                                       #Repositorios para persistencia de datos
+│   │   │   │   ├── UsuarioRepository.java
+│   │   │   │   ├── ClienteRepository.java
+│   │   │   │   ├── EmpleadoRepository.java
+│   │   │   │   └── TransaccionRepository.java
+│   │   │   ├── Services/                                                           #Capas de servicio
+│   │   │   │   ├── AdminService.java
+│   │   │   │   └── CajeroService.java
+│   │   │   ├── Utils/                                                              #Clases utilitarias
+│   │   │   │   ├── AlertHelper.java
+│   │   │   │   └── ...
+│   │   ├── Launcher.java                                                           #Compilación del programa
+│   │   │   └── module-info.java
+│   │   └── resources/
+│   │       ├── triplej/banco/                                                      #Agrupa toda la información relacionada a las vistas
+│   │       │   ├── Images/
+│   │       │   ├── Styles/                                                         #Estilos del programa
+│   │       │   │   ├── admin.css
+│   │       │   │   ├── cajero.css
+│   │       │   │   └── login.css
+│   │       │   └── Views/
+│   │       │       ├── AdminViews/                                                 #Vistas del admin
+│   │       │       │   ├── Admin-view.fxml
+│   │       │       │   ├── TablaEmpleados-view.fxml
+│   │       │       │   ├── MonitoreoTransacciones-view.fxml
+│   │       │       │   └── FormularioEmpleado-view.fxml
+│   │       │       └── CajeroViews/                                                #Vistas del cajero
+│   │       │           ├── Cajero-view.fxml
+│   │       │           ├── Login-view.fxml
+│   │       │           ├── Cliente-view.fxml
+│   │       │           ├── Deposito-view.fxml
+│   │       │           ├── Retiro-view.fxml
+│   │       │           └── Transferencia-view.fxml
+│   ├── test/                                                                       #Pruebas unitarias
+│   │   └── java/triplej/banco/
+│   │       ├── Models/
+│   │       │   ├── Cuentas/CuentaBancariaTest.java
+│   │       │   └── Reportes/ReporteAdminTest.java
+│   │       ├── Repositories/
+│   │       │   ├── ClienteRepositoryTest.java
+│   │       │   ├── EmpleadoRepositoryTest.java
+│   │       │   ├── TransaccionRepositoryTest.java
+│   │       │   └── UsuarioRepositoryTest.java
+│   │       ├── Services/
+│   │       │   ├── AdminServiceTest.java
+│   │       │   └── CajeroServiceTest.java
+│   │       └── Utils/
+│   │           └── CuentaFactoryTest.java
+├── .gitignore
+├── pom.xml / mvnw
+└── README.md
 ```
 
 ## Ejecución

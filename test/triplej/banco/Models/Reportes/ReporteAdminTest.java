@@ -17,6 +17,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+/**
+ * Clase de prueba para el reporte del Admin  {@link ReporteAdmin}.
+ */
 class ReporteAdminTest {
     private TransaccionRepository transaccionRepository;
     private UsuarioRepository usuarioRepository;
@@ -38,7 +41,7 @@ class ReporteAdminTest {
         // Crear el mock del usuario
         Usuario usuario = mock(Usuario.class);
 
-        when(usuario.getNombreCompleto()).thenReturn("Aquiles Tengo");
+        when(usuario.getNombreUsuario()).thenReturn("Aquiles Tengo");
         when(usuario.getRolUsuario()).thenReturn(RolUsuario.CLIENTE);
         when(usuario.isActivo()).thenReturn(true);
 
@@ -71,7 +74,6 @@ class ReporteAdminTest {
         assertTrue(reporte.getContenido().stream().anyMatch(linea -> linea.contains("Total de transacciones")));
         assertTrue(reporte.getContenido().stream().anyMatch(linea -> linea.contains("Aquiles Tengo")));
         assertTrue(reporte.getContenido().stream().anyMatch(linea -> linea.contains("T001")));
-
 
     }
 }

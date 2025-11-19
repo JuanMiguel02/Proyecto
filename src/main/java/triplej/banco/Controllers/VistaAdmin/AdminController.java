@@ -10,15 +10,16 @@ import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import triplej.banco.Models.Banco;
 import triplej.banco.Models.Reportes.ReporteAdmin;
 import triplej.banco.Models.Reportes.Reporte;
-import triplej.banco.Models.Usuarios.Empleado;
 import triplej.banco.Models.Usuarios.Usuario;
 import triplej.banco.Repositories.UsuarioRepository;
+import triplej.banco.Services.AdminService;
 import triplej.banco.Utils.GeneracionReporteVista;
 import triplej.banco.Utils.VolverLogin;
 
@@ -32,25 +33,24 @@ import static triplej.banco.Utils.AlertHelper.mostrarAlerta;
 
 /**
  * Controlador principal del panel de administración del banco.
- *
+ * <p>
  * Esta clase se encarga de gestionar la vista del administrador, incluyendo:
  * - Mostrar información general sobre los usuarios del sistema.
- * - Generar y guardar reportes administrativos.
+ * - Generar y guardarUsuario reportes administrativos.
  * - Mostrar gráficas con estadísticas.
  * - Navegar entre las diferentes vistas del módulo de administración
  *   (inicio, empleados, formularios, monitoreo de transacciones, etc.).
  * - Controlar la sesión del administrador (cerrar sesión).
- *
+ * <p>
  * Se comunica principalmente con:
  * - {@link UsuarioRepository}: para obtener la lista de usuarios activos/inactivos.
- * - {@link Banco}: para acceder a los repositorios globales del sistema.
  * - {@link ReporteAdmin} y {@link GeneracionReporteVista}: para generar y mostrar reportes.
  */
 
 public class AdminController {
 
     //Referencia al empleado que está logueado como administrador.
-    private Empleado admin;
+    private Usuario admin;
 
     //Contenedor principal donde se cargan dinámicamente las vistas del panel.
     @FXML private StackPane contenedorCentro;
@@ -72,6 +72,7 @@ public class AdminController {
     @FXML private Label lblNombre;
     @FXML private Label lblUsuariosActivos;
     @FXML private Label lblUsuariosInactivos;
+    @FXML private ImageView imgAdmin;
 
     //Gráfica de área que muestra la cantidad total de usuarios registrados.
     @FXML
@@ -81,9 +82,11 @@ public class AdminController {
     //Repositorio que contiene la lista observable de todos los usuarios del sistema.
     private UsuarioRepository usuarioRepository;
 
+    private final AdminService adminService = new AdminService();
+
     /**
      *  Método que se ejecuta automáticamente al cargar la vista del administrador.
-     *
+     * <p>
      * - Obtiene la instancia del banco y su repositorio de usuarios.
      * - Vincula las etiquetas de la interfaz con el tamaño actual de la lista de usuarios.
      * - Configura las etiquetas de usuarios activos e inactivos.
@@ -93,8 +96,7 @@ public class AdminController {
     @FXML
     public void initialize() {
 
-        Banco banco = Banco.getInstancia();
-        usuarioRepository = banco.getUsuarioRepository();
+        usuarioRepository = UsuarioRepository.getInstancia();
 
         // Muestra el total de usuarios registrados (valor siempre sincronizado)
         lblTotalUsuarios.textProperty().bind(
@@ -115,18 +117,19 @@ public class AdminController {
      *
      * @param admin objeto Empleado que representa al usuario administrador actual.
      */
-    public void setAdmin(Empleado admin) {
+    public void setAdmin(Usuario admin) {
         this.admin = admin;
         if (lblNombre != null && admin != null) {
-            lblNombre.setText(admin.getNombreCompleto());
+            lblNombre.setText(admin.getNombreUsuario());
         }
+        mostrarImagenAdmin();
     }
 
     /**
      * Carga dinámicamente una vista FXML dentro del contenedor principal.
      *
      * @param fxmlRuta ruta del archivo FXML a cargar.
-     *
+     * <p>
      * Funcionamiento:
      * 1. Crea un FXMLLoader con la ruta indicada.
      * 2. Carga el archivo y obtiene su controlador.
@@ -137,7 +140,7 @@ public class AdminController {
      *
      * Si ocurre un error al cargar la vista, lanza una RuntimeException.
      */
-    private void cargarVistaEnCentro(String fxmlRuta) {
+    private <T> T cargarVistaEnCentro(String fxmlRuta) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlRuta));
             Parent vista = loader.load();
@@ -168,6 +171,7 @@ public class AdminController {
                 AnchorPane.setRightAnchor(vista, 0.0);
             }
 
+            return (T) controller;
         } catch (IOException e) {
             throw new RuntimeException("Error al cargar la vista: " + e.getMessage(), e);
         }
@@ -175,15 +179,14 @@ public class AdminController {
 
     /**
      * Genera un reporte administrativo y lo muestra en la interfaz.
-     *
+     * <p>
      * - Crea una instancia de ReporteAdmin.
      * - Genera el reporte con datos actuales.
      * - Usa {@link GeneracionReporteVista} para mostrar el contenido en la vista.
      */
     @FXML
     private void generarReporte(){
-        ReporteAdmin reporteAdmin = new ReporteAdmin();
-        Reporte reporte = reporteAdmin.generarReporte();
+        Reporte reporte = adminService.generarReporteAvanzado();
 
         GeneracionReporteVista.generarReporte(reporte, txtContenido, vistaReporte, contenedorCentro);
 
@@ -197,7 +200,7 @@ public class AdminController {
     private void guardarReporte(){
         String contenido = txtContenido.getText();
         if(contenido == null || contenido.isBlank()){
-            mostrarAlerta("No hay reporte para guardar");
+            mostrarAlerta("No hay reporte para guardarUsuario");
             return;
         }
         exportarReporteTxt(contenido);
@@ -225,7 +228,7 @@ public class AdminController {
 
     /**
      * Inicializa la gráfica que muestra el número total de usuarios.
-     *
+     * <p>
      * - Crea una serie de datos y la agrega a la gráfica.
      * - Llama a {@link #actualizarGrafico()} para mostrar los valores iniciales.
      * - Añade un listener para actualizar automáticamente la gráfica
@@ -239,11 +242,39 @@ public class AdminController {
 
          graficaUsuarios.getData().add(serieUsuarios);
 
-         usuarioRepository.getUsuarios().addListener((javafx.collections.ListChangeListener<? super Object>) c->{
-             actualizarGrafico();
-         });
+         usuarioRepository.getUsuarios().addListener((javafx.collections.ListChangeListener<? super Object>) c-> actualizarGrafico());
 
     }
+
+    /**
+     * Muestra la imagen del admin, cargándola desde la ruta guardada o una imagen por defecto.
+     */
+    private void mostrarImagenAdmin() {
+        try {
+            String rutaFoto = admin.getFoto();
+
+            if (rutaFoto != null && !rutaFoto.isBlank()) {
+                if (rutaFoto.startsWith("/")) {
+                    // Imagen guardada en los recursos del proyecto
+                    imgAdmin.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(rutaFoto))));
+                } else {
+                    // Imagen guardada en el sistema de archivos del usuario
+                    Path path = Paths.get(rutaFoto);
+                    if (Files.exists(path)) {
+                        imgAdmin.setImage(new Image(path.toUri().toString()));
+                        return;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("No se pudo cargar la imagen del admin: " + e.getMessage());
+        }
+
+        // Imagen por defecto si no hay ninguna guardada
+        imgAdmin.setImage(new Image(Objects.requireNonNull(
+                getClass().getResourceAsStream("/triplej/banco/Images/avatar.png"))));
+    }
+
 
     /**
      * Actualiza los valores de la gráfica según el número total de usuarios.
@@ -258,7 +289,9 @@ public class AdminController {
     /** Abre la vista de empleados. */
     @FXML
     private void mostrarEmpleados() {
-        cargarVistaEnCentro("/triplej/banco/Views/AdminViews/TablaEmpleados-view.fxml");
+        TablaEmpleadosController controller = cargarVistaEnCentro("/triplej/banco/Views/AdminViews/TablaEmpleados-view.fxml");
+        controller.setAdminActual(admin);
+
     }
 
     /** Abre el formulario para registrar nuevos empleados. */
@@ -316,7 +349,7 @@ public class AdminController {
 
     /**
      * Cierra la sesión del administrador y vuelve a la pantalla de login.
-     *
+     * <p>
      * Pasos:
      * 1. Marca al administrador como inactivo.
      * 2. Actualiza el estado en el repositorio de usuarios.
@@ -325,8 +358,8 @@ public class AdminController {
      */
     @FXML
     private void volverMenu() {
-        admin.getPersona().setActivo(false);
-        usuarioRepository.actualizarUsuario(admin.getPersona());
+        admin.setActivo(false);
+        usuarioRepository.actualizarUsuario(admin);
 
         Stage ventanaActual = (Stage) btnSalir.getScene().getWindow();
         VolverLogin.volverLogin(ventanaActual);

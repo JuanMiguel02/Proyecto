@@ -9,21 +9,33 @@ import triplej.banco.Repositories.UsuarioRepository;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+/**
+ * Esta clase prueba los métodos del servicio AdminService {@link AdminService} ,
+ * responsable de manejar la lógica de negocio relacionada con los empleados:
+ * registro, actualización, eliminación, validación de correo, etc.
+ * <p>
+ * Se utilizan mocks de los repositorios para aislar la lógica del servicio,
+ * evitando acceso a archivos reales o bases de datos.
+ */
 class AdminServiceTest {
 
     private AdminService adminService;
     private EmpleadoRepository empleadoRepository;
     private UsuarioRepository usuarioRepository;
 
+    /**
+     * Se ejecuta antes de cada prueba
+     * crea los mock correspondientes e inyecta dependencias
+     */
     @BeforeEach
     void setUp() {
+        // Se crean mocks para no depender de implementaciones reales
         empleadoRepository = mock(EmpleadoRepository.class);
         usuarioRepository = mock(UsuarioRepository.class);
 
@@ -44,6 +56,10 @@ class AdminServiceTest {
         }
     }
 
+    /**
+     * Prueba 1. Verifica que al registrar un empleado sin imagen seleccionada
+     * se use la imagen por defecto del sistema.
+     */
     @Test
     void registrarEmpleadoFotoDefecto() {
         PersonaNatural persona = new PersonaNatural(
@@ -61,6 +77,10 @@ class AdminServiceTest {
         verify(empleadoRepository).agregarEmpleado(any(Empleado.class));
     }
 
+    /**
+     * Prueba 2. Verifica que si se pasa una imagen al registrar empleado,
+     * esta se copie correctamente y se asigne al objeto PersonaNatural.
+     */
     @Test
     void registrarEmpleadoFoto() throws IOException {
         PersonaNatural persona = new PersonaNatural(
@@ -81,6 +101,10 @@ class AdminServiceTest {
         verify(empleadoRepository, times(1)).agregarEmpleado(any(Empleado.class));
     }
 
+    /**
+     * Prueba 3. Verifica que el método correoYaExiste devuelva true
+     * si el correo ya está registrado en algún repositorio.
+     */
     @Test
     void correoYaExiste() {
         when(empleadoRepository.existeEmpleadoConCorreo("ana@correo.com")).thenReturn(true);
@@ -92,6 +116,10 @@ class AdminServiceTest {
         verify(empleadoRepository, times(1)).existeEmpleadoConCorreo("ana@correo.com");
     }
 
+    /**
+     * Prueba 4. Verifica que obtenerEmpleados devuelva la lista
+     * que entrega el repositorio de empleados.
+     */
     @Test
     void obtenerEmpleados() {
         when(empleadoRepository.getEmpleados()).thenReturn(List.of(mock(Empleado.class)));
@@ -103,6 +131,11 @@ class AdminServiceTest {
         verify(empleadoRepository, times(1)).getEmpleados();
     }
 
+    /**
+     * Prueba 5. Verifica el comportamiento del método eliminarEmpleado:
+     * - Si recibe null, devuelve false.
+     * - Si recibe un empleado válido, lo elimina y devuelve true.
+     */
     @Test
     void eliminarEmpleado() {
         assertFalse(adminService.eliminarEmpleado(null));
@@ -113,6 +146,10 @@ class AdminServiceTest {
         verify(empleadoRepository, times(1)).eliminarEmpleado(e);
     }
 
+    /**
+     * Prueba 6. Verifica que actualizarEmpleado modifique todos los datos del empleado correctamente
+     * y llame a los métodos de actualización de los repositorios.
+     */
     @Test
     void actualizarEmpleado() {
         PersonaNatural persona = new PersonaNatural(
@@ -160,6 +197,10 @@ class AdminServiceTest {
         verify(empleadoRepository, times(1)).actualizarEmpleado(empleado);
     }
 
+    /**
+     * Prueba 7. Verifica que determinarRolPorCargo devuelva el RolUsuario correcto
+     * según el nombre del cargo.
+     */
     @Test
     void determinarRolPorCargo() {
         assertEquals(RolUsuario.ADMIN, adminService.determinarRolPorCargo("Admin"));

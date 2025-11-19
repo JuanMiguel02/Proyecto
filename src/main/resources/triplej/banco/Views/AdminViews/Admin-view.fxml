@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.AreaChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
@@ -30,7 +29,7 @@
         <AnchorPane prefWidth="260" styleClass="sidebar" BorderPane.alignment="CENTER">
             <children>
                 <!-- Avatar -->
-                <ImageView fitHeight="120" fitWidth="120" layoutX="70" layoutY="20" preserveRatio="true">
+                <ImageView fx:id="imgAdmin" fitHeight="120" fitWidth="120" layoutX="70" layoutY="20" nodeOrientation="INHERIT" preserveRatio="true">
                     <image>
                         <Image url="@../../Images/avatar.png" />
                     </image>
@@ -43,46 +42,17 @@
                 <Line endX="180" layoutX="40" layoutY="220" startX="0" />
 
                 <!-- Botones del menú -->
-                <VBox alignment="TOP_CENTER" layoutY="250" spacing="15">
+                <VBox alignment="CENTER" layoutX="28.0" layoutY="268.0" prefHeight="281.0" prefWidth="205.0" spacing="15">
                     <children>
-                        <HBox alignment="CENTER_LEFT" spacing="10">
-                            <ImageView fitHeight="25" fitWidth="25" preserveRatio="true">
-                                <image>
-                                    <Image url="@../../Images/home.png" />
-                                </image>
-                            </ImageView>
-                            <Button fx:id="btnInicio" onAction="#mostrarInicio" styleClass="btn-admin" text="Inicio" />
-                        </HBox>
-
-                        <HBox alignment="CENTER" spacing="10">
-                            <ImageView fitHeight="25" fitWidth="25" preserveRatio="true">
-                                <image>
-                                    <Image url="@../../Images/search.png" />
-                                </image>
-                            </ImageView>
-                            <Button fx:id="btnInicio1" onAction="#mostrarTransacciones" prefHeight="26.0" prefWidth="183.0" styleClass="btn-admin" text="Monitorear Transacciones" />
-                        </HBox>
-
-                        <HBox alignment="BOTTOM_LEFT" spacing="10">
-                            <ImageView fitHeight="28" fitWidth="28" preserveRatio="true">
-                                <image>
-                                    <Image url="@../../Images/man.png" />
-                                </image>
-                            </ImageView>
-                            <Button fx:id="btnEmpleados" onAction="#mostrarEmpleados" prefHeight="26.0" prefWidth="130.0" styleClass="btn-admin" text="Ver Empleados">
-                        <HBox.margin>
-                           <Insets />
-                        </HBox.margin></Button>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                        </HBox>
+                         <Button fx:id="btnInicio" onAction="#mostrarInicio" prefHeight="50.0" prefWidth="170.0" styleClass="btn-admin" text="Inicio" />
+      
+                        <Button fx:id="btnAgregarEmpleado" onAction="#mostrarFormulario" prefHeight="50.0" prefWidth="170.0" styleClass="btn-admin" text="Añadir Empleado" />
+                         <Button fx:id="btnEmpleados" onAction="#mostrarEmpleados" prefHeight="50.0" prefWidth="170.0" styleClass="btn-admin" text="Ver Empleados" />
+                         <Button fx:id="btnInicio1" onAction="#mostrarTransacciones" prefHeight="50.0" prefWidth="229.0" styleClass="btn-admin" text="Monitorear Transacciones" />
                     </children>
                 </VBox>
 
-                <Button fx:id="btnSalir" layoutX="79.0" layoutY="565.0" onAction="#volverMenu" prefHeight="26.0" prefWidth="82.0" styleClass="btn-admin" text="Salir" />
-
-                  <Button fx:id="btnAgregarEmpleado" layoutX="40.0" layoutY="393.0" onAction="#mostrarFormulario" styleClass="btn-admin" text="Añadir Empleado" />
+                <Button fx:id="btnSalir" layoutX="45.0" layoutY="614.0" onAction="#volverMenu" prefHeight="50.0" prefWidth="170.0" styleClass="btn-admin" text="Salir" />
             </children>
         </AnchorPane>
     </left>
@@ -95,7 +65,7 @@
                 <!-- VISTA INICIO -->
                 <AnchorPane fx:id="vistaInicio" prefHeight="712.0" prefWidth="946.0">
                     <children>
-                        <HBox alignment="CENTER" layoutX="32.0" layoutY="40" prefHeight="175.0" prefWidth="958.0" spacing="40">
+                        <HBox alignment="CENTER" layoutX="16.0" layoutY="82.0" prefHeight="175.0" prefWidth="958.0" spacing="40">
                             <children>
                                 <!-- Total Usuarios -->
                                 <VBox fx:id="statCard1" alignment="CENTER" prefWidth="300.0" spacing="20.0" styleClass="stat-card">
@@ -132,12 +102,12 @@
                             </children>
                         </HBox>
 
-                        <AreaChart fx:id="graficaUsuarios" layoutY="350" prefHeight="300" prefWidth="800" title="Usuarios">
+                        <AreaChart fx:id="graficaUsuarios" layoutX="104.0" layoutY="352.0" prefHeight="300" prefWidth="800" title="Usuarios">
                             <xAxis><CategoryAxis side="BOTTOM" /></xAxis>
                             <yAxis><NumberAxis side="LEFT" /></yAxis>
                         </AreaChart>
 
-                        <Button layoutX="400.0" layoutY="660.0" onAction="#generarReporte" styleClass="btn-admin" text="Generar Reporte" />
+                        <Button layoutX="443.0" layoutY="664.0" onAction="#generarReporte" styleClass="btn-admin" text="Generar Reporte" />
                     </children>
                 </AnchorPane>
 

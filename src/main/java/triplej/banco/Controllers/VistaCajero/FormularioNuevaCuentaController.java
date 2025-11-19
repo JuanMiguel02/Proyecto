@@ -7,7 +7,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import triplej.banco.Models.Usuarios.PersonaJuridica;
-import triplej.banco.Models.Usuarios.TipoDocumento;
 import triplej.banco.Services.CajeroService;
 import triplej.banco.Models.Cuentas.CuentaBancaria;
 import triplej.banco.Models.Usuarios.Cliente;
@@ -60,12 +59,12 @@ public class FormularioNuevaCuentaController {
      */
     public void setCliente(Cliente cliente){
         this.cliente = cliente;
-        lblNombreCliente.setText(cliente.getUsuarioAsociado().getNombreCompleto());
+        lblNombreCliente.setText(cliente.getPersonaAsociada().getNombreUsuario());
         lblDocumentoCliente.setText(cliente.getDocumento());
 
         cmbTipoCuenta.getItems().clear();
 
-        if(cliente.getUsuarioAsociado() instanceof PersonaJuridica){
+        if(cliente.getPersonaAsociada() instanceof PersonaJuridica){
             cmbTipoCuenta.getItems().addAll("Empresarial", "Corriente");
         }else{
             cmbTipoCuenta.getItems().addAll("Ahorro", "Corriente", "Empresarial");
@@ -79,7 +78,7 @@ public class FormularioNuevaCuentaController {
      * estén completos. Convierte el saldo inicial a número y registra la cuenta
      * usando el servicio {@link CajeroService}.
 
-     *
+     * <p>
      * Si la operación es exitosa, muestra un mensaje de confirmación con
      * el número de cuenta creada. Si ocurre un error, muestra una alerta.</p>
      */
